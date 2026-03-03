@@ -1,0 +1,38 @@
+{
+    "Header": {
+    "nav": {
+      "home": "Home",
+      "about": "About",
+      "services": "Services",
+      "contact": "Contact"
+    },
+    "auth": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    },
+    "aria": {
+      "toggleTheme": "Toggle theme"
+    }
+  },
+  "Hero": {
+    "title": "Find the connection <br></br> <primary>you need in Gaza.</primary>",
+    "description": "Discover safe, accessible hubs providing reliable internet, electricity, and quiet workspaces when you need them most.",
+    "searchButton": "Search",
+    "filters": {
+      "governorates": {
+        "placeholder": "Any Governorate",
+        "northGaza": "North Gaza",
+        "gazaCity": "Gaza City",
+        "deirAlBalah": "Deir al-Balah",
+        "khanYunis": "Khan Yunis",
+        "rafah": "Rafah"
+      },
+      "services": {
+        "placeholder": "Any Service",
+        "internet": "Internet",
+        "electricity": "Electricity",
+        "workspace": "Workspace"
+      }
+    }
+  }
+}

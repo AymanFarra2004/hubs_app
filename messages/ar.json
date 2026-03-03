@@ -1,0 +1,38 @@
+{
+  "Header": {
+    "nav": {
+      "home": "الرئيسية",
+      "about": "من نحن",
+      "services": "الخدمات",
+      "contact": "تواصل معنا"
+    },
+    "auth": {
+      "signIn": "تسجيل الدخول",
+      "signUp": "إنشاء حساب"
+    },
+    "aria": {
+      "toggleTheme": "تغيير المظهر"
+    }
+  },
+  "Hero": {
+    "title": "ابحث عن الاتصال <br></br> <primary>الذي تحتاجه في غزة.</primary>",
+    "description": "اكتشف مراكز آمنة توفر إنترنت موثوق، كهرباء، ومساحات عمل هادئة عندما تكون في أمس الحاجة إليها.",
+    "searchButton": "بحث",
+    "filters": {
+      "governorates": {
+        "placeholder": "أي محافظة",
+        "northGaza": "شمال غزة",
+        "gazaCity": "مدينة غزة",
+        "deirAlBalah": "دير البلح",
+        "khanYunis": "خانيونس",
+        "rafah": "رفح"
+      },
+      "services": {
+        "placeholder": "أي خدمة",
+        "internet": "إنترنت",
+        "electricity": "كهرباء",
+        "workspace": "مساحة عمل"
+      }
+    }
+  }
+}
