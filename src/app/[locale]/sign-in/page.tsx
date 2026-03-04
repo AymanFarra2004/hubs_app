@@ -1,8 +1,11 @@
 import {Link} from '@/src/i18n/routing'
 import { MapPin, Mail, Lock, ArrowRight } from "lucide-react"
+import { Header } from "@/components/header/Header"
 
 export default function SignInPage() {
   return (
+     <div className="flex flex-col min-h-screen">
+            <Header />
     <div className="min-h-screen flex flex-col md:flex-row">
       {/* Left side - Form */}
       <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24 bg-background">
@@ -123,6 +126,7 @@ export default function SignInPage() {
           <p className="text-white/80 font-medium">— Habbat Initiative</p>
         </div>
       </div>
+    </div>
     </div>
   )
 }

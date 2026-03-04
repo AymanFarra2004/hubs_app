@@ -2,8 +2,8 @@ import Image from "next/image"
 import {Link} from '@/src/i18n/routing'
 import { MapPin, Wifi, Zap, Clock, ShieldCheck, Monitor, Coffee } from "lucide-react"
 
-import { Card, CardContent, CardFooter, CardHeader } from "@/src/app/[locale]/components/ui/card"
-import { Badge } from "@/src/app/[locale]/components/ui/badge"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import { IHub } from "@/data/hubs"
 
 interface IHubCardProps {
