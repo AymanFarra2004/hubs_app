@@ -4,7 +4,7 @@ interface Icontact {
     email?: string;
 }
 export interface IHub {
-    id: number;
+    id: string;
     name: string;
     description: string;
     location: string;
@@ -19,12 +19,12 @@ export interface IHub {
 
 export const staticHubs: IHub[] = [
   {
-    id: 1,
+    id: "1",
     name: "Gaza Sky Geeks",
     description: "A leading tech hub and co-working space offering high-speed internet and a professional community for freelancers.",
     location: "Al-Bahr Street, Gaza City",
     governorate: "Gaza",
-    pricing: "10",
+    pricing: "10 / hour",
     operatingHours: "08:00 AM - 10:00 PM",
     services: ["High-speed Internet", "Electricity", "Meeting Rooms", "Coffee Shop"],
     imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
@@ -36,7 +36,7 @@ export const staticHubs: IHub[] = [
     }
   },
   {
-    id: 2,
+    id: "2",
     name: "Al-Amal Hub",
     description: "Quiet workspace located in the heart of Khan Yunis, specializing in providing stable electricity during outages.",
     location: "Al-Nasr Street",
@@ -52,7 +52,7 @@ export const staticHubs: IHub[] = [
     }
   },
   {
-    id: 3,
+    id: "3",
     name: "Rafah Connect",
     description: "A newly opened center focused on providing connectivity services for students and remote workers in the south.",
     location: "Near Al-Awda Square",
@@ -68,7 +68,7 @@ export const staticHubs: IHub[] = [
     }
   },
   {
-    id: 4,
+    id: "4",
     name: "Deir al-Balah Innovation Center",
     description: "A community-driven space offering affordable workspaces and mentorship for local entrepreneurs.",
     location: "Main Road, Deir al-Balah",
@@ -85,7 +85,7 @@ export const staticHubs: IHub[] = [
     }
   },
   {
-    id: 5,
+    id: "5",
     name: "North Gaza Digital Hub",
     description: "Providing essential digital services and workspace for residents in the North Gaza governorate.",
     location: "Jabalia",
