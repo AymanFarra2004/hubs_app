@@ -1,9 +1,12 @@
+"use client";
 import { useTranslations } from 'next-intl';
 import HeroQuickSearch from './HeroQuickSearch';
 import FeaturedHubSection from './FeaturedHubSection';
+import { useState } from 'react';
 
 const HeroSection = () => {
   const t = useTranslations("Hero");
+  const [filter, setFilter] = useState<{governorate: string, service: string}>({governorate: "", service: ""});
   return (
     <section className="bg-muted/30 border-b border-border py-12 md:py-20 lg:py-24 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -17,10 +20,10 @@ const HeroSection = () => {
               <p className="text-lg md:text-xl text-muted-foreground mb-8">
                 {t("description")}
               </p>
-              <HeroQuickSearch />
+              <HeroQuickSearch setFilter={setFilter} />
             </div>
           </div>
-          <FeaturedHubSection />
+          <FeaturedHubSection filter={filter} />
           
           {/* Decorative background elements */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/5 rounded-full blur-3xl -z-10" />

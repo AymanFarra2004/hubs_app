@@ -2,8 +2,17 @@ import { HubCard } from "@/src/app/[locale]/components/general/HubCard";
 import { staticHubs } from "@/data/hubs";
 import { IHub } from "@/data/hubs";
 
-export default function FeaturedHubSection(){
-    return(
+export default function FeaturedHubSection({filter}: {filter: {governorate: string, service: string}}){
+    const filteredHubs =filter.governorate === "" && filter.service === "" ? staticHubs : staticHubs.filter((hub) => {
+      if(filter.governorate === ""){
+        return hub.services.includes(filter.service) ;
+      }
+      if(filter.service === ""){
+      return hub.governorate === filter.governorate ;
+    }
+    return hub.governorate === filter.governorate && hub.services.includes(filter.service) ;
+    });
+  return(
          <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-10">
@@ -17,7 +26,7 @@ export default function FeaturedHubSection(){
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {staticHubs.map((hub: IHub) => (
+              {filteredHubs.map((hub: IHub) => (
                 <HubCard key={hub.id} hub={hub} />
               ))}
             </div>

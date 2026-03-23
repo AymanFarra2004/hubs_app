@@ -8,7 +8,7 @@ export interface IHub {
     name: string;
     description: string;
     location: string;
-    governorate: "Khanyounis" | "Gaza" | "Deir al-Balah" | "Rafah" | "North Gaza";
+    governorate: "Khan Yunis" | "Gaza" | "Deir al-Balah" | "Rafah" | "North Gaza";
     pricing: string;
     operatingHours: string;
     services: string[];
@@ -26,7 +26,7 @@ export const staticHubs: IHub[] = [
     governorate: "Gaza",
     pricing: "10 / hour",
     operatingHours: "08:00 AM - 10:00 PM",
-    services: ["High-speed Internet", "Electricity", "Meeting Rooms", "Coffee Shop"],
+    services: ["High-speed Internet", "Electricity", "Meeting Rooms", "Coffee Shop", "Workspace"],
     imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
     verificationStatus: "Verified",
     contact: {
@@ -40,10 +40,10 @@ export const staticHubs: IHub[] = [
     name: "Al-Amal Hub",
     description: "Quiet workspace located in the heart of Khan Yunis, specializing in providing stable electricity during outages.",
     location: "Al-Nasr Street",
-    governorate: "Khanyounis",
+    governorate: "Khan Yunis",
     pricing: "5",
     operatingHours: "09:00 AM - 08:00 PM",
-    services: ["Solar Power", "Stable WiFi", "Private Desks"],
+    services: ["Solar Power", "Stable WiFi", "Private Desks", "Workspace"],
     imageUrl: "https://images.unsplash.com/photo-1497366216548-37526070297c",
     verificationStatus: "Verified",
     contact: {
@@ -97,6 +97,23 @@ export const staticHubs: IHub[] = [
     verificationStatus: "Pending",
     contact: {
       contactNumber: "+970597000555"
+    }
+  },
+  {
+    id: "6",
+    name: "Gaza Sky Geeks",
+    description: "A leading tech hub and co-working space offering high-speed internet and a professional community for freelancers.",
+    location: "Al-Bahr Street, Gaza City",
+    governorate: "Gaza",
+    pricing: "10 / hour",
+    operatingHours: "08:00 AM - 10:00 PM",
+    services: ["High-speed Internet", "Electricity", "Meeting Rooms", "Coffee Shop"],
+    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    verificationStatus: "Verified",
+    contact: {
+      contactNumber: "+970599000111",
+      email: "info@gazaskygeeks.com",
+      links: ["https://gazaskygeeks.com", "https://facebook.com/GazaSkyGeeks"]
     }
   }
 ];
