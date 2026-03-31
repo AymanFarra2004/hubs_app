@@ -1,10 +1,42 @@
 'use client'
 
-import { Link } from '@/src/i18n/routing'
-import { MapPin, Mail, Lock, User, ArrowRight } from "lucide-react"
+import { Link, useRouter } from '@/src/i18n/routing'
+import { MapPin, Mail, Lock, User, ArrowRight, Loader2 } from "lucide-react"
 import { Header } from "@/components/header/Header"
+import { registerUser } from "@/src/actions/auth"
+import {useActionState, useEffect} from "react"
+import { useFormStatus } from "react-dom";
+
+
+
+  function SubmitButton() {
+      const { pending } = useFormStatus();
+      return (
+        <button
+          type="submit"
+          disabled={pending}
+          className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up"}
+          {!pending && <ArrowRight className="h-4 w-4" />}
+        </button>
+      );
+    }
 
 export default function SignUpPage() {
+  const [state, formAction] = useActionState(registerUser, null);
+  const router = useRouter();
+      if(state?.error) console.log(state.error);
+
+  useEffect(() => {
+      if (state?.success) {
+        // Redirect to home page upon successful login
+        router.push("/");
+        router.refresh();
+      }
+    }, [state, router]);
+
+  
   return (
     <div className="flex flex-col h-screen bg-background">
       <Header />
@@ -31,7 +63,17 @@ export default function SignUpPage() {
               </p>
             </div>
 
-            <form className="space-y-4">
+            <form className="space-y-4" action={formAction}>
+              {state?.error && (
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 text-sm rounded-lg">
+                  {state.error}
+                </div>
+              )}
+              {state?.success && (
+                <div className="p-3 bg-green-100 border border-green-400 text-green-700 text-sm rounded-lg">
+                  {state.message} Redirecting...
+                </div>
+              )}
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-foreground">Full Name</label>
                 <div className="mt-1 relative rounded-md">
@@ -82,28 +124,64 @@ export default function SignUpPage() {
                   />
                 </div>
               </div>
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-foreground">
+                  Confirm Password
+                </label>
+                <div className="mt-1 relative rounded-md">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Lock className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <input
+                    id="password_confirmation"
+                    name="password_confirmation"
+                    type="password"
+                    required
+                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
+                    placeholder="••••••••"
+                  />
+                </div>
+              </div>
+
+
+
+{/**ضفت تحديد الموقع بشكل مؤقت بهذا الشكل لحد ما افهم منك ايش قصدك منها */}
+<div>
+  <label htmlFor="location_id" className="block text-sm font-medium text-foreground">
+    Location ID
+  </label>
+  <div className="mt-1 relative rounded-md">
+    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <MapPin className="h-5 w-5 text-muted-foreground" />
+    </div>
+    <input
+      id="location_id"
+      name="location_id"
+      type="number"
+      required
+      className="appearance-none block w-full pl-10 pr-3 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
+      placeholder="e.g. 12345"
+    />
+  </div>
+</div>
               
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">Account Type</label>
                 <div className="grid grid-cols-2 gap-3">
                   <label className="flex items-center justify-center gap-2 p-3 border border-input rounded-xl cursor-pointer hover:bg-muted/30 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
-                    <input type="radio" name="accountType" value="user" className="hidden" defaultChecked />
+                    <input type="radio" name="role" value="user" className="hidden" defaultChecked />
                     <span className="text-sm font-medium">Regular User</span>
                   </label>
                   <label className="flex items-center justify-center gap-2 p-3 border border-input rounded-xl cursor-pointer hover:bg-muted/30 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
-                    <input type="radio" name="accountType" value="owner" className="hidden" />
+                    <input type="radio" name="role" value="owner" className="hidden" />
                     <span className="text-sm font-medium">Hub Owner</span>
                   </label>
                 </div>
               </div>
 
-              <button
-                type="submit"
-                className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 transition-all"
-              >
-                Create account
-                <ArrowRight className="h-4 w-4" />
-              </button>
+               <div>
+                <SubmitButton />
+              </div>
             </form>
 
             <div className="mt-6 text-center">

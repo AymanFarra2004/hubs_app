@@ -1,8 +1,36 @@
-import {Link} from '@/src/i18n/routing'
-import { MapPin, Mail, Lock, ArrowRight } from "lucide-react"
+"use client";
+
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
+import { Link, useRouter } from '@/src/i18n/routing'
+import { MapPin, Mail, Lock, ArrowRight, Loader2 } from "lucide-react"
 import { Header } from "@/components/header/Header"
+import { loginUser } from "@/src/actions/auth"
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+    >
+      {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign in"}
+      {!pending && <ArrowRight className="h-4 w-4" />}
+    </button>
+  );
+}
 
 export default function SignInPage() {
+  const [state, formAction] = useActionState(loginUser, null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state?.success) {
+      router.push("/");
+      router.refresh();
+    }
+  }, [state, router]);
   return (
      <div className="flex flex-col min-h-screen">
             <Header />
@@ -27,7 +55,18 @@ export default function SignInPage() {
           </div>
 
           <div className="mt-8">
-            <form className="space-y-6">
+            <form action={formAction} className="space-y-6">
+              {state?.error && (
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 text-sm rounded-lg">
+                  {state.error}
+                </div>
+              )}
+              {state?.success && (
+                <div className="p-3 bg-green-100 border border-green-400 text-green-700 text-sm rounded-lg">
+                  {state.message} Redirecting...
+                </div>
+              )}
+
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-foreground">
                   Email address
@@ -89,13 +128,7 @@ export default function SignInPage() {
               </div>
 
               <div>
-                <button
-                  type="submit"
-                  className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all"
-                >
-                  Sign in
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+                <SubmitButton />
               </div>
             </form>
 

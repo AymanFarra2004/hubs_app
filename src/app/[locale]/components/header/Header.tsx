@@ -7,12 +7,17 @@ import { Menu, Moon, Sun, X, MapPin } from "lucide-react";
 import Nav from "./Nav";
 import { useTranslations } from "next-intl";
 
+
 export function Header() {
   const [isOpen, setIsOpen] = React.useState(false);
   const { setTheme, theme } = useTheme();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const t = useTranslations("Header"); 
+  
+  
+
+
 
   return (
     <nav className="fixed top-0 w-full z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -27,8 +32,10 @@ export function Header() {
             </Link>
           </div>
 
-          <Nav isOpen={isOpen} setIsOpen={setIsOpen} />
-
+          
+            <Nav isOpen={isOpen} setIsOpen={setIsOpen} />
+          
+          
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-4">
             <button

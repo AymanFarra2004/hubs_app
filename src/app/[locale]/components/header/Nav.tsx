@@ -3,7 +3,10 @@ import {Link, usePathname} from '@/src/i18n/routing'
 import { useTheme } from 'next-themes'
 import { Sun, Moon, Menu, X } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "@/src/store/authSlice";
+import { useRouter } from "@/src/i18n/routing";
+import { logoutUser } from "@/src/actions/auth";
 const navLinks = [
   { href: "/", labelKey: "home" },
   { href: "/about", labelKey: "about" },
@@ -15,6 +18,22 @@ export default function Nav({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: (i
     const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const t = useTranslations("Header");
+  const router = useRouter();
+
+ const auth = useSelector((state: any) => state.auth);
+
+const isLoggedIn = !!(auth && auth.isLoggedIn);
+
+    const dispatch = useDispatch();
+
+  const handleLogout = async () => {
+    await logoutUser();
+    dispatch(logout());
+    localStorage.removeItem("token"); // Fallback for any legacy client storage
+    
+    router.push("/");
+  };
+
   return (
     <>
       {/* Desktop Navigation */}
@@ -41,12 +60,28 @@ export default function Nav({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: (i
             {/* Icons remain the same */}
           </button>
           
-          <Link href="/sign-in" className="...">
-            {t('auth.signIn')}
-          </Link>
-          <Link href="/sign-up" className="...">
-            {t('auth.signUp')}
-          </Link>
+          {!isLoggedIn && (
+            <Link href="/sign-in" className="...">
+              {t('auth.signIn')}
+            </Link>
+          )}
+          {!isLoggedIn && (
+            <Link href="/sign-up" className="...">
+              {t('auth.signUp')}
+          </Link>)}
+         {isLoggedIn && (
+            <div className="flex items-center space-x-4">
+              <span className="text-sm font-medium text-foreground">
+                Hello, {auth?.user?.name || "User"}
+              </span>
+              <button 
+                onClick={handleLogout}
+                className="text-red-500 hover:text-red-700"
+              >
+                Log out 
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

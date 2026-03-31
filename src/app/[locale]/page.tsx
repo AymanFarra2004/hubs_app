@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Header } from "@/components/header/Header";
 import HeroSection from "@/components/home-page/HeroSection";
 import { Footer } from "@/components/footer/Footer";
+import ApiTest from "@/components/testapi";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <Header />
       <HeroSection />
       <Footer />
+      {/* <ApiTest /> */}
     </div>
   );
 }
