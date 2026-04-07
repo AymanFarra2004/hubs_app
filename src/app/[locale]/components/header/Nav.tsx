@@ -24,6 +24,7 @@ export default function Nav({isOpen, setIsOpen}: {isOpen: boolean, setIsOpen: (i
 
 const isLoggedIn = !!(auth && auth.isLoggedIn);
 const isHubOwner = isLoggedIn && auth?.user?.role === "hub_owner";
+const isAdmin = isLoggedIn && auth?.user?.role === "admin";
 
     const dispatch = useDispatch();
 
@@ -78,6 +79,14 @@ console.log(auth);
                   className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl transition-colors font-medium text-sm"
                 >
                   Dashboard
+                </Link>
+              )}
+              {isAdmin && (
+                <Link 
+                  href="/admin"
+                  className="px-4 py-2 bg-red-100/50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-xl transition-colors font-medium text-sm"
+                >
+                  Admin Dash
                 </Link>
               )}
               <span className="text-sm font-medium text-foreground">

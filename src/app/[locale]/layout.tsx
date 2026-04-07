@@ -4,6 +4,7 @@ import "./globals.css";
 import { NextIntlClientProvider } from 'next-intl';
 import StoreProvider from "@/src/providers/storeProvider";
 import AuthHydrator from "@/src/providers/AuthHydrator";
+import { Toaster } from "react-hot-toast";
 import { cookies } from "next/headers";
 
 const geistSans = Geist({
@@ -56,6 +57,7 @@ export default async function RootLayout({
         <StoreProvider> 
           {token && user && <AuthHydrator user={user} />}
          <NextIntlClientProvider>{children}</NextIntlClientProvider>
+         <Toaster position="top-center" toastOptions={{ className: 'dark:bg-slate-800 dark:text-white rounded-xl' }} />
         </StoreProvider>
       </body>
     </html>

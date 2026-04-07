@@ -4,6 +4,7 @@ import { useState } from "react";
 import { markAllAdminNotificationsRead } from "@/src/actions/admin";
 import { Loader2, BellRing, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function NotificationsList({ initialNotifications }: { initialNotifications: any[] }) {
   const [notifications, setNotifications] = useState(initialNotifications);
@@ -16,8 +17,9 @@ export default function NotificationsList({ initialNotifications }: { initialNot
     if (res.success) {
       setNotifications(prev => prev.map(n => ({ ...n, read_at: new Date().toISOString() })));
       router.refresh();
+      toast.success("All notifications marked as read");
     } else {
-      alert(res.error || "Failed to mark as read");
+      toast.error(res.error || "Failed to mark as read");
     }
     setIsMarking(false);
   };

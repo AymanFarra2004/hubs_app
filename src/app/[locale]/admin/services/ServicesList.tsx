@@ -5,15 +5,17 @@ import { deleteService } from "@/src/actions/admin";
 import { createService } from "@/src/actions/hubs";
 import { Loader2, Trash2, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 
 export default function ServicesList({ initialServices }: { initialServices: any[] }) {
   const [services, setServices] = useState(initialServices);
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
   const router = useRouter();
 
   const handleDelete = async (id: number) => {
-    if (!confirm("Are you sure you want to delete this service?")) return;
     
     setLoadingId(String(id));
     const res = await deleteService(id);
@@ -21,8 +23,9 @@ export default function ServicesList({ initialServices }: { initialServices: any
     if (res.success) {
       setServices(prev => prev.filter(s => s.id !== id));
       router.refresh();
+      toast.success("Service deleted");
     } else {
-      alert(res.error || "Failed to delete service");
+      toast.error(res.error || "Failed to delete service");
     }
     setLoadingId(null);
   };
@@ -49,8 +52,9 @@ export default function ServicesList({ initialServices }: { initialServices: any
       setServices(prev => [...prev, res.data]);
       setFormData({ name_en: "", name_ar: "", description_en: "", description_ar: "" });
       router.refresh();
+      toast.success("Service created successfully");
     } else {
-      alert(res.error || "Failed to add service");
+      toast.error(res.error || "Failed to add service");
     }
     setIsAdding(false);
   };
@@ -116,7 +120,7 @@ export default function ServicesList({ initialServices }: { initialServices: any
                     ) : (
                       <div className="flex justify-end">
                          <button 
-                           onClick={() => handleDelete(service.id)}
+                           onClick={() => setDeleteConfirmId(service.id)}
                            className="flex items-center gap-1 p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors border border-transparent hover:border-red-200"
                            title="Delete Service"
                          >
@@ -138,6 +142,26 @@ export default function ServicesList({ initialServices }: { initialServices: any
           </table>
         </div>
       </div>
+
+      <AlertDialog open={deleteConfirmId !== null} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
+        <AlertDialogContent className="bg-background sm:rounded-3xl border border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this service?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently remove the service from the system.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-xl border-border">Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}
+              className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
+            >
+              Confirm Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

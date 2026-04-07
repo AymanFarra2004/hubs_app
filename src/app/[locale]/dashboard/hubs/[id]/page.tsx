@@ -5,9 +5,14 @@ import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2,
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
 import { getHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, getAllServices, createService } from "@/src/actions/hubs";
+import { toast } from "react-hot-toast";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 
 // General Tab - shows real hub data
 function GeneralTab({ hub }: { hub: any }) {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
@@ -76,16 +81,7 @@ function GeneralTab({ hub }: { hub: any }) {
 
           <div className="pt-6 mt-6 border-t border-border">
             <button 
-              onClick={async () => {
-                if (confirm("Are you sure you want to delete this hub?")) {
-                  const res = await deleteHub(hub.slug);
-                  if (res.success) {
-                    window.location.href = "/dashboard";
-                  } else {
-                    alert(res.error || "Failed to delete hub");
-                  }
-                }
-              }}
+              onClick={() => setIsDeleteDialogOpen(true)}
               className="px-4 py-2 bg-red-100 text-red-700 text-sm rounded-lg font-medium hover:bg-red-200 transition-colors"
             >
               Delete Hub
@@ -93,6 +89,39 @@ function GeneralTab({ hub }: { hub: any }) {
           </div>
         </div>
       </div>
+
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent className="bg-background sm:rounded-3xl border border-border">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this Hub?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this hub? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-xl border-border">Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={async (e) => {
+                e.preventDefault();
+                setIsDeleting(true);
+                const res = await deleteHub(hub.slug);
+                if (res.success) {
+                  toast.success("Hub deleted successfully");
+                  window.location.href = "/dashboard";
+                } else {
+                  toast.error(res.error || "Failed to delete hub");
+                  setIsDeleting(false);
+                  setIsDeleteDialogOpen(false);
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Confirm Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

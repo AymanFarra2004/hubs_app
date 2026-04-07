@@ -1,7 +1,30 @@
-import { Shield, LayoutDashboard, Server, Bell, Settings, LogOut, CheckSquare } from "lucide-react";
+"use client";
+
+import { Shield, LayoutDashboard, Server, Bell, Settings, LogOut, CheckSquare, AlertTriangle } from "lucide-react";
 import { Link } from "@/src/i18n/routing";
+import { useSelector } from "react-redux";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const auth = useSelector((state: any) => state.auth);
+  const isLoggedIn = !!(auth && auth.isLoggedIn);
+  const isAdmin = isLoggedIn && auth?.user?.role === "admin";
+
+  if (!isAdmin) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-muted/40 p-4">
+        <div className="bg-background p-8 rounded-2xl shadow-lg text-center max-w-md w-full border border-border">
+          <AlertTriangle className="h-16 w-16 text-destructive mx-auto mb-6" />
+          <h1 className="text-2xl font-bold text-foreground mb-3">Access Denied</h1>
+          <p className="text-muted-foreground mb-8">
+            This area is for system administrators only. You do not have permission to view this page.
+          </p>
+          <Link href="/" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-colors w-full">
+            Return to Home
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="flex min-h-screen bg-muted/40">
       {/* Admin Sidebar */}

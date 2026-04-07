@@ -4,6 +4,7 @@ import { useState } from "react";
 import { updateHubStatus } from "@/src/actions/admin";
 import { Loader2, Check, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
   const [hubs, setHubs] = useState(initialHubs);
@@ -21,8 +22,9 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
     if (res.success) {
       setHubs(prev => prev.map(h => h.id === hubId || h.slug === slug ? { ...h, status: newStatus } : h));
       router.refresh();
+      toast.success(`Hub status updated to ${newStatus}`);
     } else {
-      alert(res.error || "Failed to update status");
+      toast.error(res.error || "Failed to update status");
     }
     setLoadingId(null);
   };
