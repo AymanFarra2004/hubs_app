@@ -3,22 +3,28 @@
 import { useState, useMemo } from "react";
 import { Filter, Search, MapPin, Zap, Wifi, X } from "lucide-react";
 import { HubCard } from "../general/HubCard";
+import { useTranslations } from "next-intl";
 
 type HubsClientProps = {
   hubs: any[];
 };
 
 export default function HubsClient({ hubs }: HubsClientProps) {
+  const t = useTranslations("HubsPage");
+  const tGov = useTranslations("Hero.filters.governorates");
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGovernorates, setSelectedGovernorates] = useState<string[]>([]);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
-  // Derive unique governorates from actual hub data
-  const governorates = useMemo(() => {
-    const set = new Set<string>();
-    hubs.forEach((h) => { if (h.governorate) set.add(h.governorate); });
-    return Array.from(set).sort();
-  }, [hubs]);
+  // Fixed standard Gaza governorates with translations
+  const governorateOptions = [
+    { id: "northGaza", name: tGov("northGaza"), canonical: "North Gaza" },
+    { id: "gazaCity", name: tGov("gazaCity"), canonical: "Gaza" },
+    { id: "deirAlBalah", name: tGov("deirAlBalah"), canonical: "Deir al-Balah" },
+    { id: "khanYunis", name: tGov("khanYunis"), canonical: "Khan Yunis" },
+    { id: "rafah", name: tGov("rafah"), canonical: "Rafah" },
+  ];
 
   // Derive unique services from actual hub data
   const services = useMemo(() => {
@@ -27,9 +33,9 @@ export default function HubsClient({ hubs }: HubsClientProps) {
     return Array.from(set).sort().map((name) => ({
       name,
       icon: name.toLowerCase().includes("internet") || name.toLowerCase().includes("wifi") || name.toLowerCase().includes("web")
-        ? <Wifi className="h-3 w-3 inline mr-1" />
+        ? <Wifi className="h-3 w-3 inline me-1" />
         : name.toLowerCase().includes("electric") || name.toLowerCase().includes("power") || name.toLowerCase().includes("solar")
-        ? <Zap className="h-3 w-3 inline mr-1" />
+        ? <Zap className="h-3 w-3 inline me-1" />
         : null,
     }));
   }, [hubs]);
@@ -56,7 +62,6 @@ export default function HubsClient({ hubs }: HubsClientProps) {
 
   const filteredHubs = useMemo(() => {
     return hubs.filter((hub) => {
-      // Search filter
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         const nameMatch = (hub.name || "").toLowerCase().includes(q);
@@ -65,7 +70,6 @@ export default function HubsClient({ hubs }: HubsClientProps) {
         if (!nameMatch && !descMatch && !locMatch) return false;
       }
 
-      // Governorate filter (partial, case-insensitive)
       if (selectedGovernorates.length > 0) {
         const govNorm = (hub.governorate || "").toLowerCase();
         const hasGovMatch = selectedGovernorates.some(
@@ -74,7 +78,6 @@ export default function HubsClient({ hubs }: HubsClientProps) {
         if (!hasGovMatch) return false;
       }
 
-      // Services filter (partial, case-insensitive)
       if (selectedServices.length > 0) {
         const hubServices: string[] = hub.services || [];
         const hasMatch = selectedServices.some((sel) =>
@@ -95,7 +98,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
             <div className="flex items-center gap-2 font-semibold text-lg">
               <Filter className="h-5 w-5" />
-              Filters
+              {t("filters")}
             </div>
             {activeFilterCount > 0 && (
               <button
@@ -103,22 +106,22 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                 className="flex items-center gap-1 text-xs text-muted-foreground hover:text-red-500 transition-colors"
               >
                 <X className="h-3 w-3" />
-                Clear all ({activeFilterCount})
+                {t("clearAll")} ({activeFilterCount})
               </button>
             )}
           </div>
 
           {/* Search */}
           <div className="space-y-3 mb-6">
-            <label className="text-sm font-medium text-foreground">Search Name</label>
+            <label className="text-sm font-medium text-foreground">{t("searchName")}</label>
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="e.g. Al-Bahr Connection"
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-9 pr-4 rounded-md border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                className="w-full h-10 ps-9 pe-4 rounded-md border border-input bg-background text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
             </div>
           </div>
@@ -126,23 +129,23 @@ export default function HubsClient({ hubs }: HubsClientProps) {
           {/* Governorate Filter */}
           <div className="space-y-3 mb-6">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <MapPin className="h-4 w-4" /> Governorate
+              <MapPin className="h-4 w-4" /> {t("governorate")}
             </label>
             <div className="space-y-2">
-              {governorates.map((gov) => (
-                <div key={gov} className="flex items-center space-x-2">
+              {governorateOptions.map((gov) => (
+                <div key={gov.id} className="flex items-center space-x-2 rtl:space-x-reverse">
                   <input
                     type="checkbox"
-                    id={`gov-${gov}`}
-                    checked={selectedGovernorates.includes(gov)}
-                    onChange={() => toggleGovernorate(gov)}
+                    id={`gov-${gov.id}`}
+                    checked={selectedGovernorates.includes(gov.canonical)}
+                    onChange={() => toggleGovernorate(gov.canonical)}
                     className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                   />
                   <label
-                    htmlFor={`gov-${gov}`}
+                    htmlFor={`gov-${gov.id}`}
                     className="text-sm font-medium leading-none cursor-pointer"
                   >
-                    {gov}
+                    {gov.name}
                   </label>
                 </div>
               ))}
@@ -152,11 +155,11 @@ export default function HubsClient({ hubs }: HubsClientProps) {
           {/* Services Filter */}
           <div className="space-y-3">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <Zap className="h-4 w-4" /> Essential Services
+              <Zap className="h-4 w-4" /> {t("essentialServices")}
             </label>
             <div className="space-y-2">
               {services.map((service) => (
-                <div key={service.name} className="flex items-center space-x-2">
+                <div key={service.name} className="flex items-center space-x-2 rtl:space-x-reverse">
                   <input
                     type="checkbox"
                     id={`srv-${service.name}`}
@@ -181,12 +184,12 @@ export default function HubsClient({ hubs }: HubsClientProps) {
       <div className="flex-1">
         <div className="flex justify-between items-center mb-6">
           <p className="text-sm text-muted-foreground">
-            Showing {filteredHubs.length} of {hubs.length} results
+            {t("showing", { count: filteredHubs.length, total: hubs.length })}
           </p>
-          <select className="h-9 w-40 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-            <option>Most Relevant</option>
-            <option>Price: Low to High</option>
-            <option>Recently Added</option>
+          <select className="h-9 w-44 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+            <option>{t("mostRelevant")}</option>
+            <option>{t("priceLow")}</option>
+            <option>{t("recentlyAdded")}</option>
           </select>
         </div>
 
@@ -199,15 +202,15 @@ export default function HubsClient({ hubs }: HubsClientProps) {
         ) : (
           <div className="py-20 text-center border border-dashed border-border rounded-2xl bg-muted/10">
             <Search className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">No hubs found</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-2">{t("noHubsFound")}</h3>
             <p className="text-muted-foreground text-sm mb-4">
-              Try adjusting your filters or search query
+              {t("noHubsTry")}
             </p>
             <button
               onClick={clearFilters}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
             >
-              Clear All Filters
+              {t("clearFilters")}
             </button>
           </div>
         )}

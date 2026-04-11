@@ -1,14 +1,16 @@
 "use client"
 import { Link, usePathname, useRouter } from "@/src/i18n/routing";
-import { LayoutDashboard, PlusCircle, Settings, LogOut, Menu } from "lucide-react";
+import { LayoutDashboard, PlusCircle, Settings, LogOut } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/src/store/authSlice";
 import { logoutUser } from "@/src/actions/auth";
+import { useTranslations } from "next-intl";
 
 export function DashboardSidebar() {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const router = useRouter();
+  const t = useTranslations("DashboardSidebar");
 
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
@@ -37,7 +39,7 @@ export function DashboardSidebar() {
           }`}
         >
           <LayoutDashboard className="h-5 w-5" />
-          My Hubs
+          {t("myHubs")}
         </Link>
 
         <Link
@@ -49,7 +51,7 @@ export function DashboardSidebar() {
           }`}
         >
           <PlusCircle className="h-5 w-5" />
-          Create Hub
+          {t("createHub")}
         </Link>
 
         <Link
@@ -61,14 +63,14 @@ export function DashboardSidebar() {
           }`}
         >
           <Settings className="h-5 w-5" />
-          Settings
+          {t("settings")}
         </Link>
       </nav>
 
       <div className="p-4 border-t border-border">
         <button onClick={handleSignOut} className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-500/10 transition-colors font-medium text-sm">
           <LogOut className="h-5 w-5" />
-          Sign Out
+          {t("signOut")}
         </button>
       </div>
     </aside>

@@ -106,4 +106,8 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* When the locale is Arabic, use Noto Sans Arabic as the base font */
+  :root:lang(ar) body {
+    font-family: var(--font-noto-arabic), sans-serif;
+  }
 }

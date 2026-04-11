@@ -1,8 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 export default function ModernCta() {
+  const t = useTranslations("Cta");
+
   return (
     <section className="relative py-32 overflow-hidden bg-white dark:bg-[#0A0A0B] transition-colors duration-300">
       {/* Dynamic Background */}
@@ -23,18 +26,21 @@ export default function ModernCta() {
             className="relative z-10"
           >
             <h2 className="text-4xl md:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-6 transition-colors">
-              Ready to find your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500">perfect space?</span>
+              {t("title")}{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500">
+                {t("titleHighlight")}
+              </span>
             </h2>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-10 max-w-2xl mx-auto transition-colors">
-              Join thousands of users discovering the best workspaces, cafes, and creative hubs in Gaza. Add your own hub to reach more people.
+              {t("description")}
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a href="/sign-up" className="px-8 py-4 w-full sm:w-auto rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-lg transition-transform hover:scale-105 active:scale-95 shadow-lg dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-800 dark:hover:bg-gray-100">
-                Get Started for Free
+                {t("getStarted")}
               </a>
               <a href="/dashboard/hubs/new" className="px-8 py-4 w-full sm:w-auto rounded-full bg-transparent border border-gray-300 dark:border-white/20 text-gray-700 dark:text-white font-semibold text-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
-                List Your Hub
+                {t("listHub")}
               </a>
             </div>
           </motion.div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { MapPin, Loader2 } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 type Location = {
   id: number;
@@ -15,6 +16,7 @@ type Location = {
 export function LocationSelect() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslations("NewHub");
   
   const [governorateId, setGovernorateId] = useState<string>("");
   const [cityId, setCityId] = useState<string>("");
@@ -43,10 +45,10 @@ export function LocationSelect() {
   if (isLoading) {
     return (
       <div>
-        <label className="block text-sm font-medium text-foreground">Location</label>
+        <label className="block text-sm font-medium text-foreground">{t("locationSelection")}</label>
         <div className="mt-1 flex items-center gap-2 text-muted-foreground p-3 border border-input rounded-xl bg-muted/50">
           <Loader2 className="h-5 w-5 animate-spin" />
-          <span className="text-sm">Loading locations...</span>
+          <span className="text-sm">{t("loadingLocations")}</span>
         </div>
       </div>
     );
@@ -57,9 +59,9 @@ export function LocationSelect() {
       <input type="hidden" name="location_id" value={finalLocationId} />
       
       <div>
-        <label htmlFor="governorate" className="block text-sm font-medium text-foreground">Governorate</label>
+        <label htmlFor="governorate" className="block text-sm font-medium text-foreground">{t("governorate")}</label>
         <div className="mt-1 relative rounded-md shadow-sm">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <div className="absolute inset-y-0 left-0 ps-3 flex items-center pointer-events-none">
             <MapPin className="h-5 w-5 text-muted-foreground" />
           </div>
           <select
@@ -71,9 +73,9 @@ export function LocationSelect() {
               setAreaId(""); // reset area
             }}
             required
-            className="appearance-none block w-full pl-10 pr-8 py-3 border border-input rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
+            className="appearance-none block w-full ps-10 pe-8 py-3 border border-input rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
           >
-            <option value="">Select Governorate</option>
+            <option value="">{t("selectGovernorate")}</option>
             {governorates.map(gov => (
               <option key={gov.id} value={gov.id}>{gov.name}</option>
             ))}
@@ -83,9 +85,9 @@ export function LocationSelect() {
 
       {cities.length > 0 && (
         <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-          <label htmlFor="city" className="block text-sm font-medium text-foreground">City</label>
+          <label htmlFor="city" className="block text-sm font-medium text-foreground">{t("city")}</label>
           <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 ps-3 flex items-center pointer-events-none">
               <MapPin className="h-5 w-5 text-muted-foreground" />
             </div>
             <select
@@ -96,9 +98,9 @@ export function LocationSelect() {
                 setAreaId(""); // reset area
               }}
               required
-              className="appearance-none block w-full pl-10 pr-8 py-3 border border-input rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
+              className="appearance-none block w-full ps-10 pe-8 py-3 border border-input rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
             >
-              <option value="">Select City</option>
+              <option value="">{t("selectCity")}</option>
               {cities.map(city => (
                 <option key={city.id} value={city.id}>{city.name}</option>
               ))}
@@ -109,9 +111,9 @@ export function LocationSelect() {
 
       {areas.length > 0 && (
         <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-          <label htmlFor="area" className="block text-sm font-medium text-foreground">Area</label>
+          <label htmlFor="area" className="block text-sm font-medium text-foreground">{t("area")}</label>
           <div className="mt-1 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 ps-3 flex items-center pointer-events-none">
               <MapPin className="h-5 w-5 text-muted-foreground" />
             </div>
             <select
@@ -119,9 +121,9 @@ export function LocationSelect() {
               value={areaId}
               onChange={(e) => setAreaId(e.target.value)}
               required
-              className="appearance-none block w-full pl-10 pr-8 py-3 border border-input rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
+              className="appearance-none block w-full ps-10 pe-8 py-3 border border-input rounded-xl bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
             >
-              <option value="">Select Area</option>
+              <option value="">{t("selectArea")}</option>
               {areas.map(area => (
                 <option key={area.id} value={area.id}>{area.name}</option>
               ))}

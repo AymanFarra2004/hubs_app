@@ -3,8 +3,8 @@
 import * as React from "react";
 import { Link, usePathname, useRouter } from '@/src/i18n/routing';
 import { useTheme } from "next-themes";
-import { Menu, Moon, Sun, X, MapPin, User, LogOut, LayoutDashboard, Settings } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { Menu, Moon, Sun, X, MapPin, User, LogOut, LayoutDashboard, Settings, Languages } from "lucide-react";
+import { useTranslations, useLocale } from "next-intl";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/src/store/authSlice";
 import { logoutUser } from "@/src/actions/auth";
@@ -12,7 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { href: "/", labelKey: "home" },
-  { href: "/hubs", labelKey: "services" }, // Using "services" translation key for hubs page
+  { href: "/hubs", labelKey: "services" },
   { href: "/about", labelKey: "about" },
   { href: "/contact", labelKey: "contact" },
 ];
@@ -20,11 +20,12 @@ const navLinks = [
 export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
-  const { setTheme, theme, resolvedTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
   
   const pathname = usePathname();
   const t = useTranslations("Header");
   const router = useRouter();
+  const locale = useLocale();
   
   // Redux Auth state
   const auth = useSelector((state: any) => state.auth);
@@ -44,9 +45,11 @@ export function Header() {
     router.push("/");
   };
 
-  const currentTheme = theme === "system" ? resolvedTheme : theme;
+  const handleLocaleSwitch = () => {
+    const nextLocale = locale === "en" ? "ar" : "en";
+    router.replace(pathname, { locale: nextLocale });
+  };
 
-  // Close menus when clicking outside (simple approach: close on scroll or blur)
   React.useEffect(() => {
     const handleScroll = () => { setIsUserMenuOpen(false); };
     window.addEventListener("scroll", handleScroll);
@@ -71,7 +74,7 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-1 rtl:space-x-reverse">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -91,7 +94,7 @@ export function Header() {
           </div>
 
           {/* Desktop Right Side Operations */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-3 rtl:space-x-reverse">
             {/* Theme Toggle */}
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
@@ -102,9 +105,19 @@ export function Header() {
               <Moon className="h-4 w-4 block dark:hidden" />
             </button>
 
+            {/* Language Switcher */}
+            <button
+              onClick={handleLocaleSwitch}
+              className="p-2.5 rounded-full bg-foreground/5 text-foreground hover:bg-foreground/10 transition-colors flex items-center gap-1.5 text-sm font-semibold"
+              aria-label={t('aria.switchLanguage')}
+            >
+              <Languages className="h-4 w-4" />
+              {locale === "en" ? "عربي" : "EN"}
+            </button>
+
             {/* Auth or User Burger Menu */}
             {!isLoggedIn ? (
-              <div className="flex items-center space-x-2 border-l border-border/50 pl-3">
+              <div className="flex items-center space-x-2 rtl:space-x-reverse border-s border-border/50 ps-3">
                 <Link href="/sign-in" className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   {t('auth.signIn')}
                 </Link>
@@ -113,7 +126,7 @@ export function Header() {
                 </Link>
               </div>
             ) : (
-              <div className="relative border-l border-border/50 pl-3">
+              <div className="relative border-s border-border/50 ps-3">
                 <button 
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-2 p-2 rounded-full border border-border bg-background hover:bg-muted transition-all shadow-sm"
@@ -132,7 +145,7 @@ export function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.15 }}
-                      className="absolute right-0 mt-3 w-56 rounded-2xl bg-background border border-border shadow-2xl overflow-hidden py-2"
+                      className="absolute end-0 mt-3 w-56 rounded-2xl bg-background border border-border shadow-2xl overflow-hidden py-2"
                     >
                       <div className="px-4 py-3 border-b border-border/50">
                         <p className="text-sm font-medium text-foreground truncate">{userName}</p>
@@ -143,28 +156,28 @@ export function Header() {
                         {isHubOwner && (
                           <Link href="/dashboard" className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
                             <LayoutDashboard className="h-4 w-4 text-primary" />
-                            Dashboard
+                            {t('userMenu.dashboard')}
                           </Link>
                         )}
                         {isAdmin && (
                           <Link href="/admin" className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
                             <Settings className="h-4 w-4 text-destructive" />
-                            Admin Dashboard
+                            {t('userMenu.adminDashboard')}
                           </Link>
                         )}
                         <Link href="/dashboard/settings" className="flex items-center gap-3 px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors">
                            <User className="h-4 w-4 text-muted-foreground" />
-                           Profile
+                           {t('userMenu.profile')}
                         </Link>
                       </div>
 
                       <div className="border-t border-border/50 pt-2">
                         <button 
                           onClick={handleLogout}
-                          className="flex items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 w-full text-left transition-colors"
+                          className="flex items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 w-full text-start transition-colors"
                         >
                           <LogOut className="h-4 w-4" />
-                          Logout
+                          {t('userMenu.logout')}
                         </button>
                       </div>
                     </motion.div>
@@ -175,8 +188,15 @@ export function Header() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="flex md:hidden items-center space-x-3">
-             <button
+          <div className="flex md:hidden items-center space-x-3 rtl:space-x-reverse">
+            {/* Language Switcher Mobile */}
+            <button
+              onClick={handleLocaleSwitch}
+              className="p-2 rounded-full bg-foreground/5 text-foreground hover:bg-foreground/10 transition-colors text-xs font-bold"
+            >
+              {locale === "en" ? "عربي" : "EN"}
+            </button>
+            <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="p-2 rounded-full bg-foreground/5 text-foreground hover:bg-foreground/10 transition-colors"
             >
@@ -237,20 +257,20 @@ export function Header() {
                     </div>
                     {isHubOwner && (
                       <Link onClick={() => setIsMobileMenuOpen(false)} href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-medium">
-                        <LayoutDashboard className="h-5 w-5" /> Dashboard
+                        <LayoutDashboard className="h-5 w-5" /> {t('userMenu.dashboard')}
                       </Link>
                     )}
                     {isAdmin && (
                       <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-destructive/10 text-destructive font-medium">
-                         <Settings className="h-5 w-5" /> Admin Dashboard
+                         <Settings className="h-5 w-5" /> {t('userMenu.adminDashboard')}
                       </Link>
                     )}
                     <button 
                       onClick={handleLogout}
-                      className="flex items-center gap-3 px-4 py-3 text-sm text-destructive hover:bg-destructive/10 rounded-xl w-full text-left transition-colors font-medium border border-transparent hover:border-destructive/20"
+                      className="flex items-center gap-3 px-4 py-3 text-sm text-destructive hover:bg-destructive/10 rounded-xl w-full text-start transition-colors font-medium border border-transparent hover:border-destructive/20"
                     >
                       <LogOut className="h-5 w-5" />
-                      Logout
+                      {t('userMenu.logout')}
                     </button>
                   </div>
                 )}

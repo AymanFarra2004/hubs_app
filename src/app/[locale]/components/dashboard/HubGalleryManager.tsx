@@ -6,6 +6,7 @@ import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 import { updateHub, downloadImageServer } from "@/src/actions/hubs";
 import { toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 interface FileWithPreview extends File {
   preview: string;
@@ -17,6 +18,8 @@ interface OldPhoto {
 }
 
 export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { hub: any, isOpen: boolean, onClose: () => void, onUpdate: () => void }) {
+  const t = useTranslations("HubManagement.gallery");
+  
   // Existing API photos
   const [oldPhotos, setOldPhotos] = useState<OldPhoto[]>([]);
   // Newly dropped files
@@ -113,11 +116,8 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
     setMainPhotoId(id);
   };
 
-  // Safe fetch utility to download an old image securely to submit it backward to the server as a File, 
-  // ensuring the API accepts it exactly like a newly dropped File
   const fetchUrlAsFile = async (url: string): Promise<File> => {
     try {
-      // First try standard fetch (works if same origin or if backend enables CORS)
       const res = await fetch(url);
       if (!res.ok) throw new Error("CORS or Network issue");
       const blob = await res.blob();
@@ -128,11 +128,9 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
       
       return new File([blob], `main_image.${ext}`, { type: blob.type });
     } catch (e) {
-      // Fallback: Use Server Proxy to bypass strict browser CORS issues!
       const proxied = await downloadImageServer(url);
       
       if (proxied.success && proxied.base64) {
-        // Convert Base64 back to Blob securely
         const byteCharacters = atob(proxied.base64);
         const byteNumbers = new Array(byteCharacters.length);
         for (let i = 0; i < byteCharacters.length; i++) {
@@ -161,16 +159,11 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
     setIsSubmitting(true);
     try {
       const formData = new FormData();
-      
-      // 1. Resolve true main_image File
       let finalMainFile: File | null = null;
-      
-      // Check if mainPhotoId belongs to new Files
       const matchedNew = newFiles.find(f => f.preview === mainPhotoId);
       if (matchedNew) {
          finalMainFile = matchedNew;
       } else {
-         // It belongs to old photos, so we have to dynamically grab it
          finalMainFile = await fetchUrlAsFile(mainPhotoId);
       }
 
@@ -178,15 +171,12 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
          formData.append("main_image", finalMainFile);
       }
 
-      // 2. Resolve gallery additions 
-      // Note: We only append NEW files that are NOT the main image. Old gallery items are preserved inherently.
       newFiles.forEach((file) => {
          if (file.preview !== mainPhotoId) {
             formData.append("gallery[]", file);
          }
       });
 
-      // Submit
       const res = await updateHub(hub.slug, null, formData);
       if (res.success) {
         toast.success("Gallery updated successfully!");
@@ -214,9 +204,9 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
           <div>
             <h2 className="text-xl font-bold flex items-center gap-2 text-foreground">
               <ImageIcon className="h-5 w-5 text-primary" />
-              Manage Hub Gallery
+              {t("title")}
             </h2>
-            <p className="text-sm text-muted-foreground mt-1">Upload new images and set your primary cover photo.</p>
+            <p className="text-sm text-muted-foreground mt-1">{t("subtitle")}</p>
           </div>
           <button 
             onClick={onClose} 
@@ -244,18 +234,18 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
               </div>
               <div>
                 <p className="text-base font-medium text-foreground">
-                  {isDragActive ? 'Drop images to add to gallery...' : 'Click or drag images to upload'}
+                  {isDragActive ? t("dropzonePrimary") : t("dropzonePrimary")}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">Max 5MB per file (PNG, JPG, WEBP)</p>
+                <p className="text-sm text-muted-foreground mt-1">{t("dropzoneSecondary")}</p>
               </div>
             </div>
           </div>
 
           <div className="space-y-4">
              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-lg">Hub Photos</h3>
+                <h3 className="font-semibold text-lg">{t("title").split(' ')[2] || "Photos"}</h3>
                 <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded">
-                   {oldPhotos.length + newFiles.length} Total
+                   {oldPhotos.length + newFiles.length} {t("total")}
                 </span>
              </div>
 
@@ -275,12 +265,12 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
                      
                      {/* Overlay Indicators */}
                      {isMain && (
-                       <div className="absolute top-2 left-2 flex items-center gap-1 bg-amber-400 text-amber-950 text-xs font-bold px-2 py-1 rounded-full shadow-md z-10 animate-in slide-in-from-top-2">
+                       <div className="absolute top-2 left-2 rtl:right-2 rtl:left-auto flex items-center gap-1 bg-amber-400 text-amber-950 text-xs font-bold px-2 py-1 rounded-full shadow-md z-10 animate-in slide-in-from-top-2">
                          <Crown className="h-3 w-3" /> MAIN
                        </div>
                      )}
-                     <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur text-white text-[10px] font-medium px-2 py-1 rounded shadow-md z-10 pointer-events-none">
-                       Uploaded
+                     <div className="absolute bottom-2 right-2 rtl:left-2 rtl:right-auto flex items-center gap-1 bg-black/60 backdrop-blur text-white text-[10px] font-medium px-2 py-1 rounded shadow-md z-10 pointer-events-none">
+                       {t("uploaded")}
                      </div>
 
                      {/* Hover Actions */}
@@ -290,7 +280,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
                            onClick={(e) => { e.stopPropagation(); handleSetMain(photo.url); }}
                            className="flex items-center gap-1.5 bg-amber-400 hover:bg-amber-500 text-amber-950 text-xs font-bold px-3 py-1.5 rounded-full shadow-xl transition-transform hover:scale-105"
                          >
-                           <Star className="h-3.5 w-3.5" /> Set Main
+                           <Star className="h-3.5 w-3.5" /> {t("setMain")}
                          </button>
                        )}
                      </div>
@@ -312,12 +302,12 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
                      
                      {/* Overlay Indicators */}
                      {isMain && (
-                       <div className="absolute top-2 left-2 flex items-center gap-1 bg-amber-400 text-amber-950 text-xs font-bold px-2 py-1 rounded-full shadow-md z-10 animate-in slide-in-from-top-2">
+                       <div className="absolute top-2 left-2 rtl:right-2 rtl:left-auto flex items-center gap-1 bg-amber-400 text-amber-950 text-xs font-bold px-2 py-1 rounded-full shadow-md z-10 animate-in slide-in-from-top-2">
                          <Crown className="h-3 w-3" /> MAIN
                        </div>
                      )}
-                     <div className="absolute bottom-2 right-2 flex items-center gap-1 bg-blue-500/80 backdrop-blur text-white text-[10px] font-medium px-2 py-1 rounded shadow-md z-10 pointer-events-none">
-                       New
+                     <div className="absolute bottom-2 right-2 rtl:left-2 rtl:right-auto flex items-center gap-1 bg-blue-500/80 backdrop-blur text-white text-[10px] font-medium px-2 py-1 rounded shadow-md z-10 pointer-events-none">
+                       {t("new")}
                      </div>
 
                      {/* Hover Actions */}
@@ -327,7 +317,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
                            onClick={(e) => { e.stopPropagation(); handleSetMain(file.preview); }}
                            className="flex items-center gap-1.5 bg-amber-400 hover:bg-amber-500 text-amber-950 text-xs font-bold px-3 py-1.5 rounded-full shadow-xl transition-transform hover:scale-105"
                          >
-                           <Star className="h-3.5 w-3.5" /> Set Main
+                           <Star className="h-3.5 w-3.5" /> {t("setMain")}
                          </button>
                        )}
                        <button 
@@ -346,7 +336,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
              {(oldPhotos.length === 0 && newFiles.length === 0) && (
                <div className="py-12 flex flex-col items-center justify-center text-center bg-muted/10 border border-dashed border-border rounded-xl">
                  <ImageIcon className="h-12 w-12 text-muted-foreground opacity-30 mb-3" />
-                 <p className="font-medium text-muted-foreground">No images found. Drop some above!</p>
+                 <p className="font-medium text-muted-foreground">{t("noImages")}</p>
                </div>
              )}
           </div>
@@ -359,7 +349,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
             disabled={isSubmitting}
             className="px-6 py-2.5 font-medium text-muted-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
           >
-            Cancel
+            {t("cancel") || "Cancel"}
           </button>
           <button 
             onClick={handleSubmit}
@@ -367,7 +357,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
             className="px-6 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors shadow-lg disabled:opacity-50 disabled:shadow-none flex items-center gap-2"
           >
             {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            {isSubmitting ? "Saving Gallery..." : "Save Changes"}
+            {isSubmitting ? t("saving") : t("save")}
           </button>
         </div>
       </div>

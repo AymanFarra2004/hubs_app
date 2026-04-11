@@ -62,10 +62,10 @@ export default function ModernHero({ setFilter }: { setFilter: any }) {
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14"
           >
             <a href="#hubs" className="px-8 py-4 rounded-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-lg transition-transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(37,99,235,0.4)]">
-              Explore Hubs
+              {t("exploreHubs")}
             </a>
             <a href="/dashboard/hubs/new" className="px-8 py-4 rounded-full bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 text-gray-800 dark:text-white font-semibold text-lg backdrop-blur-md transition-transform hover:scale-105 active:scale-95 shadow-sm">
-              Create a Hub
+              {t("createHub")}
             </a>
           </motion.div>
 

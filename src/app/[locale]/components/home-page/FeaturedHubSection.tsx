@@ -1,6 +1,11 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import { HubCard } from "@/src/app/[locale]/components/general/HubCard";
 
 export default function FeaturedHubSection({filter, hubs = []}: {filter: {governorate: string, service: string}, hubs?: any[]}){
+    const t = useTranslations("FeaturedHubs");
+
     const mappedHubs = hubs.map(apiHub => ({
         id: String(apiHub.id),
         slug: apiHub.slug,
@@ -36,16 +41,17 @@ export default function FeaturedHubSection({filter, hubs = []}: {filter: {govern
 
           return govMatch && srvMatch;
         });
+
   return(
          <section className="py-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-10">
               <div>
-                <h2 className="text-3xl font-bold tracking-tight text-foreground">Featured Hubs</h2>
-                <p className="mt-2 text-muted-foreground">Top-rated and verified locations across Gaza.</p>
+                <h2 className="text-3xl font-bold tracking-tight text-foreground">{t("title")}</h2>
+                <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
               </div>
               <a href="/hubs" className="hidden sm:flex text-primary font-medium hover:underline items-center gap-1">
-                View all hubs <span aria-hidden="true">&rarr;</span>
+                {t("viewAll")} <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
             
@@ -57,7 +63,7 @@ export default function FeaturedHubSection({filter, hubs = []}: {filter: {govern
             
             <div className="mt-10 sm:hidden">
               <a href="/hubs" className="block w-full bg-muted text-center py-3 rounded-lg text-foreground font-medium hover:bg-muted/80 transition-colors">
-                View all hubs
+                {t("viewAll")}
               </a>
             </div>
           </div>

@@ -3,31 +3,44 @@ import { DashboardHeader } from "../components/dashboard/DashboardHeader";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import type { Metadata } from 'next';
+import { getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: 'Dashboard | Habbat Owner',
-  description: 'Manage your hubs and connect with your community.',
+type Props = {
+  params: Promise<{ locale: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'Dashboard' });
+ 
+  return {
+    title: `${t('dashboard')} | Habbat Owner`,
+    description: t('myHubsDesc'),
+  };
+}
 
 export default async function DashboardLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const cookieStore = await cookies();
   const userCookie = cookieStore.get("user")?.value;
   
   if (!userCookie) {
-    redirect("/sign-in");
+    redirect(`/${locale}/sign-in`);
   }
 
   try {
     const user = JSON.parse(userCookie);
     if (user.role !== "hub_owner") {
-      redirect("/");
+      redirect(`/${locale}`);
     }
   } catch (e) {
-    redirect("/");
+    redirect(`/${locale}`);
   }
 
   return (

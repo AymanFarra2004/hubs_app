@@ -8,12 +8,15 @@ import { getHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubO
 import { toast } from "react-hot-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 import HubGalleryManager from "@/src/app/[locale]/components/dashboard/HubGalleryManager";
+import { useTranslations, useLocale } from "next-intl";
 
 // General Tab - shows real hub data
 function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
+  const t = useTranslations("HubManagement.general");
+  const locale = useLocale();
 
   const mainImage = hub.images?.main || hub.main_image;
   const imageUrl = mainImage ? (mainImage.startsWith('http') ? mainImage : `https://karam.idreis.net${mainImage.startsWith('/') ? '' : '/'}${mainImage}`) : null;
@@ -21,11 +24,11 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
-        <h3 className="text-lg font-bold mb-4">Hub Information</h3>
+        <h3 className="text-lg font-bold mb-4">{t("title")}</h3>
         
         <div className="space-y-4 max-w-xl">
           <div>
-            <label className="block text-sm font-medium mb-1">Cover Image & Gallery</label>
+            <label className="block text-sm font-medium mb-1">{t("coverImage")}</label>
             <div className="flex items-center gap-4 border border-border p-3 rounded-xl bg-muted/10">
               <div className="h-16 w-16 rounded-xl border border-border flex items-center justify-center bg-muted/30 text-muted-foreground overflow-hidden relative shadow-sm">
                 {imageUrl ? (
@@ -35,17 +38,17 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 )}
               </div>
               <div className="flex flex-col items-start gap-1">
-                <span className="text-sm font-medium">Manage Hub Gallery</span>
-                <span className="text-xs text-muted-foreground">Select main picture and upload gallery</span>
+                <span className="text-sm font-medium">{t("manageGallery")}</span>
+                <span className="text-xs text-muted-foreground">{t("manageGalleryDesc")}</span>
               </div>
               <button 
                 onClick={(e) => {
                   e.preventDefault();
                   setIsGalleryOpen(true);
                 }}
-                className="ml-auto px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
+                className="ms-auto px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
               >
-                Manage Gallery
+                {t("manageGallery")}
               </button>
             </div>
             <HubGalleryManager 
@@ -57,47 +60,47 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Hub Name</label>
-            <input type="text" className="w-full px-4 py-2 border border-input rounded-xl bg-background" defaultValue={hub.name || ""} readOnly />
+            <label className="block text-sm font-medium mb-1">{t("hubName")}</label>
+            <input type="text" className="w-full px-4 py-2 border border-input rounded-xl bg-background" defaultValue={hub.name?.[locale] || hub.name || ""} readOnly />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Description</label>
-            <textarea className="w-full px-4 py-2 border border-input rounded-xl bg-background resize-none" rows={3} defaultValue={hub.description || ""} readOnly />
+            <label className="block text-sm font-medium mb-1">{t("description")}</label>
+            <textarea className="w-full px-4 py-2 border border-input rounded-xl bg-background resize-none" rows={3} defaultValue={hub.description?.[locale] || hub.description || ""} readOnly />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Status</label>
+              <label className="block text-sm font-medium mb-1">{t("status")}</label>
               <span className={`inline-block px-3 py-1.5 rounded-full text-xs font-semibold ${
-                hub.status === "approved" ? "bg-green-100 text-green-700" :
+                hub.status === "approved" || hub.status === "active" ? "bg-green-100 text-green-700" :
                 hub.status === "rejected" ? "bg-red-100 text-red-700" :
                 "bg-yellow-100 text-yellow-700"
               }`}>
-                {hub.status?.charAt(0).toUpperCase() + hub.status?.slice(1) || "Pending"}
+                {hub.status || "Pending"}
               </span>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Slug</label>
+              <label className="block text-sm font-medium mb-1">{t("slug")}</label>
               <span className="text-sm text-muted-foreground font-mono">{hub.slug}</span>
             </div>
           </div>
 
           {hub.rejection_reason && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
-              <strong>Rejection Reason:</strong> {hub.rejection_reason}
+              <strong>{t("rejectionReason")}</strong> {hub.rejection_reason}
             </div>
           )}
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
-            <span>{hub.address_details || "No address"}</span>
+            <span>{hub.address_details?.[locale] || hub.address || t("noAddress")}</span>
             {hub.location && <span className="text-xs bg-muted px-2 py-0.5 rounded">({hub.location.name} - {hub.location.type})</span>}
           </div>
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Phone className="h-4 w-4" />
-            <span dir="ltr">{hub.contact || "No contact"}</span>
+            <span dir="ltr">{hub.contact || t("noContact")}</span>
           </div>
 
           <div className="pt-6 mt-6 border-t border-border">
@@ -105,7 +108,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               onClick={() => setIsDeleteDialogOpen(true)}
               className="px-4 py-2 bg-red-100 text-red-700 text-sm rounded-lg font-medium hover:bg-red-200 transition-colors"
             >
-              Delete Hub
+              {t("deleteHub")}
             </button>
           </div>
         </div>
@@ -114,13 +117,13 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent className="bg-background sm:rounded-3xl border border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this Hub?</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteHubConfirm")}</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete this hub? This action cannot be undone.
+              {t("deleteHubDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl border-border">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-xl border-border">{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={async (e) => {
                 e.preventDefault();
@@ -138,7 +141,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Confirm Delete"}
+              {isDeleting ? t("deleting") : t("confirmDelete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -160,8 +163,8 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const [customNameAR, setCustomNameAR] = useState("");
   const [customDescEN, setCustomDescEN] = useState("");
   const [customDescAR, setCustomDescAR] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const t = useTranslations("HubManagement.services");
+  const locale = useLocale();
 
   const loadData = async () => {
     setLoading(true);
@@ -181,8 +184,6 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 
   const handleLinkGlobal = async (serviceId: number, isLinked: boolean) => {
     setSavingLink(serviceId);
-    setError(null);
-    setSuccess(null);
 
     const formData = new FormData();
     if (isLinked) {
@@ -204,8 +205,6 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const handleAddCustom = async (e: React.FormEvent) => {
     e.preventDefault();
     setAddingCustom(true);
-    setError(null);
-    setSuccess(null);
 
     const formData = new FormData();
     formData.append("name_en", customNameEN.trim());
@@ -249,38 +248,38 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
       {/* Current Services Table */}
       <div className="bg-background rounded-2xl border border-border shadow-sm overflow-hidden">
         <div className="p-6 border-b border-border">
-          <h3 className="text-lg font-bold">Current Hub Services</h3>
-          <p className="text-sm text-muted-foreground">List of all active services for this hub.</p>
+          <h3 className="text-lg font-bold">{t("currentTitle")}</h3>
+          <p className="text-sm text-muted-foreground">{t("currentDesc")}</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
+          <table className="w-full text-sm text-start">
             <thead className="bg-muted/50 text-muted-foreground uppercase text-xs font-semibold">
               <tr>
-                <th className="px-6 py-4">Service Name</th>
-                <th className="px-6 py-4">Type</th>
-                <th className="px-6 py-4">Description</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4 text-start">{t("name")}</th>
+                <th className="px-6 py-4 text-start">{t("type")}</th>
+                <th className="px-6 py-4 text-start">{t("descCol")}</th>
+                <th className="px-6 py-4 text-end">{t("actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
               {activeServices.map((s: any) => {
-                const isCustom = !s.id || s.is_custom || (s.pivot === undefined && !globalServices.find(gs => gs.id === s.id));
-                // Note: The API response might distinguish these differently, adjust if needed
+                const isGlobal = !!s.pivot;
                 return (
                   <tr key={s.id || s.name?.en} className="hover:bg-muted/10 transition-colors">
                     <td className="px-6 py-4">
-                      <span className="font-medium block">{s.name?.en || s.name}</span>
-                      {s.name?.ar && <span className="text-xs text-muted-foreground block">{s.name.ar}</span>}
+                      <span className="font-medium block">{s.name?.[locale] || s.name?.en || s.name}</span>
+                      {s.name?.ar && locale === 'en' && <span className="text-xs text-muted-foreground block">{s.name.ar}</span>}
+                      {s.name?.en && locale === 'ar' && <span className="text-xs text-muted-foreground block" dir="ltr">{s.name.en}</span>}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${s.pivot ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}>
-                        {s.pivot ? "Global" : "Custom"}
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold ${isGlobal ? "bg-blue-100 text-blue-700" : "bg-purple-100 text-purple-700"}`}>
+                        {isGlobal ? t("global") : t("custom")}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-muted-foreground italic">
-                      {s.description?.en || s.description || "-"}
+                      {s.description?.[locale] || s.description?.en || s.description || "-"}
                     </td>
-                    <td className="px-6 py-4 text-right">
+                    <td className="px-6 py-4 text-end">
                        <button 
                          disabled={deletingId === s.id || savingLink === s.id}
                          onClick={() => s.pivot ? handleLinkGlobal(s.id, true) : handleDeleteCustom(s.id)}
@@ -298,7 +297,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               })}
               {activeServices.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">No active services. Add one below.</td>
+                  <td colSpan={4} className="px-6 py-8 text-center text-muted-foreground">{t("noActive")}</td>
                 </tr>
               )}
             </tbody>
@@ -310,15 +309,15 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
         
         {/* Link Global Services */}
         <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
-          <h3 className="text-lg font-bold mb-4">Link Global Services</h3>
+          <h3 className="text-lg font-bold mb-4">{t("linkGlobal")}</h3>
           <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
             {globalServices.map((gs) => {
               const isLinked = activeServices.some(as => as.id === gs.id);
               return (
                 <div key={gs.id} className="flex items-center justify-between p-3 border border-border rounded-xl hover:bg-muted/30 transition-colors">
                   <div>
-                    <span className="font-medium block text-sm">{gs.name?.en || gs.name}</span>
-                    {gs.name?.ar && <span className="text-[10px] text-muted-foreground block">{gs.name.ar}</span>}
+                    <span className="font-medium block text-sm">{gs.name?.[locale] || gs.name?.en || gs.name}</span>
+                    {gs.name?.ar && locale === 'en' && <span className="text-[10px] text-muted-foreground block">{gs.name.ar}</span>}
                   </div>
                   <button
                     disabled={savingLink === gs.id}
@@ -329,7 +328,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                         : "bg-primary/10 text-primary hover:bg-primary/20"
                     }`}
                   >
-                    {savingLink === gs.id ? <Loader2 className="h-3 w-3 animate-spin" /> : (isLinked ? "Unlink" : "Link")}
+                    {savingLink === gs.id ? <Loader2 className="h-3 w-3 animate-spin" /> : (isLinked ? t("unlink") : t("link"))}
                   </button>
                 </div>
               );
@@ -339,11 +338,11 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 
         {/* Add Custom Service */}
         <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
-          <h3 className="text-lg font-bold mb-4">Add Custom Service</h3>
+          <h3 className="text-lg font-bold mb-4">{t("addCustom")}</h3>
           <form onSubmit={handleAddCustom} className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">Service Name (EN) *</label>
+                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">{t("serviceNameEn")}</label>
                 <input 
                   required
                   value={customNameEN}
@@ -353,7 +352,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">Service Name (AR)</label>
+                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground text-end">{t("serviceNameAr")}</label>
                 <input 
                   value={customNameAR}
                   onChange={(e) => setCustomNameAR(e.target.value)}
@@ -363,7 +362,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">Description (EN)</label>
+                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">{t("descEn")}</label>
                 <textarea
                   value={customDescEN}
                   onChange={(e) => setCustomDescEN(e.target.value)}
@@ -372,7 +371,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">Description (AR)</label>
+                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground text-end">{t("descAr")}</label>
                 <textarea
                   value={customDescAR}
                   onChange={(e) => setCustomDescAR(e.target.value)}
@@ -388,7 +387,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               className="w-full px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {addingCustom && <Loader2 className="h-4 w-4 animate-spin" />}
-              {addingCustom ? "Adding..." : "Add Service"}
+              {addingCustom ? t("adding") : t("addService")}
             </button>
           </form>
         </div>
@@ -402,20 +401,21 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 // Socials Tab - functional form
 function SocialsTab({ hubSlug }: { hubSlug: string }) {
   const [state, formAction] = useActionState(addHubSocial.bind(null, hubSlug), null);
+  const t = useTranslations("HubManagement.socials");
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h3 className="text-lg font-bold">Social Links</h3>
-            <p className="text-sm text-muted-foreground mt-1">Help people find your hub online</p>
+            <h3 className="text-lg font-bold">{t("title")}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t("description")}</p>
           </div>
         </div>
 
         <form action={formAction} className="max-w-xl space-y-4">
           {state?.error && <div className="text-red-500 text-sm bg-red-50 p-2 rounded">{state.error}</div>}
-          {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">Social Account Added!</div>}
+          {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">{t("socialAdded")}</div>}
           <div className="flex gap-3">
             <select name="platform" className="px-4 py-2 border border-input rounded-xl bg-background text-sm">
               <option value="facebook">Facebook</option>
@@ -429,7 +429,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
               required
               className="flex-1 px-4 py-2 border border-input rounded-xl bg-background text-sm" 
             />
-            <button type="submit" className="px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-xl font-medium">Add</button>
+            <button type="submit" className="px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-xl font-medium">{t("add")}</button>
           </div>
         </form>
       </div>
@@ -444,6 +444,8 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
   const [state, formAction] = useActionState(addHubOffer.bind(null, hubSlug), null);
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const t = useTranslations("HubManagement.offers");
+  const locale = useLocale();
 
   useEffect(() => {
     async function loadOffers() {
@@ -459,45 +461,45 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
       <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h3 className="text-lg font-bold">Special Offers</h3>
-            <p className="text-sm text-muted-foreground mt-1">Provide special deals for your local community</p>
+            <h3 className="text-lg font-bold">{t("title")}</h3>
+            <p className="text-sm text-muted-foreground mt-1">{t("description")}</p>
           </div>
           <button onClick={() => setShowForm(!showForm)} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
-            {showForm ? "Cancel" : "+ Add Offer"}
+            {showForm ? t("cancel") : t("addOffer")}
           </button>
         </div>
 
         {showForm && (
           <form action={formAction} className="p-4 border border-border rounded-xl mb-6 space-y-4 bg-muted/20">
             {state?.error && <div className="text-red-500 text-sm bg-red-50 p-2 rounded">{state.error}</div>}
-            {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">Offer Added!</div>}
+            {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">{t("offerAdded")}</div>}
             <div>
-              <label className="block text-sm font-medium mb-1">Title (EN)</label>
+              <label className="block text-sm font-medium mb-1">{t("titleEn")}</label>
               <input name="title_en" required className="w-full px-4 py-2 border rounded-lg bg-background" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Title (AR)</label>
-              <input name="title_ar" required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background" />
+              <label className="block text-sm font-medium mb-1 text-end">{t("titleAr")}</label>
+              <input name="title_ar" required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background text-right" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Description (EN)</label>
+              <label className="block text-sm font-medium mb-1">{t("descEn")}</label>
               <textarea name="description_en" required className="w-full px-4 py-2 border rounded-lg bg-background resize-none" rows={2}></textarea>
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Description (AR)</label>
-              <textarea name="description_ar" required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background resize-none" rows={2}></textarea>
+              <label className="block text-sm font-medium mb-1 text-end">{t("descAr")}</label>
+              <textarea name="description_ar" required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background resize-none text-right" rows={2}></textarea>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Price</label>
+                <label className="block text-sm font-medium mb-1">{t("price")}</label>
                 <input name="price" type="number" required className="w-full px-4 py-2 border rounded-lg bg-background" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Duration (Hours)</label>
+                <label className="block text-sm font-medium mb-1">{t("duration")}</label>
                 <input name="duration" type="number" required className="w-full px-4 py-2 border rounded-lg bg-background" />
               </div>
             </div>
-            <button type="submit" className="px-4 py-2 bg-primary text-primary-foreground text-sm rounded-lg font-medium">Save Offer</button>
+            <button type="submit" className="px-4 py-2 bg-primary text-primary-foreground text-sm rounded-lg font-medium">{t("saveOffer")}</button>
           </form>
         )}
 
@@ -508,11 +510,11 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             offers.map((offer) => (
               <div key={offer.id} className="flex items-center justify-between p-4 border border-border rounded-xl">
                 <div>
-                  <h4 className="font-medium text-lg">{offer.title?.en || offer.title}</h4>
-                  <p className="text-sm text-muted-foreground line-clamp-2">{offer.description?.en || ""}</p>
+                  <h4 className="font-medium text-lg">{offer.title?.[locale] || offer.title?.en || offer.title}</h4>
+                  <p className="text-sm text-muted-foreground line-clamp-2">{offer.description?.[locale] || offer.description?.en || ""}</p>
                   <div className="flex gap-4 mt-2">
-                    <span className="text-sm font-semibold text-green-600">${offer.price}</span>
-                    <span className="text-sm text-muted-foreground">{offer.duration} Hours</span>
+                    <span className="text-sm font-semibold text-green-600">₪{offer.price}</span>
+                    <span className="text-sm text-muted-foreground">{offer.duration} {t("hours")}</span>
                     <span className="text-sm capitalize text-muted-foreground">{offer.type}</span>
                   </div>
                 </div>
@@ -522,7 +524,7 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             <div className="border border-border rounded-xl overflow-hidden">
               <div className="py-12 flex flex-col items-center justify-center text-center bg-muted/10">
                 <Tag className="h-12 w-12 text-muted-foreground opacity-50 mb-3" />
-                <p className="font-medium">No offers currently active</p>
+                <p className="font-medium">{t("noOffers")}</p>
               </div>
             </div>
           )}
@@ -539,6 +541,8 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
   const [hub, setHub] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const t = useTranslations("HubManagement");
+  const locale = useLocale();
 
   useEffect(() => {
     async function fetchHub() {
@@ -555,17 +559,17 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
   }, [resolvedParams.id]);
   
   const tabs = [
-    { id: "general", label: "General Settings", icon: Settings },
-    { id: "services", label: "Services", icon: Box },
-    { id: "offers", label: "Special Offers", icon: Tag },
-    { id: "socials", label: "Social Accounts", icon: LinkIcon },
+    { id: "general", label: t("tabs.general"), icon: Settings },
+    { id: "services", label: t("tabs.services"), icon: Box },
+    { id: "offers", label: t("tabs.offers"), icon: Tag },
+    { id: "socials", label: t("tabs.socials"), icon: LinkIcon },
   ];
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-3 text-muted-foreground">Loading hub details...</span>
+        <span className="ms-3 text-muted-foreground">{t("loading")}</span>
       </div>
     );
   }
@@ -574,14 +578,14 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
     return (
       <div className="max-w-lg mx-auto py-20 text-center">
         <div className="p-6 bg-red-50 border border-red-200 rounded-2xl">
-          <p className="font-medium text-red-700">{error || "Hub not found"}</p>
-          <Link href="/dashboard" className="inline-block mt-4 text-primary hover:underline text-sm">← Back to Dashboard</Link>
+          <p className="font-medium text-red-700">{error || t("hubNotFound")}</p>
+          <Link href="/dashboard" className="inline-block mt-4 text-primary hover:underline text-sm">{t("backToDashboard")}</Link>
         </div>
       </div>
     );
   }
 
-  const hubName = hub.name || "Unnamed Hub";
+  const hubName = hub.name?.[locale] || hub.name || "Unnamed Hub";
 
   // Re-fetch hub helper for child tabs to refresh data
   const fetchHub = async () => {
@@ -594,19 +598,19 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
       {/* Header Area */}
       <div>
         <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
-          <ArrowLeft className="h-4 w-4" /> Back to Hubs
+          <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t("backToHubs")}
         </Link>
-        <div className="flex items-end justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
           <div>
             <h2 className="text-3xl font-extrabold text-foreground tracking-tight">{hubName}</h2>
-            <p className="text-muted-foreground mt-1 font-mono text-sm">slug: {hub.slug}</p>
+            <p className="text-muted-foreground mt-1 font-mono text-sm opacity-60">slug: {hub.slug}</p>
           </div>
           <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-            hub.status === "approved" ? "bg-green-100 text-green-700" :
+            hub.status === "approved" || hub.status === "active" ? "bg-green-100 text-green-700" :
             hub.status === "rejected" ? "bg-red-100 text-red-700" :
             "bg-yellow-100 text-yellow-700"
           }`}>
-            {hub.status?.charAt(0).toUpperCase() + hub.status?.slice(1) || "Pending"}
+            {hub.status || "Pending"}
           </span>
         </div>
       </div>
@@ -649,4 +653,3 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
     </div>
   );
 }
-

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from 'next-intl';
+import { getMessages } from 'next-intl/server';
 import StoreProvider from "@/src/providers/storeProvider";
 import AuthHydrator from "@/src/providers/AuthHydrator";
 import { ThemeProvider } from "@/src/providers/ThemeProvider";
@@ -16,6 +17,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const notoSansArabic = Noto_Sans_Arabic({
+  variable: "--font-noto-arabic",
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -38,9 +45,14 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  const messages = await getMessages();
+
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const userCookie = cookieStore.get("user")?.value;
@@ -50,15 +62,20 @@ export default async function RootLayout({
       user = JSON.parse(userCookie);
     } catch(e) {}
   }
+
+  const isRtl = locale === "ar";
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} dir={isRtl ? "rtl" : "ltr"} suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${notoSansArabic.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <StoreProvider> 
             {token && user && <AuthHydrator user={user} />}
-           <NextIntlClientProvider>{children}</NextIntlClientProvider>
+           <NextIntlClientProvider messages={messages} locale={locale}>
+             {children}
+           </NextIntlClientProvider>
            <Toaster position="top-center" toastOptions={{ className: 'dark:bg-slate-800 dark:text-white rounded-xl' }} />
           </StoreProvider>
         </ThemeProvider>

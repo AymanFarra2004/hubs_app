@@ -1,7 +1,13 @@
-import Link from "next/link";
-import { MapPin, Mail, Phone } from "lucide-react";
+"use client";
+
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/i18n/routing";
+import { MapPin, Mail } from "lucide-react";
 
 export function Footer() {
+  const t = useTranslations("Footer");
+
   return (
     <footer className="bg-background border-t border-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -14,10 +20,9 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm mb-6">
-              Empowering communities in Gaza by connecting people to essential 
-              hubs that provide internet, electricity, and safe workspaces.
+              {t("tagline")}
             </p>
-            <div className="flex space-x-4 text-muted-foreground">
+            <div className="flex space-x-4 rtl:space-x-reverse text-muted-foreground">
               <span className="flex items-center gap-2 text-sm">
                 <Mail className="h-4 w-4" /> support@habbat.example.com
               </span>
@@ -25,42 +30,42 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Quick Links</h3>
+            <h3 className="font-semibold text-foreground mb-4">{t("quickLinks")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Home
+                  {t("home")}
                 </Link>
               </li>
               <li>
                 <Link href="/hubs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Find Hubs
+                  {t("findHubs")}
                 </Link>
               </li>
               <li>
                 <Link href="/submit" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Submit a Hub
+                  {t("submitHub")}
                 </Link>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="font-semibold text-foreground mb-4">Legal</h3>
+            <h3 className="font-semibold text-foreground mb-4">{t("legal")}</h3>
             <ul className="space-y-3">
               <li>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Privacy Policy
+                  {t("privacyPolicy")}
                 </Link>
               </li>
               <li>
                 <Link href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Terms of Service
+                  {t("termsOfService")}
                 </Link>
               </li>
               <li>
                 <Link href="/sign-in" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  Hub Owner Login
+                  {t("hubOwnerLogin")}
                 </Link>
               </li>
             </ul>
@@ -68,9 +73,9 @@ export function Footer() {
         </div>
         
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Habbat Connect. All rights reserved.</p>
+          <p>{t("rights", { year: new Date().getFullYear() })}</p>
           <p className="mt-4 md:mt-0 flex items-center gap-1">
-            Built for Gaza <span className="text-red-500">❤️</span>
+            {t("builtFor")} <span className="text-red-500">❤️</span>
           </p>
         </div>
       </div>

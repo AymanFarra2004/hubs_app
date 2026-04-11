@@ -1,9 +1,9 @@
 {
-    "Header": {
+  "Header": {
     "nav": {
       "home": "Home",
       "about": "About",
-      "services": "Services",
+      "services": "Hubs",
       "contact": "Contact"
     },
     "auth": {
@@ -11,13 +11,22 @@
       "signUp": "Sign Up"
     },
     "aria": {
-      "toggleTheme": "Toggle theme"
+      "toggleTheme": "Toggle theme",
+      "switchLanguage": "Switch to Arabic"
+    },
+    "userMenu": {
+      "dashboard": "Dashboard",
+      "adminDashboard": "Admin Dashboard",
+      "profile": "Profile",
+      "logout": "Logout"
     }
   },
   "Hero": {
     "title": "Find the connection <br></br> <primary>you need in Gaza.</primary>",
     "description": "Discover safe, accessible hubs providing reliable internet, electricity, and quiet workspaces when you need them most.",
     "searchButton": "Search",
+    "exploreHubs": "Explore Hubs",
+    "createHub": "Create a Hub",
     "filters": {
       "governorates": {
         "placeholder": "Any Governorate",
@@ -34,5 +43,321 @@
         "workspace": "Workspace"
       }
     }
+  },
+  "HubsGrid": {
+    "title": "Featured",
+    "titleHighlight": "Hubs",
+    "description": "Discover top-rated, premium spaces across Gaza designed for productivity, connection, and comfort.",
+    "viewAll": "View all locations",
+    "verified": "Verified",
+    "exploreSpace": "Explore Space"
+  },
+  "FeaturedHubs": {
+    "title": "Featured Hubs",
+    "subtitle": "Top-rated and verified locations across Gaza.",
+    "viewAll": "View all hubs"
+  },
+  "Cta": {
+    "title": "Ready to find your",
+    "titleHighlight": "perfect space?",
+    "description": "Join thousands of users discovering the best workspaces, cafes, and creative hubs in Gaza. Add your own hub to reach more people.",
+    "getStarted": "Get Started for Free",
+    "listHub": "List Your Hub"
+  },
+  "Footer": {
+    "tagline": "Empowering communities in Gaza by connecting people to essential hubs that provide internet, electricity, and safe workspaces.",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "home": "Home",
+    "findHubs": "Find Hubs",
+    "submitHub": "Submit a Hub",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "hubOwnerLogin": "Hub Owner Login",
+    "rights": "© {year} Habbat Connect. All rights reserved.",
+    "builtFor": "Built for Gaza"
+  },
+  "HubsPage": {
+    "title": "Find a Hub",
+    "description": "Browse all available hubs across Gaza. Use the filters to find the exact services and locations you need.",
+    "filters": "Filters",
+    "clearAll": "Clear all",
+    "searchName": "Search Name",
+    "searchPlaceholder": "e.g. Al-Bahr Connection",
+    "governorate": "Governorate",
+    "essentialServices": "Essential Services",
+    "showing": "Showing {count} of {total} results",
+    "mostRelevant": "Most Relevant",
+    "priceLow": "Price: Low to High",
+    "recentlyAdded": "Recently Added",
+    "noHubsFound": "No hubs found",
+    "noHubsTry": "Try adjusting your filters or search query",
+    "clearFilters": "Clear All Filters"
+  },
+  "SignIn": {
+    "welcomeBack": "Welcome back",
+    "subtitle": "Sign in to manage your hubs or save your favorites.",
+    "emailLabel": "Email address",
+    "passwordLabel": "Password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot your password?",
+    "signIn": "Sign in",
+    "noAccount": "Don't have an account?",
+    "signUpInstead": "Sign up instead",
+    "redirecting": "Redirecting..."
+  },
+  "SignUp": {
+    "createAccount": "Create an account",
+    "subtitle": "Join Habbat to connect with hubs across Gaza.",
+    "nameLabel": "Full Name",
+    "emailLabel": "Email address",
+    "passwordLabel": "Password",
+    "signUp": "Create Account",
+    "haveAccount": "Already have an account?",
+    "signInInstead": "Sign in instead"
+  },
+  "Admin": {
+    "platformOverview": "Platform Overview",
+    "monitorDescription": "Monitor all hubs and pending approvals across the platform.",
+    "pendingApprovals": "Pending Approvals",
+    "activeHubs": "Active Hubs",
+    "rejectedHubs": "Rejected Hubs",
+    "reviewHubs": "Review Hubs",
+    "hubManagement": "Hub Management",
+    "hubManagementDesc": "Manage the lifecycle of all hubs, including new applications and active listings.",
+    "failedToLoad": "Failed to load hubs"
+  },
+  "AdminLayout": {
+    "management": "Management",
+    "dashboard": "Dashboard",
+    "hubApprovals": "Hub Approvals",
+    "globalServices": "Global Services",
+    "notifications": "Notifications",
+    "exitAdmin": "Exit Admin",
+    "accessDenied": "Access Denied",
+    "accessDeniedDesc": "This area is for system administrators only. You do not have permission to view this page.",
+    "returnHome": "Return to Home",
+    "admin": "Admin"
+  },
+  "AdminHubsTable": {
+    "pendingApprovals": "Pending Approvals",
+    "activeHubs": "Active Hubs",
+    "rejectedApplications": "Rejected Applications",
+    "allRecords": "All Records",
+    "hubDetails": "Hub Details",
+    "ownerContact": "Owner Contact",
+    "status": "Status",
+    "actions": "Actions",
+    "approve": "Approve",
+    "reject": "Reject",
+    "reason": "Reason",
+    "unknown": "Unknown",
+    "noContactInfo": "No contact info",
+    "noHubsInSection": "No hubs found in this section.",
+    "rejectHub": "Reject Hub",
+    "rejectModalDesc": "Please provide a reason to help the hub owner understand why this request is being rejected. They will be able to read this message.",
+    "rejectionReason": "Rejection Reason",
+    "rejectionPlaceholder": "e.g. Identity verification failed...",
+    "cancel": "Cancel",
+    "confirmRejection": "Confirm Rejection"
+  },
+  "AdminServices": {
+    "addNewService": "Add New Service",
+    "nameEn": "Name (English)",
+    "nameAr": "Name (Arabic)",
+    "descEn": "Description (English)",
+    "descAr": "Description (Arabic)",
+    "createService": "Create Service",
+    "id": "ID",
+    "serviceName": "Service Name",
+    "description": "Description",
+    "actions": "Actions",
+    "noServices": "No services configured.",
+    "deleteService": "Delete this service?",
+    "deleteServiceDesc": "This action cannot be undone. This will permanently remove the service from the system.",
+    "confirmDelete": "Confirm Delete",
+    "globalServicesTitle": "Global Services",
+    "globalServicesDesc": "Manage the services available to all hubs."
+  },
+  "Dashboard": {
+    "myHubs": "My Hubs",
+    "myHubsDesc": "Manage and monitor all your resilient networks",
+    "createNewHub": "Create New Hub",
+    "failedToLoad": "Failed to load hubs",
+    "noHubsYet": "No hubs yet",
+    "noHubsDesc": "You haven't created any service hubs. Get started by registering your first location to help your community.",
+    "createFirstHub": "Create First Hub",
+    "dashboard": "Dashboard"
+  },
+  "DashboardSidebar": {
+    "myHubs": "My Hubs",
+    "createHub": "Create Hub",
+    "settings": "Settings",
+    "signOut": "Sign Out"
+  },
+  "DashboardHeader": {
+    "dashboard": "Dashboard",
+    "signOut": "Sign Out"
+  },
+  "DashboardHubCard": {
+    "noImage": "No Image",
+    "locationUnavailable": "Location unavailable",
+    "manageHub": "Manage Hub"
+  },
+  "HubManagement": {
+    "backToHubs": "Back to Hubs",
+    "loading": "Loading hub details...",
+    "hubNotFound": "Hub not found",
+    "backToDashboard": "← Back to Dashboard",
+    "tabs": {
+      "general": "General Settings",
+      "services": "Services",
+      "offers": "Special Offers",
+      "socials": "Social Accounts"
+    },
+    "general": {
+      "title": "Hub Information",
+      "coverImage": "Cover Image & Gallery",
+      "manageGallery": "Manage Hub Gallery",
+      "manageGalleryDesc": "Select main picture and upload gallery",
+      "hubName": "Hub Name",
+      "description": "Description",
+      "status": "Status",
+      "slug": "Slug",
+      "rejectionReason": "Rejection Reason:",
+      "noAddress": "No address",
+      "noContact": "No contact",
+      "deleteHub": "Delete Hub",
+      "deleteHubConfirm": "Delete this Hub?",
+      "deleteHubDesc": "Are you sure you want to delete this hub? This action cannot be undone.",
+      "deleting": "Deleting...",
+      "confirmDelete": "Confirm Delete",
+      "cancel": "Cancel"
+    },
+    "services": {
+      "currentTitle": "Current Hub Services",
+      "currentDesc": "List of all active services for this hub.",
+      "name": "Service Name",
+      "type": "Type",
+      "global": "Global",
+      "custom": "Custom",
+      "descCol": "Description",
+      "actions": "Actions",
+      "noActive": "No active services. Add one below.",
+      "linkGlobal": "Link Global Services",
+      "unlink": "Unlink",
+      "link": "Link",
+      "addCustom": "Add Custom Service",
+      "serviceNameEn": "Service Name (EN) *",
+      "serviceNameAr": "Service Name (AR)",
+      "descEn": "Description (EN)",
+      "descAr": "Description (AR)",
+      "adding": "Adding...",
+      "addService": "Add Service"
+    },
+    "socials": {
+      "title": "Social Links",
+      "description": "Help people find your hub online",
+      "socialAdded": "Social Account Added!",
+      "add": "Add"
+    },
+    "offers": {
+      "title": "Special Offers",
+      "description": "Provide special deals for your local community",
+      "addOffer": "+ Add Offer",
+      "cancel": "Cancel",
+      "titleEn": "Title (EN)",
+      "titleAr": "Title (AR)",
+      "descEn": "Description (EN)",
+      "descAr": "Description (AR)",
+      "price": "Price",
+      "duration": "Duration (Hours)",
+      "saveOffer": "Save Offer",
+      "offerAdded": "Offer Added!",
+      "hours": "Hours",
+      "noOffers": "No offers currently active"
+    },
+    "gallery": {
+      "title": "Manage Hub Gallery",
+      "subtitle": "Upload new images and set your primary cover photo.",
+      "uploaded": "Uploaded",
+      "new": "New",
+      "saving": "Saving Gallery...",
+      "save": "Save Changes",
+      "noImages": "No images found. Drop some above!",
+      "total": "Total",
+      "setMain": "Set Main"
+    }
+  },
+  "NewHub": {
+    "title": "List Your Hub",
+    "description": "Help your community stay connected. Add your internet or electricity hub to our network.",
+    "disclaimer": "By submitting this form, you agree that our team will review the information. Approved listings receive a \"Verified Partner\" badge.",
+    "cancel": "Cancel",
+    "submit": "Submit Listing",
+    "basicInfo": "1. Basic Information",
+    "hubNameEn": "Hub Name (English)",
+    "hubNameAr": "Hub Name (Arabic)",
+    "hubNamePlaceholderEn": "e.g. Al-Bahr Connection",
+    "hubNamePlaceholderAr": "e.g. Al-Bahr Connection",
+    "locationSelection": "Location Selection",
+    "detailedAddressEn": "Detailed Address (English)",
+    "detailedAddressAr": "Detailed Address (Arabic)",
+    "addressPlaceholderEn": "e.g. Al-Rashid St, Near the Port",
+    "addressPlaceholderAr": "Al-Rashid St, Near the Port",
+    "descriptionEn": "Description (English)",
+    "descriptionAr": "Description (Arabic)",
+    "descriptionPlaceholderEn": "Describe the atmosphere or specific directions...",
+    "descriptionPlaceholderAr": "Describe the atmosphere...",
+    "servicesPricing": "2. Services, Pricing & Contact",
+    "contactNumber": "Contact Number",
+    "contactPlaceholder": "e.g. +970591234567",
+    "hourlyPrice": "Hourly Price",
+    "hourlyPriceNote": "(per hour, in ₪)",
+    "hourlyPricePlaceholder": "e.g. 5",
+    "facebookUrl": "Facebook URL",
+    "twitterUrl": "Twitter (X) URL",
+    "urlPlaceholder": "https://...",
+    "availableServices": "Available Services Overview",
+    "other": "Other",
+    "createCustomService": "Create Custom Service",
+    "customServiceNameEn": "Service Name (EN)",
+    "customServiceNameAr": "Service Name (AR)",
+    "customServiceDescEn": "Description (EN)",
+    "customServiceDescAr": "Description (AR)",
+    "customNamePlaceholderEn": "e.g. Free Coffee",
+    "customNamePlaceholderAr": "e.g. Free Coffee",
+    "photos": "3. Photos",
+    "mainImageNote": "Main image shows on the hub card · others go to gallery",
+    "dropzoneActive": "Drop images here...",
+    "dropzoneInactive": "Click to upload or drag and drop",
+    "dropzoneNote": "Images only · max 5MB per file",
+    "imagesSelected": "{count} image{count, plural, one {} other {s}} selected",
+    "setMain": "Set Main",
+    "addMore": "Add more",
+    "mainLegend": "Main",
+    "mainLegendDesc": "shown on hub card",
+    "galleryLegend": "Gallery",
+    "galleryLegendDesc": "shown in hub detail page",
+    "skippedOverSize": "Skipped (over 5MB): {names}",
+    "loadingLocations": "Loading locations...",
+    "governorate": "Governorate",
+    "selectGovernorate": "Select Governorate",
+    "city": "City",
+    "selectCity": "Select City",
+    "area": "Area",
+    "selectArea": "Select Area",
+    "loadingData": "Loading hub details...",
+    "successMessage": "Hub created successfully!"
+  },
+  "AdminNotifications": {
+    "title": "Platform Notifications",
+    "description": "Review system alerts, new hub applications, and user activities.",
+    "failedToLoad": "Failed to load notifications",
+    "activityLog": "Activity Log",
+    "unreadCount": "You have {count} unread notifications.",
+    "markAllRead": "Mark All Read",
+    "noNotifications": "No notifications available.",
+    "systemNotif": "Internal system notification"
   }
 }

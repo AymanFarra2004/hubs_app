@@ -5,11 +5,13 @@ import { markAllAdminNotificationsRead } from "@/src/actions/admin";
 import { Loader2, BellRing, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 export default function NotificationsList({ initialNotifications }: { initialNotifications: any[] }) {
   const [notifications, setNotifications] = useState(initialNotifications);
   const [isMarking, setIsMarking] = useState(false);
   const router = useRouter();
+  const t = useTranslations("AdminNotifications");
 
   const handleMarkAll = async () => {
     setIsMarking(true);
@@ -17,7 +19,7 @@ export default function NotificationsList({ initialNotifications }: { initialNot
     if (res.success) {
       setNotifications(prev => prev.map(n => ({ ...n, read_at: new Date().toISOString() })));
       router.refresh();
-      toast.success("All notifications marked as read");
+      toast.success(t("markAllRead"));
     } else {
       toast.error(res.error || "Failed to mark as read");
     }
@@ -34,8 +36,8 @@ export default function NotificationsList({ initialNotifications }: { initialNot
             <BellRing className="h-6 w-6" />
           </div>
           <div>
-            <h3 className="font-bold text-lg text-foreground">Activity Log</h3>
-            <p className="text-muted-foreground text-sm">You have {unreadCount} unread notifications.</p>
+            <h3 className="font-bold text-lg text-foreground">{t("activityLog")}</h3>
+            <p className="text-muted-foreground text-sm">{t("unreadCount", { count: unreadCount })}</p>
           </div>
         </div>
         <button 
@@ -44,14 +46,14 @@ export default function NotificationsList({ initialNotifications }: { initialNot
           className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-xl font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
         >
           {isMarking ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-          Mark All Read
+          {t("markAllRead")}
         </button>
       </div>
 
       <div className="bg-background rounded-2xl border border-border shadow-sm overflow-hidden">
         {notifications.length === 0 ? (
           <div className="py-16 text-center text-muted-foreground">
-            No notifications available.
+            {t("noNotifications")}
           </div>
         ) : (
           <div className="divide-y divide-border">
@@ -60,14 +62,14 @@ export default function NotificationsList({ initialNotifications }: { initialNot
                 <div className={`mt-1 h-3 w-3 rounded-full flex-shrink-0 ${!notif.read_at ? 'bg-primary' : 'bg-muted'}`} />
                 <div className="flex-1">
                   <p className={`text-sm ${!notif.read_at ? 'font-semibold text-foreground' : 'text-muted-foreground'}`}>
-                    {notif.data?.message || "Internal system notification"}
+                    {notif.data?.message || t("systemNotif")}
                   </p>
                   
                   {notif.data && Object.keys(notif.data).filter(k => k !== 'message').length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-2">
                        {Object.entries(notif.data).filter(([k]) => k !== 'message').map(([key, value]) => {
                           const displayKey = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                          const displayValue = typeof value === 'object' ? (value as any)?.en || JSON.stringify(value) : String(value);
+                          const displayValue = typeof value === 'object' ? (value as any)?.en || (value as any)?.ar || JSON.stringify(value) : String(value);
                           return (
                             <span key={key} className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-muted/60 border border-border rounded-lg text-xs font-medium text-muted-foreground">
                               <span className="opacity-70">{displayKey}:</span> 

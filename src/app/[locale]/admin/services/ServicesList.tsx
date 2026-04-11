@@ -7,6 +7,7 @@ import { Loader2, Trash2, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
+import { useTranslations, useLocale } from "next-intl";
 
 export default function ServicesList({ initialServices }: { initialServices: any[] }) {
   const [services, setServices] = useState(initialServices);
@@ -14,6 +15,8 @@ export default function ServicesList({ initialServices }: { initialServices: any
   const [isAdding, setIsAdding] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
   const router = useRouter();
+  const t = useTranslations("AdminServices");
+  const locale = useLocale();
 
   const handleDelete = async (id: number) => {
     
@@ -64,43 +67,43 @@ export default function ServicesList({ initialServices }: { initialServices: any
       {/* Add New Service Form */}
       <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
         <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
-          <Plus className="h-5 w-5 text-primary" /> Add New Service
+          <Plus className="h-5 w-5 text-primary" /> {t("addNewService")}
         </h3>
         <form onSubmit={handleAdd} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Name (English) <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium mb-1">{t("nameEn")} <span className="text-red-500">*</span></label>
               <input required value={formData.name_en} onChange={(e) => setFormData({...formData, name_en: e.target.value})} className="w-full px-3 py-2 border rounded-xl bg-background" placeholder="e.g. 5G Setup" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Name (Arabic)</label>
-              <input value={formData.name_ar} onChange={(e) => setFormData({...formData, name_ar: e.target.value})} className="w-full px-3 py-2 border rounded-xl bg-background" placeholder="e.g. إعداد الجيل الخامس" dir="rtl" />
+              <label className="block text-sm font-medium mb-1 text-end md:text-start" dir="rtl">{t("nameAr")}</label>
+              <input value={formData.name_ar} onChange={(e) => setFormData({...formData, name_ar: e.target.value})} className="w-full px-3 py-2 border rounded-xl bg-background" placeholder="مثال: إعداد الجيل الخامس" dir="rtl" />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Description (English)</label>
+              <label className="block text-sm font-medium mb-1">{t("descEn")}</label>
               <textarea value={formData.description_en} onChange={(e) => setFormData({...formData, description_en: e.target.value})} className="w-full px-3 py-2 border rounded-xl bg-background" rows={2} />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Description (Arabic)</label>
+              <label className="block text-sm font-medium mb-1 text-end md:text-start" dir="rtl">{t("descAr")}</label>
               <textarea value={formData.description_ar} onChange={(e) => setFormData({...formData, description_ar: e.target.value})} className="w-full px-3 py-2 border rounded-xl bg-background" rows={2} dir="rtl" />
             </div>
           </div>
           <button disabled={isAdding || !formData.name_en} className="bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium hover:bg-primary/90 flex items-center gap-2">
             {isAdding && <Loader2 className="h-4 w-4 animate-spin" />}
-            Create Service
+            {t("createService")}
           </button>
         </form>
       </div>
 
       <div className="bg-background rounded-2xl border border-border shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
+          <table className="w-full text-sm text-start">
             <thead className="bg-muted/50 text-muted-foreground uppercase text-xs font-semibold">
               <tr>
-                <th className="px-6 py-4">ID</th>
-                <th className="px-6 py-4">Service Name</th>
-                <th className="px-6 py-4">Description</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4 text-start">{t("id")}</th>
+                <th className="px-6 py-4 text-start">{t("serviceName")}</th>
+                <th className="px-6 py-4 text-start">{t("description")}</th>
+                <th className="px-6 py-4 text-end">{t("actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -108,13 +111,14 @@ export default function ServicesList({ initialServices }: { initialServices: any
                 <tr key={service.id} className="hover:bg-muted/20 transition-colors">
                   <td className="px-6 py-4 text-muted-foreground">#{service.id}</td>
                   <td className="px-6 py-4 font-medium text-foreground">
-                    <span className="block">{service.name?.en || service.name}</span>
-                    {service.name?.ar && <span className="block text-xs text-muted-foreground">{service.name.ar}</span>}
+                    <span className="block">{service.name?.[locale] || service.name?.en || service.name}</span>
+                    {locale === 'en' && service.name?.ar && <span className="block text-xs text-muted-foreground">{service.name.ar}</span>}
+                    {locale === 'ar' && service.name?.en && <span className="block text-xs text-muted-foreground">{service.name.en}</span>}
                   </td>
                   <td className="px-6 py-4 text-muted-foreground w-1/3">
-                    <span className="block text-xs line-clamp-1">{service.description?.en || service.description}</span>
+                    <span className="block text-xs line-clamp-1">{service.description?.[locale] || service.description?.en || service.description || "-"}</span>
                   </td>
-                  <td className="px-6 py-4 text-right">
+                  <td className="px-6 py-4 text-end">
                     {loadingId === String(service.id) ? (
                       <div className="flex justify-end pr-3"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
                     ) : (
@@ -134,7 +138,7 @@ export default function ServicesList({ initialServices }: { initialServices: any
               {services.length === 0 && (
                 <tr>
                   <td colSpan={4} className="py-8 text-center text-muted-foreground">
-                    No services configured.
+                    {t("noServices")}
                   </td>
                 </tr>
               )}
@@ -146,18 +150,18 @@ export default function ServicesList({ initialServices }: { initialServices: any
       <AlertDialog open={deleteConfirmId !== null} onOpenChange={(open) => !open && setDeleteConfirmId(null)}>
         <AlertDialogContent className="bg-background sm:rounded-3xl border border-border">
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this service?</AlertDialogTitle>
+            <AlertDialogTitle>{t("deleteService")}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently remove the service from the system.
+              {t("deleteServiceDesc")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl border-border">Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="rounded-xl border-border">{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}
               className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
             >
-              Confirm Delete
+              {t("confirmDelete")}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

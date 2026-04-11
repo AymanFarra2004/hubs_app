@@ -6,12 +6,14 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/src/store/authSlice";
 import { logoutUser } from "@/src/actions/auth";
 import { useRouter } from "@/src/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export function DashboardHeader() {
   const [showMenu, setShowMenu] = useState(false);
   const [userName, setUserName] = useState("User");
   const dispatch = useDispatch();
   const router = useRouter();
+  const t = useTranslations("DashboardHeader");
 
   useEffect(() => {
     try {
@@ -36,7 +38,7 @@ export function DashboardHeader() {
         <button className="md:hidden p-2 text-muted-foreground hover:bg-muted rounded-lg transition-colors">
           <Menu className="h-5 w-5" />
         </button>
-        <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
+        <h1 className="text-lg font-semibold text-foreground">{t("dashboard")}</h1>
       </div>
 
       <div className="flex items-center gap-4">
@@ -58,13 +60,13 @@ export function DashboardHeader() {
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-xl shadow-lg py-1 z-50">
+            <div className="absolute right-0 rtl:left-0 rtl:right-auto mt-2 w-48 bg-background border border-border rounded-xl shadow-lg py-1 z-50">
               <button 
                 onClick={handleSignOut}
                 className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
-                Sign Out
+                {t("signOut")}
               </button>
             </div>
           )}

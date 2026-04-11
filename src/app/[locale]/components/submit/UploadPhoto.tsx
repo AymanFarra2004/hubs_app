@@ -5,6 +5,7 @@ import { Upload, X, Star, Crown, Image as ImageIcon } from 'lucide-react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { useDropzone } from 'react-dropzone'
+import { useTranslations } from 'next-intl'
 
 interface FileWithPreview extends File {
   preview: string;
@@ -14,6 +15,7 @@ const UploadPhoto = () => {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [mainIndex, setMainIndex] = useState<number>(0);
   const [rejectedNames, setRejectedNames] = useState<string[]>([]);
+  const t = useTranslations("NewHub");
 
   const mainInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
@@ -93,10 +95,10 @@ const UploadPhoto = () => {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between border-b border-border pb-2">
-        <h2 className="text-xl font-semibold">3. Photos</h2>
+        <h2 className="text-xl font-semibold">{t("photos")}</h2>
         {files.length > 0 && (
           <p className="text-xs text-muted-foreground">
-            <span className="text-amber-500 font-medium">★ Main</span> image shows on the hub card · others go to gallery
+            <span className="text-amber-500 font-medium">★ {t("mainLegend")}</span> {t("mainImageNote")}
           </p>
         )}
       </div>
@@ -135,9 +137,9 @@ const UploadPhoto = () => {
             <Upload className={`h-6 w-6 ${isDragActive ? 'text-primary' : 'text-muted-foreground'}`} />
           </div>
           <p className="text-sm font-medium text-foreground">
-            {isDragActive ? 'Drop images here...' : 'Click to upload or drag and drop'}
+            {isDragActive ? t("dropzoneActive") : t("dropzoneInactive")}
           </p>
-          <p className="text-xs text-muted-foreground">Images only · max 5MB per file</p>
+          <p className="text-xs text-muted-foreground">{t("dropzoneNote")}</p>
         </div>
       </div>
 
@@ -145,7 +147,7 @@ const UploadPhoto = () => {
       {files.length > 0 && (
         <div className="space-y-3">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            {files.length} image{files.length !== 1 ? 's' : ''} selected
+            {t("imagesSelected", { count: files.length })}
           </p>
 
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -173,7 +175,7 @@ const UploadPhoto = () => {
                     {isMain && (
                       <div className="absolute top-1.5 left-1.5 flex items-center gap-1 bg-amber-400 text-amber-900 text-[10px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                         <Crown className="h-2.5 w-2.5" />
-                        MAIN
+                        {t("mainLegend").toUpperCase()}
                       </div>
                     )}
 
@@ -187,7 +189,7 @@ const UploadPhoto = () => {
                           className="flex items-center gap-1 bg-amber-400 hover:bg-amber-500 text-amber-900 text-[10px] font-bold px-2 py-1 rounded-full shadow-sm transition-colors"
                         >
                           <Star className="h-3 w-3" />
-                          Set Main
+                          {t("setMain")}
                         </button>
                       )}
                       <button
@@ -206,8 +208,8 @@ const UploadPhoto = () => {
                     <p className="text-[10px] font-medium truncate text-foreground">{file.name}</p>
                     <p className="text-[10px] text-muted-foreground">
                       {(file.size / 1024).toFixed(1)} KB
-                      {isMain && <span className="ml-1 text-amber-600 font-semibold">· Hub Card</span>}
-                      {!isMain && <span className="ml-1 text-muted-foreground">· Gallery</span>}
+                      {isMain && <span className="mx-1 text-amber-600 font-semibold">· {t("mainLegend")}</span>}
+                      {!isMain && <span className="mx-1 text-muted-foreground">· {t("galleryLegend")}</span>}
                     </p>
                   </div>
                 </div>
@@ -221,7 +223,7 @@ const UploadPhoto = () => {
             >
               <input {...getInputProps()} />
               <ImageIcon className="h-5 w-5 text-muted-foreground" />
-              <p className="text-[10px] text-muted-foreground font-medium">Add more</p>
+              <p className="text-[10px] text-muted-foreground font-medium">{t("addMore")}</p>
             </div>
           </div>
 
@@ -229,11 +231,11 @@ const UploadPhoto = () => {
           <div className="flex flex-wrap gap-4 text-xs text-muted-foreground pt-1">
             <span className="flex items-center gap-1">
               <Crown className="h-3 w-3 text-amber-500" />
-              <strong className="text-amber-600">Main</strong> — shown on hub card
+              <strong className="text-amber-600">{t("mainLegend")}</strong> — {t("mainLegendDesc")}
             </span>
             <span className="flex items-center gap-1">
               <ImageIcon className="h-3 w-3" />
-              <strong>Gallery</strong> — shown in hub detail page
+              <strong>{t("galleryLegend")}</strong> — {t("galleryLegendDesc")}
             </span>
           </div>
         </div>
@@ -242,7 +244,7 @@ const UploadPhoto = () => {
       {/* Error Messages */}
       {rejectedNames.length > 0 && (
         <p className="text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1">
-          Skipped (over 5MB): {rejectedNames.join(', ')}
+          {t("skippedOverSize", { names: rejectedNames.join(', ') })}
         </p>
       )}
     </section>
