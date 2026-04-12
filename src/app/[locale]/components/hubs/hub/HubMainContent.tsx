@@ -2,8 +2,9 @@ import React from 'react'
 import { IHub } from '@/data/hubs'
 import { ShieldCheck, MapPin } from 'lucide-react'
 import HubGallery from './HubGallery'
+import HubOffers from './HubOffers'
 
-export default function HubMainContent({hub, serviceIcons}: {hub: IHub, serviceIcons: Record<string, React.ReactNode>}) {
+export default function HubMainContent({hub, serviceIcons, offers = []}: {hub: IHub, serviceIcons: Record<string, React.ReactNode>, offers?: any[]}) {
   return (
     <div className="lg:col-span-2 space-y-10">
               
@@ -14,6 +15,13 @@ export default function HubMainContent({hub, serviceIcons}: {hub: IHub, serviceI
                   {hub.description}
                 </p>
               </section>
+
+              {offers.length > 0 && (
+                <>
+                  <hr className="border-border" />
+                  <HubOffers offers={offers} />
+                </>
+              )}
 
               <hr className="border-border" />
 

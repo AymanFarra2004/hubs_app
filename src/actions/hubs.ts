@@ -499,6 +499,9 @@ export async function addHubOffer(hubSlug: string, prevState: any, formData: For
       type: formData.get("type") as string || "daily",
       price: Number(formData.get("price")),
       duration: Number(formData.get("duration")),
+      starts_at: (formData.get("starts_at") as string) + " 00:00:00",
+      ends_at: (formData.get("ends_at") as string) + " 00:00:00",
+      is_global: false,
       status: formData.get("status") as string || "active",
     };
 
@@ -513,6 +516,69 @@ export async function addHubOffer(hubSlug: string, prevState: any, formData: For
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
       return { success: true, message: "Added" };
     }
+    return { error: result.message || "Failed" };
+  } catch (e) {
+    return { error: "Network Error" };
+  }
+}
+
+export async function updateHubOffer(hubSlug: string, offerId: number, prevState: any, formData: FormData) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const payload = {
+      title: {
+        en: formData.get("title_en") as string,
+        ar: formData.get("title_ar") as string,
+      },
+      description: {
+        en: formData.get("description_en") as string,
+        ar: formData.get("description_ar") as string,
+      },
+      type: formData.get("type") as string || "daily",
+      price: Number(formData.get("price")),
+      duration: Number(formData.get("duration")),
+      starts_at: (formData.get("starts_at") as string) + " 00:00:00",
+      ends_at: (formData.get("ends_at") as string) + " 00:00:00",
+      status: formData.get("status") as string || "active",
+    };
+
+    const res = await fetch(`${API_BASE_URL}/hubs/${hubSlug}/offers/${offerId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "Accept": "application/json", Authorization: `Bearer ${token}` },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if (res.ok && result.status === 'success') {
+      revalidatePath(`/hubs/${hubSlug}`);
+      revalidatePath(`/dashboard/hubs/${hubSlug}`);
+      return { success: true, message: "Updated" };
+    }
+    return { error: result.message || "Failed" };
+  } catch (e) {
+    return { error: "Network Error" };
+  }
+}
+
+export async function deleteHubOffer(hubSlug: string, offerId: number) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/hubs/${hubSlug}/offers/${offerId}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}`, "Accept": "application/json" }
+    });
+    if (res.ok) {
+      revalidatePath(`/hubs/${hubSlug}`);
+      revalidatePath(`/dashboard/hubs/${hubSlug}`);
+      revalidateTag(`offers-${hubSlug}`);
+      return { success: true, message: "Deleted" };
+    }
+    const result = await res.json();
     return { error: result.message || "Failed" };
   } catch (e) {
     return { error: "Network Error" };

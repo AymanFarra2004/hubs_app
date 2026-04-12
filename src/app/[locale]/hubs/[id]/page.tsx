@@ -4,7 +4,7 @@ import { Wifi, Zap, Monitor, Coffee, ChevronLeft } from "lucide-react"
 
 import { Header } from "@/components/header/Header"
 import { Footer } from "@/components/footer/Footer"
-import { getAllHubs } from "@/src/actions/hubs"
+import { getAllHubs, getHubOffers, getHubBySlug } from "@/src/actions/hubs"
 import HubHeroImage from "@/components/hubs/hub/HubHeroImage"
 import HubMainContent from "@/components/hubs/hub/HubMainContent"
 import HhubSideBar from "@/components/hubs/hub/HhubSideBar"
@@ -38,8 +38,8 @@ function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", p
     operatingHours: apiHub.working_hours 
       ? `${format24to12(apiHub.working_hours.start, amLabel, pmLabel)} - ${format24to12(apiHub.working_hours.end, amLabel, pmLabel)}`
       : apiHub.operating_hours || "Contact for hours",
-    services: Array.isArray(apiHub.services)
-      ? apiHub.services.map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s))
+    services: Array.isArray(apiHub.all_services || apiHub.services)
+      ? (apiHub.all_services || apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s))
       : [],
     imageUrl: apiHub.images?.main
       ? apiHub.images.main.startsWith("http")
@@ -69,20 +69,20 @@ export default async function HubDetails({
   const { id } = await params
   const locale = await getLocale()
 
-  // Fetch all hubs from the API and find the one matching id or slug
-  const res = await getAllHubs(locale)
-  let rawHubs = res.data || []
-  if (!Array.isArray(rawHubs)) rawHubs = []
+  // Fetch the detailed hub directly
+  const res = await getHubBySlug(id, locale)
+  const rawHub = res.success ? res.data : null
 
-  const rawHub = rawHubs.find(
-    (h: any) => String(h.id) === id || String(h.slug) === id
-  )
-
+  if (!rawHub) {
     notFound()
   }
   
-  const t = await getTranslations("HubManagement.general")
-  const hub = mapApiHub(rawHub, locale, t("am"), t("pm"))
+  const t = await getTranslations("HubManagement.general");
+  const hub = mapApiHub(rawHub, locale, t("am"), t("pm"));
+
+  // Fetch offers for this specific hub
+  const offersRes = await getHubOffers(rawHub.slug || id, locale);
+  const offers = offersRes.success ? offersRes.data : [];
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -102,7 +102,7 @@ export default async function HubDetails({
           <HubHeroImage hub={hub} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <HubMainContent hub={hub} serviceIcons={serviceIcons} />
+            <HubMainContent hub={hub} serviceIcons={serviceIcons} offers={offers} />
             <HhubSideBar hub={hub} />
           </div>
 
@@ -111,5 +111,5 @@ export default async function HubDetails({
 
       <Footer />
     </div>
-  )
+  );
 }

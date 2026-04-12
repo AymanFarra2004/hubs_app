@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, use, useEffect, useActionState, useRef } from "react";
-import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2, AlertTriangle, MapPin, Phone, Trash2 } from "lucide-react";
+import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2, AlertTriangle, MapPin, Phone, Trash2, Clock, Calendar, Edit, X } from "lucide-react";
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
-import { getHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService } from "@/src/actions/hubs";
+import { getHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, updateHubOffer, deleteHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService } from "@/src/actions/hubs";
 import { toast } from "react-hot-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 import HubGalleryManager from "@/src/app/[locale]/components/dashboard/HubGalleryManager";
@@ -359,7 +359,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             </thead>
             <tbody className="divide-y divide-border">
               {activeServices.map((s: any) => {
-                const isGlobal = !!s.pivot;
+                const isGlobal = s.is_global || !!s.pivot;
                 return (
                   <tr key={s.id || s.name?.en} className="hover:bg-muted/10 transition-colors">
                     <td className="px-6 py-4">
@@ -378,7 +378,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                     <td className="px-6 py-4 text-end">
                        <button 
                          disabled={deletingId === s.id || savingLink === s.id}
-                         onClick={() => s.pivot ? handleLinkGlobal(s.id, true) : handleDeleteCustom(s.id)}
+                         onClick={() => isGlobal ? handleLinkGlobal(s.id, true) : handleDeleteCustom(s.id)}
                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                        >
                          {deletingId === s.id || savingLink === s.id ? (
@@ -529,28 +529,78 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
           </div>
         </form>
       </div>
-    </div>
-  );
-}
-
+      </div>
+      )}
 
 // Offers Tab - functional form
 function OffersTab({ hubSlug }: { hubSlug: string }) {
   const [showForm, setShowForm] = useState(false);
-  const [state, formAction] = useActionState(addHubOffer.bind(null, hubSlug), null);
+  const [editingOffer, setEditingOffer] = useState<any | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const t = useTranslations("HubManagement.offers");
+  const [deletingId, setDeletingId] = useState<number | null>(null);
   const locale = useLocale();
+  const t = useTranslations("HubManagement.offers");
+
+  const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
+    if (editingOffer) {
+      setIsUpdating(true);
+      const res = await updateHubOffer(hubSlug, editingOffer.id, prevState, formData);
+      setIsUpdating(false);
+      if (res.success) {
+        setEditingOffer(null);
+        setShowForm(false);
+        loadOffers();
+      }
+      return res;
+    } else {
+      const res = await addHubOffer(hubSlug, prevState, formData);
+      if (res.success) {
+        setShowForm(false);
+        loadOffers();
+      }
+      return res;
+    }
+  }, null);
+
+  const loadOffers = async () => {
+    setLoading(true);
+    const res = await getHubOffers(hubSlug, locale);
+    if (res.success) setOffers(res.data);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    async function loadOffers() {
-      const res = await getHubOffers(hubSlug, locale);
-      if (res.success) setOffers(res.data);
-      setLoading(false);
-    }
     loadOffers();
   }, [hubSlug, state]);
+
+  const handleDelete = async (offerId: number) => {
+    if (!confirm("Are you sure you want to delete this offer?")) return;
+    setDeletingId(offerId);
+    const res = await deleteHubOffer(hubSlug, offerId);
+    if (res.success) {
+      toast.success("Offer deleted");
+      loadOffers();
+    } else {
+      toast.error(res.error || "Failed to delete");
+    }
+    setDeletingId(null);
+  };
+
+  const handleEdit = (offer: any) => {
+    setEditingOffer(offer);
+    setShowForm(true);
+    // Smooth scroll to form
+    setTimeout(() => {
+      window.scrollTo({ top: 100, behavior: 'smooth' });
+    }, 100);
+  };
+
+  const cancelEdit = () => {
+    setEditingOffer(null);
+    setShowForm(false);
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -560,7 +610,10 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             <h3 className="text-lg font-bold">{t("title")}</h3>
             <p className="text-sm text-muted-foreground mt-1">{t("description")}</p>
           </div>
-          <button onClick={() => setShowForm(!showForm)} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
+           <button onClick={() => {
+            if (editingOffer) cancelEdit();
+            else setShowForm(!showForm);
+          }} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
             {showForm ? t("cancel") : t("addOffer")}
           </button>
         </div>
@@ -569,59 +622,141 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
           <form action={formAction} className="p-4 border border-border rounded-xl mb-6 space-y-4 bg-muted/20">
             {state?.error && <div className="text-red-500 text-sm bg-red-50 p-2 rounded">{state.error}</div>}
             {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">{t("offerAdded")}</div>}
-            <div>
-              <label className="block text-sm font-medium mb-1">{t("titleEn")}</label>
-              <input name="title_en" required className="w-full px-4 py-2 border rounded-lg bg-background" />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("titleEn")}</label>
+                <input name="title_en" defaultValue={editingOffer?.title?.en || (typeof editingOffer?.title === 'string' ? '' : '')} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-end">{t("titleAr")}</label>
+                <input name="title_ar" defaultValue={editingOffer?.title?.ar || (typeof editingOffer?.title === 'string' ? editingOffer.title : '')} required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background text-right text-sm" />
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-end">{t("titleAr")}</label>
-              <input name="title_ar" required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background text-right" />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("descEn")}</label>
+                <textarea name="description_en" defaultValue={editingOffer?.description?.en || ''} required className="w-full px-4 py-2 border rounded-lg bg-background resize-none text-sm" rows={2}></textarea>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-end">{t("descAr")}</label>
+                <textarea name="description_ar" defaultValue={editingOffer?.description?.ar || (typeof editingOffer?.description === 'string' ? editingOffer.description : '')} required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background resize-none text-right text-sm" rows={2}></textarea>
+              </div>
             </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">{t("descEn")}</label>
-              <textarea name="description_en" required className="w-full px-4 py-2 border rounded-lg bg-background resize-none" rows={2}></textarea>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1 text-end">{t("descAr")}</label>
-              <textarea name="description_ar" required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background resize-none text-right" rows={2}></textarea>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("type")}</label>
+                <select name="type" defaultValue={editingOffer?.type || "daily"} className="w-full px-4 py-2 border rounded-lg bg-background text-sm">
+                  <option value="daily">{t("types.daily")}</option>
+                  <option value="weekly">{t("types.weekly")}</option>
+                  <option value="monthly">{t("types.monthly")}</option>
+                  <option value="once">{t("types.once")}</option>
+                </select>
+              </div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t("price")}</label>
-                <input name="price" type="number" required className="w-full px-4 py-2 border rounded-lg bg-background" />
+                <input name="price" type="number" defaultValue={editingOffer?.price} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t("duration")}</label>
-                <input name="duration" type="number" required className="w-full px-4 py-2 border rounded-lg bg-background" />
+                <input name="duration" type="number" defaultValue={editingOffer?.duration} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("status") || "Status"}</label>
+                <select name="status" defaultValue={editingOffer?.status || "active"} className="w-full px-4 py-2 border rounded-lg bg-background text-sm">
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
               </div>
             </div>
-            <button type="submit" className="px-4 py-2 bg-primary text-primary-foreground text-sm rounded-lg font-medium">{t("saveOffer")}</button>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t("startsAt") || "Starts At"}</label>
+                <input name="starts_at" type="date" defaultValue={editingOffer?.starts_at ? editingOffer.starts_at.split(' ')[0] : ''} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1 text-end">{t("endsAt") || "Ends At"}</label>
+                <input name="ends_at" type="date" defaultValue={editingOffer?.ends_at ? editingOffer.ends_at.split(' ')[0] : ''} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3">
+              {editingOffer && (
+                <button type="button" onClick={cancelEdit} className="px-6 py-2.5 border border-border text-sm rounded-xl font-medium hover:bg-muted transition-colors">
+                  {t("cancel")}
+                </button>
+              )}
+              <button type="submit" disabled={isUpdating} className="px-8 py-2.5 bg-primary text-primary-foreground text-sm rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2">
+                {isUpdating && <Loader2 className="h-4 w-4 animate-spin" />}
+                {editingOffer ? "Update Offer" : t("saveOffer")}
+              </button>
+            </div>
           </form>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {loading ? (
-             <div className="py-8 text-center"><Loader2 className="h-6 w-6 animate-spin mx-auto text-primary" /></div>
+             <div className="py-12 text-center"><Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" /></div>
           ) : offers.length > 0 ? (
             offers.map((offer) => (
-              <div key={offer.id} className="flex items-center justify-between p-4 border border-border rounded-xl">
-                <div>
-                  <h4 className="font-medium text-lg">{offer.title?.[locale] || offer.title?.en || offer.title}</h4>
-                  <p className="text-sm text-muted-foreground line-clamp-2">{offer.description?.[locale] || offer.description?.en || ""}</p>
-                  <div className="flex gap-4 mt-2">
-                    <span className="text-sm font-semibold text-green-600">₪{offer.price}</span>
-                    <span className="text-sm text-muted-foreground">{offer.duration} {t("hours")}</span>
-                    <span className="text-sm capitalize text-muted-foreground">{offer.type}</span>
+              <div key={offer.id} className="flex items-center justify-between p-5 border border-border rounded-2xl hover:bg-muted/10 transition-colors group">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3">
+                    <h4 className="font-bold text-lg">{typeof offer.title === 'string' ? offer.title : (offer.title?.[locale] || offer.title?.en || offer.title?.ar || "Offer")}</h4>
+                    <span className="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold uppercase rounded-full">
+                      {t(`types.${offer.type}`)}
+                    </span>
                   </div>
+                  <p className="text-sm text-muted-foreground mt-1 line-clamp-2 max-w-2xl">
+                    {typeof offer.description === 'string' ? offer.description : (offer.description?.[locale] || offer.description?.en || offer.description?.ar || "")}
+                  </p>
+                  <div className="flex flex-wrap gap-4 mt-3">
+                    <div className="flex items-center text-green-600 font-bold">
+                       <span className="text-xl">₪{offer.price}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
+                      <Clock className="h-3 w-3" />
+                      <span>{offer.duration} {t("hours")}</span>
+                    </div>
+                    {offer.starts_at && (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground bg-muted/50 px-2 py-1 rounded-md">
+                        <Calendar className="h-3 w-3" />
+                        <span>{new Date(offer.starts_at).toLocaleDateString('en-GB')}</span>
+                      </div>
+                    )}
+                    {offer.ends_at && (
+                      <div className="flex items-center gap-1.5 text-xs text-red-600/80 font-medium bg-red-50 px-2 py-1 rounded-md">
+                        <Calendar className="h-3 w-3" />
+                        <span>{t("expiresAt") || "Expires"}: {new Date(offer.ends_at).toLocaleDateString('en-GB')}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  <button 
+                    onClick={() => handleEdit(offer)}
+                    className="p-3 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                  >
+                    <Edit className="h-5 w-5" />
+                  </button>
+                  <button 
+                    onClick={() => handleDelete(offer.id)}
+                    disabled={deletingId === offer.id}
+                    className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                  >
+                    {deletingId === offer.id ? <Loader2 className="h-5 w-5 animate-spin" /> : <Trash2 className="h-5 w-5" />}
+                  </button>
                 </div>
               </div>
             ))
           ) : (
-            <div className="border border-border rounded-xl overflow-hidden">
-              <div className="py-12 flex flex-col items-center justify-center text-center bg-muted/10">
-                <Tag className="h-12 w-12 text-muted-foreground opacity-50 mb-3" />
-                <p className="font-medium">{t("noOffers")}</p>
-              </div>
+            <div className="border border-dashed border-border rounded-2xl overflow-hidden py-16 flex flex-col items-center justify-center text-center bg-muted/5">
+              <Tag className="h-12 w-12 text-muted-foreground opacity-30 mb-4" />
+              <p className="font-medium text-muted-foreground">{t("noOffers")}</p>
             </div>
           )}
         </div>

@@ -1,12 +1,13 @@
 "use client";
-
+import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { MapPin, Zap, Clock } from "lucide-react";
+import { MapPin, Zap, Clock, Tag } from "lucide-react";
 import { format24to12 } from "@/src/lib/utils";
 
 export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governorate: string, service: string }, hubs?: any[] }) {
   const t = useTranslations("HubsGrid");
+  const tOffers = useTranslations("HubManagement.offers");
   const locale = useLocale();
 
   const mappedHubs = hubs.map(apiHub => ({
@@ -20,12 +21,13 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
     operatingHours: apiHub.working_hours 
       ? `${format24to12(apiHub.working_hours.start, t("am"), t("pm"))} - ${format24to12(apiHub.working_hours.end, t("am"), t("pm"))}`
       : apiHub.operating_hours || "Contact for hours",
-    services: Array.isArray(apiHub.services) ? apiHub.services.map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
+    services: Array.isArray(apiHub.all_services || apiHub.services) ? (apiHub.all_services || apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
     imageUrl: apiHub.images?.main ?
       (apiHub.images.main.startsWith('http') ? apiHub.images.main : `https://karam.idreis.net${apiHub.images.main.startsWith('/') ? '' : '/'}${apiHub.images.main}`)
       : "https://placehold.co/600x400?text=No+Image",
     verificationStatus: apiHub.status === "approved" ? "Verified" : "Pending",
-    contact: { contactNumber: apiHub.contact || "" }
+    contact: { contactNumber: apiHub.contact || "" },
+    activeOffer: (apiHub.hasOffer || apiHub.offers) && Array.isArray(apiHub.hasOffer || apiHub.offers) && (apiHub.hasOffer || apiHub.offers).length > 0 ? (apiHub.hasOffer || apiHub.offers)[0] : null,
   }));
 
   // Only show approved hubs in the featured grid
@@ -51,7 +53,7 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
   // Limit to max 6 for a balanced bento grid
   const bentoHubs = filteredHubs.slice(0, 6);
 
-  return (
+return (
     <section className="py-24 bg-gray-50 dark:bg-[#050505] relative z-10 transition-colors duration-300" id="hubs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
@@ -102,14 +104,23 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
                 </div>
 
                 <div className="relative z-20 h-full flex flex-col justify-end p-6 md:p-8">
-                  {hub.verificationStatus === "Verified" && (
-                    <div className="absolute top-6 end-6 px-3 py-1 bg-blue-500/20 border border-blue-400/30 rounded-full backdrop-blur-md">
-                      <span className="text-xs font-semibold text-blue-300 uppercase tracking-wider flex items-center gap-1">
-                        <Zap className="w-3 h-3" /> {t("verified")}
+                  {/* Verified Tag */}
+                  <div className="absolute top-6 end-6 px-3 py-1 bg-blue-500/20 border border-blue-400/30 rounded-full backdrop-blur-md">
+                    <span className="text-xs font-semibold text-blue-300 uppercase tracking-wider flex items-center gap-1">
+                      <Zap className="w-3 h-3" /> {t("verified")}
+                    </span>
+                  </div>
+
+                  {/* Active Offer Tag */}
+                  {hub.activeOffer && (
+                    <div className="absolute top-6 start-6 px-3 py-1 bg-primary/20 border border-primary/30 rounded-full backdrop-blur-md">
+                      <span className="text-xs font-bold text-primary-foreground uppercase tracking-wider flex items-center gap-1">
+                        <Tag className="w-3 h-3 text-primary" /> {tOffers("specialOffer")}
                       </span>
                     </div>
                   )}
                   
+                  {/* Content Section */}
                   <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 line-clamp-1">{hub.name}</h3>
                     
@@ -124,9 +135,23 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
                       </div>
                     </div>
 
-                    <p className="text-gray-200 dark:text-gray-400 text-sm md:text-base line-clamp-2 mb-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                    <p className="text-gray-200 dark:text-gray-400 text-sm md:text-base line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                       {hub.description}
                     </p>
+{console.log(hub)}
+                    {hub.activeOffer && (
+                      <div className="mb-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-150">
+                        <div className="px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg">
+                          <p className="text-[10px] font-bold text-primary-foreground/70 uppercase tracking-tighter">{tOffers("specialOffer")}</p>
+                          <p className="text-xs font-bold text-white truncate max-w-[120px]">
+                            {typeof hub.activeOffer.title === 'string' ? hub.activeOffer.title : (hub.activeOffer.title?.[locale] || hub.activeOffer.title?.en || "Offer")}
+                          </p>
+                        </div>
+                        <div className="px-2 py-1.5 bg-primary text-white font-bold text-sm rounded-lg shadow-lg">
+                          ₪{hub.activeOffer.price}
+                        </div>
+                      </div>
+                    )}
 
                     <a href={`/hubs/${hub.slug}`} className="inline-flex items-center text-sm font-semibold text-white group/btn">
                       {t("exploreSpace")}

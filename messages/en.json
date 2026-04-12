@@ -249,12 +249,12 @@
       "currentDesc": "List of all active services for this hub.",
       "name": "Service Name",
       "type": "Type",
-      "global": "Global",
+      "global": "Default",
       "custom": "Custom",
       "descCol": "Description",
       "actions": "Actions",
       "noActive": "No active services. Add one below.",
-      "linkGlobal": "Link Global Services",
+      "linkGlobal": "Link Default Services",
       "unlink": "Unlink",
       "link": "Link",
       "addCustom": "Add Custom Service",
@@ -285,7 +285,19 @@
       "saveOffer": "Save Offer",
       "offerAdded": "Offer Added!",
       "hours": "Hours",
-      "noOffers": "No offers currently active"
+      "noOffers": "No offers currently active",
+      "type": "Offer Type",
+      "startsAt": "Starts At",
+      "endsAt": "Ends At",
+      "expiresAt": "Expires",
+      "specialOffer": "Special Offer",
+      "status": "Status",
+      "types": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "once": "Once"
+      }
     },
     "gallery": {
       "title": "Manage Hub Gallery",

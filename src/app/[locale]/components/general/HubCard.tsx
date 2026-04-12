@@ -1,13 +1,13 @@
 import Image from "next/image"
 import {Link} from '@/src/i18n/routing'
-import { MapPin, Wifi, Zap, Clock, ShieldCheck, Monitor, Coffee } from "lucide-react"
-
+import { MapPin, Wifi, Zap, Clock, ShieldCheck, Monitor, Coffee, Tag } from "lucide-react"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { IHub } from "@/data/hubs"
+import { useLocale, useTranslations } from "next-intl"
 
 interface IHubCardProps {
-  hub: IHub & { slug?: string }
+  hub: IHub & { slug?: string; activeOffer?: any }
 }
 
 const serviceIcons: Record<string, React.ReactNode> = {
@@ -37,8 +37,14 @@ function resolveImageSrc(imageUrl: any): string | undefined {
 
 export function HubCard({ hub }: IHubCardProps) {
   const imageSrc = resolveImageSrc(hub.imageUrl);
+  const locale = useLocale();
+  const t = useTranslations("HubManagement.offers");
+  
   // Use slug if available (API hubs), otherwise fall back to id
   const detailHref = `/hubs/${(hub as any).slug || hub.id}`;
+  
+  const offer = hub.activeOffer;
+  const offerTitle = offer ? (offer.title?.[locale] || offer.title?.en || offer.title) : null;
 
   return (
     <Card className="flex flex-col overflow-hidden transition-all hover:shadow-md group">
@@ -65,6 +71,14 @@ export function HubCard({ hub }: IHubCardProps) {
               Verified
             </Badge>
           </div>
+        )}
+        {offer && (
+           <div className="absolute top-3 left-3 z-10">
+             <Badge className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-sm flex items-center gap-1 backdrop-blur-sm font-bold animate-pulse">
+               <Tag className="h-3 w-3" />
+               {t("specialOffer")}
+             </Badge>
+           </div>
         )}
         <div className="absolute bottom-3 left-3 flex flex-wrap gap-2 z-10">
           {(hub.services || []).slice(0, 3).map((service: string, index: number) => (
@@ -113,6 +127,18 @@ export function HubCard({ hub }: IHubCardProps) {
             <div className="flex items-center text-muted-foreground">
               <Clock className="h-3.5 w-3.5 mr-1.5 shrink-0" />
               <span className="line-clamp-1">{hub.operatingHours}</span>
+            </div>
+          )}
+          
+          {offer && (
+            <div className="mt-2 p-2 rounded-lg bg-primary/5 border border-primary/10 flex items-center gap-2">
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-bold text-primary uppercase tracking-wider">{t("specialOffer")}</p>
+                <p className="text-xs font-semibold text-foreground truncate">{offerTitle}</p>
+              </div>
+              <div className="text-primary font-bold text-sm bg-primary/10 px-1.5 py-0.5 rounded">
+                ₪{offer.price}
+              </div>
             </div>
           )}
         </div>

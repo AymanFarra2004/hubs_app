@@ -29,12 +29,13 @@ export default async function HubsDirectory() {
     operatingHours: apiHub.working_hours 
       ? `${format24to12(apiHub.working_hours.start, t("am"), t("pm"))} - ${format24to12(apiHub.working_hours.end, t("am"), t("pm"))}`
       : apiHub.operating_hours || "Contact for hours",
-    services: Array.isArray(apiHub.services) ? apiHub.services.map((s:any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
+    services: Array.isArray(apiHub.all_services || apiHub.services) ? (apiHub.all_services || apiHub.services).map((s:any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
     imageUrl: apiHub.images?.main ? 
       (apiHub.images.main.startsWith('http') ? apiHub.images.main : `https://karam.idreis.net${apiHub.images.main.startsWith('/') ? '' : '/'}${apiHub.images.main}`) 
       : "https://placehold.co/600x400?text=No+Image",
     verificationStatus: apiHub.status === "approved" ? "Verified" : "Pending",
-    contact: { contactNumber: apiHub.contact || "" }
+    contact: { contactNumber: apiHub.contact || "" },
+    activeOffer: (apiHub.hasOffer || apiHub.offers) && (apiHub.hasOffer || apiHub.offers).length > 0 ? (apiHub.hasOffer || apiHub.offers)[0] : null,
   }));
 
   // Only show approved hubs to the public directory

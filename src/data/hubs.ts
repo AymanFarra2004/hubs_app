@@ -17,4 +17,5 @@ export interface IHub {
     galleryUrls?: string[];
     verificationStatus: "Verified" | "Pending";
     contact:Icontact;
+    activeOffer?: any;
 }

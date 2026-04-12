@@ -35,7 +35,7 @@ export default async function DashboardOverviewPage() {
       ) : hubs && hubs.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {hubs.map((hub: any, i: number) => (
-             <HubCard key={hub.id || i} hub={hub} />
+            <HubCard key={hub.id || i} hub={hub} />
           ))}
         </div>
       ) : (
