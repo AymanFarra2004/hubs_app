@@ -38,8 +38,8 @@ function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", p
     operatingHours: apiHub.working_hours 
       ? `${format24to12(apiHub.working_hours.start, amLabel, pmLabel)} - ${format24to12(apiHub.working_hours.end, amLabel, pmLabel)}`
       : apiHub.operating_hours || "Contact for hours",
-    services: Array.isArray(apiHub.all_services || apiHub.services)
-      ? (apiHub.all_services || apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s))
+    services: Array.isArray((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services)
+      ? ((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s))
       : [],
     imageUrl: apiHub.images?.main
       ? apiHub.images.main.startsWith("http")

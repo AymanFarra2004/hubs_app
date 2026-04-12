@@ -73,13 +73,41 @@ export async function getMyHubs(locale: string = "ar") {
 }
 
 export async function getHubBySlug(slugOrId: string, locale: string = "ar") {
+  try {
+    const langParam = getLangParam(locale);
+    const headers: Record<string, string> = { "Accept": "application/json" };
+
+    const res = await fetch(`${API_BASE_URL}/front/hubs/${slugOrId}?${langParam}`, {
+      method: "GET",
+      headers,
+      next: { revalidate: 0 }
+    });
+    
+    let result;
+    try {
+      result = await res.json();
+    } catch (e) {
+      result = null;
+    }
+
+    if (res.ok && result) {
+      return { success: true, data: result.data || result };
+    }
+
+    return { error: (result && result.message) ? result.message : "Failed to fetch hub", data: null };
+  } catch (error) {
+    return { error: "Network Error", data: null };
+  }
+}
+
+export async function getPrivateHubBySlug(slugOrId: string, locale: string = "ar") {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   if (!token) return { error: "Unauthenticated", data: null };
 
   try {
     const langParam = getLangParam(locale);
-    const res = await fetch(`${API_BASE_URL}/front/hubs/${slugOrId}?${langParam}`, {
+    const res = await fetch(`${API_BASE_URL}/hubs/${slugOrId}?${langParam}`, {
       method: "GET",
       headers: {
         "Accept": "application/json",
@@ -95,11 +123,11 @@ export async function getHubBySlug(slugOrId: string, locale: string = "ar") {
       result = null;
     }
 
-    if (res.ok && result) {
-      return { success: true, data: result.data || result };
+    if (res.ok && result && result.status === 'success') {
+      return { success: true, data: result.data };
     }
 
-    // Fallback: If it's a 404 (possibly due to global scope 'approved' hiding pending hubs), use getMyHubs
+    // Fallback if the direct API fails for some backend reason, try getting from list.
     const myHubsRes = await getMyHubs(locale);
     if (myHubsRes.success && myHubsRes.data) {
        const found = myHubsRes.data.find((h: any) => String(h.id) === String(slugOrId) || String(h.slug) === String(slugOrId));

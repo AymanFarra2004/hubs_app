@@ -4,11 +4,12 @@ import { useState, use, useEffect, useActionState, useRef } from "react";
 import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2, AlertTriangle, MapPin, Phone, Trash2, Clock, Calendar, Edit, X } from "lucide-react";
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
-import { getHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, updateHubOffer, deleteHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService } from "@/src/actions/hubs";
+import { getPrivateHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, updateHubOffer, deleteHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService } from "@/src/actions/hubs";
 import { toast } from "react-hot-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 import HubGalleryManager from "@/src/app/[locale]/components/dashboard/HubGalleryManager";
 import { useTranslations, useLocale } from "next-intl";
+import { getHubBySlug } from "@/src/actions/hubs";
 
 // General Tab - shows real hub data
 function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
@@ -778,7 +779,7 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
   useEffect(() => {
     async function fetchHub() {
       setLoading(true);
-      const result = await getHubBySlug(resolvedParams.id, locale);
+      const result = await getPrivateHubBySlug(resolvedParams.id, locale);
       if (result.success && result.data) {
         setHub(result.data);
       } else {
