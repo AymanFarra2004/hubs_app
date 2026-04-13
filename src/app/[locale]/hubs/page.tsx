@@ -24,6 +24,7 @@ export default async function HubsDirectory() {
     name: typeof apiHub.name === 'string' ? apiHub.name : (apiHub.name?.[locale] || apiHub.name?.en || apiHub.name?.ar || "Unknown Hub"),
     description: typeof apiHub.description === 'string' ? apiHub.description : (apiHub.description?.[locale] || apiHub.description?.en || apiHub.description?.ar || "No description"),
     location: typeof apiHub.address_details === 'string' ? apiHub.address_details : (apiHub.address_details?.[locale] || apiHub.address_details?.en || apiHub.address_details?.ar || "Unknown"),
+    locationId: apiHub.location_id || apiHub.location?.id || null,
     governorate: apiHub.location?.name || "Gaza",
     pricing: apiHub.pricing || "Free",
     operatingHours: apiHub.working_hours 

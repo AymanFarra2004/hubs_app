@@ -4,6 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { MapPin, Zap, Clock, Tag } from "lucide-react";
 import { format24to12 } from "@/src/lib/utils";
+import { getGovernorateKeyByLocationId } from "@/src/lib/locationMapping";
 
 export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governorate: string, service: string }, hubs?: any[] }) {
   const t = useTranslations("HubsGrid");
@@ -16,12 +17,16 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
     name: typeof apiHub.name === 'string' ? apiHub.name : (apiHub.name?.[locale] || apiHub.name?.en || apiHub.name?.ar || "Unknown Hub"),
     description: typeof apiHub.description === 'string' ? apiHub.description : (apiHub.description?.[locale] || apiHub.description?.en || apiHub.description?.ar || "No description"),
     location: typeof apiHub.address_details === 'string' ? apiHub.address_details : (apiHub.address_details?.[locale] || apiHub.address_details?.en || apiHub.address_details?.ar || "Unknown"),
+    locationId: apiHub.location?.id || apiHub.location_id,
     governorate: apiHub.location?.name || "Gaza",
     pricing: apiHub.pricing || "Free",
-    operatingHours: apiHub.working_hours 
+    operatingHours: apiHub.working_hours
       ? `${format24to12(apiHub.working_hours.start, t("am"), t("pm"))} - ${format24to12(apiHub.working_hours.end, t("am"), t("pm"))}`
       : apiHub.operating_hours || "Contact for hours",
-    services: Array.isArray(apiHub.all_services || apiHub.services) ? (apiHub.all_services || apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
+    services: [
+      ...Array.isArray(apiHub.all_services || apiHub.services) ? (apiHub.all_services || apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
+      ...Array.isArray(apiHub.custom_services) ? apiHub.custom_services.map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name)) : [],
+    ],
     imageUrl: apiHub.images?.main ?
       (apiHub.images.main.startsWith('http') ? apiHub.images.main : `https://karam.idreis.net${apiHub.images.main.startsWith('/') ? '' : '/'}${apiHub.images.main}`)
       : "https://placehold.co/600x400?text=No+Image",
@@ -39,8 +44,7 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
     : displayHubs.filter((hub) => {
       const govMatch =
         filter.governorate === "" ||
-        (hub.governorate || "").toLowerCase().includes(filter.governorate.toLowerCase()) ||
-        filter.governorate.toLowerCase().includes((hub.governorate || "").toLowerCase());
+        getGovernorateKeyByLocationId(hub.locationId ? Number(hub.locationId) : null) === filter.governorate;
 
       const srvMatch =
         filter.service === "" ||
@@ -54,7 +58,7 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
   // Limit to max 6 for a balanced bento grid
   const bentoHubs = filteredHubs.slice(0, 6);
 
-return (
+  return (
     <section className="py-24 bg-gray-50 dark:bg-[#050505] relative z-10 transition-colors duration-300" id="hubs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
@@ -77,13 +81,13 @@ return (
 
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 auto-rows-[280px]">
           {bentoHubs.map((hub: any, i: number) => {
-            const styleClass = 
-              i === 0 ? "md:col-span-4 lg:col-span-4 row-span-2" : 
-              i === 1 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-              i === 2 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-              i === 3 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-              i === 4 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-              "md:col-span-2 lg:col-span-2 row-span-1";
+            const styleClass =
+              i === 0 ? "md:col-span-4 lg:col-span-4 row-span-2" :
+                i === 1 ? "md:col-span-2 lg:col-span-2 row-span-1" :
+                  i === 2 ? "md:col-span-2 lg:col-span-2 row-span-1" :
+                    i === 3 ? "md:col-span-2 lg:col-span-2 row-span-1" :
+                      i === 4 ? "md:col-span-2 lg:col-span-2 row-span-1" :
+                        "md:col-span-2 lg:col-span-2 row-span-1";
 
             return (
               <motion.div
@@ -120,11 +124,11 @@ return (
                       </span>
                     </div>
                   )}
-                  
+
                   {/* Content Section */}
                   <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 line-clamp-1">{hub.name}</h3>
-                    
+
                     <div className="flex flex-wrap items-center gap-4 text-gray-200 dark:text-gray-300 text-sm mb-4">
                       <div className="flex items-center gap-1">
                         <MapPin className="w-4 h-4 text-blue-400" />
@@ -139,7 +143,7 @@ return (
                     <p className="text-gray-200 dark:text-gray-400 text-sm md:text-base line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
                       {hub.description}
                     </p>
-{console.log(hub)}
+                    {console.log(hub)}
                     {hub.activeOffer && (
                       <div className="mb-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-150">
                         <div className="px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg">

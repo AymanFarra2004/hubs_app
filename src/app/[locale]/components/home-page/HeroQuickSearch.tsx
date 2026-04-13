@@ -9,11 +9,11 @@ const HeroQuickSearch = ({setFilter}: {setFilter: React.Dispatch<React.SetStateA
                   <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
                   <select onChange={(e) => setFilter(prev => ({ ...prev, governorate: e.target.value }))} className="w-full h-12 pl-12 pr-4 bg-transparent appearance-none focus:outline-none text-foreground cursor-pointer rounded-full hover:bg-muted/50 transition-colors">
                     <option value="">{t("filters.governorates.placeholder")}</option>
-                    <option value="North Gaza">{t("filters.governorates.northGaza")}</option>
-                    <option value="Gaza">{t("filters.governorates.gazaCity")}</option>
-                    <option value="Deir al-Balah">{t("filters.governorates.deirAlBalah")}</option>
-                    <option value="Khan Yunis">{t("filters.governorates.khanYunis")}</option>
-                    <option value="Rafah">{t("filters.governorates.rafah")}</option>
+                    <option value="northGaza">{t("filters.governorates.northGaza")}</option>
+                    <option value="gazaCity">{t("filters.governorates.gazaCity")}</option>
+                    <option value="deirAlBalah">{t("filters.governorates.deirAlBalah")}</option>
+                    <option value="khanYunis">{t("filters.governorates.khanYunis")}</option>
+                    <option value="rafah">{t("filters.governorates.rafah")}</option>
                   </select>
                 </div>
                 <div className="hidden sm:block w-px bg-border my-2" />

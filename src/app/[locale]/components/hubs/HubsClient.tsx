@@ -9,6 +9,8 @@ type HubsClientProps = {
   hubs: any[];
 };
 
+import { getGovernorateKeyByLocationId } from "@/src/lib/locationMapping";
+
 export default function HubsClient({ hubs }: HubsClientProps) {
   const t = useTranslations("HubsPage");
   const tGov = useTranslations("Hero.filters.governorates");
@@ -21,13 +23,13 @@ export default function HubsClient({ hubs }: HubsClientProps) {
   const itemsPerPage = 9;
 
   // Fixed standard Gaza governorates with translations
-  const governorateOptions = [
-    { id: "northGaza", name: tGov("northGaza"), canonical: "North Gaza" },
-    { id: "gazaCity", name: tGov("gazaCity"), canonical: "Gaza" },
-    { id: "deirAlBalah", name: tGov("deirAlBalah"), canonical: "Deir al-Balah" },
-    { id: "khanYunis", name: tGov("khanYunis"), canonical: "Khan Yunis" },
-    { id: "rafah", name: tGov("rafah"), canonical: "Rafah" },
-  ];
+  const governorateOptions = useMemo(() => {
+    const keys = ["northGaza", "gazaCity", "deirAlBalah", "khanYunis", "rafah"];
+    return keys.map(key => ({
+      key,
+      name: tGov(key as any),
+    }));
+  }, [tGov]);
 
   // Derive unique services from actual hub data
   const services = useMemo(() => {
@@ -43,9 +45,9 @@ export default function HubsClient({ hubs }: HubsClientProps) {
     }));
   }, [hubs]);
 
-  const toggleGovernorate = (gov: string) => {
+  const toggleGovernorate = (govKey: string) => {
     setSelectedGovernorates((prev) =>
-      prev.includes(gov) ? prev.filter((g) => g !== gov) : [...prev, gov]
+      prev.includes(govKey) ? prev.filter((g) => g !== govKey) : [...prev, govKey]
     );
   };
 
@@ -74,16 +76,16 @@ export default function HubsClient({ hubs }: HubsClientProps) {
       }
 
       if (selectedGovernorates.length > 0) {
-        const govNorm = (hub.governorate || "").toLowerCase();
-        const hasGovMatch = selectedGovernorates.some(
-          (g) => govNorm.includes(g.toLowerCase()) || g.toLowerCase().includes(govNorm)
-        );
-        if (!hasGovMatch) return false;
+        // Match based on resolved governorate key from location ID
+        const hubGovKey = getGovernorateKeyByLocationId(hub.locationId ? Number(hub.locationId) : null);
+        if (!selectedGovernorates.includes(hubGovKey)) {
+          return false;
+        }
       }
 
       if (selectedServices.length > 0) {
         const hubServices: string[] = hub.services || [];
-        const hasMatch = selectedServices.some((sel) =>
+        const hasMatch = selectedServices.every((sel) =>
           hubServices.some((s) => s.toLowerCase().includes(sel.toLowerCase()))
         );
         if (!hasMatch) return false;
@@ -146,16 +148,16 @@ export default function HubsClient({ hubs }: HubsClientProps) {
             </label>
             <div className="space-y-2">
               {governorateOptions.map((gov) => (
-                <div key={gov.id} className="flex items-center space-x-2 rtl:space-x-reverse">
+                <div key={gov.key} className="flex items-center space-x-2 rtl:space-x-reverse">
                   <input
                     type="checkbox"
-                    id={`gov-${gov.id}`}
-                    checked={selectedGovernorates.includes(gov.canonical)}
-                    onChange={() => toggleGovernorate(gov.canonical)}
+                    id={`gov-${gov.key}`}
+                    checked={selectedGovernorates.includes(gov.key)}
+                    onChange={() => toggleGovernorate(gov.key)}
                     className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
                   />
                   <label
-                    htmlFor={`gov-${gov.id}`}
+                    htmlFor={`gov-${gov.key}`}
                     className="text-sm font-medium leading-none cursor-pointer"
                   >
                     {gov.name}
