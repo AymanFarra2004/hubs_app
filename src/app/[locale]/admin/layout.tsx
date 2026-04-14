@@ -1,6 +1,6 @@
 "use client";
 
-import { Shield, LayoutDashboard, Server, Bell, Settings, LogOut, CheckSquare, AlertTriangle, X } from "lucide-react";
+import { Shield, LayoutDashboard, Server, Bell, Settings, LogOut, CheckSquare, AlertTriangle, X, Users } from "lucide-react";
 import { Link } from "@/src/i18n/routing";
 import { useSelector } from "react-redux";
 import { useTranslations } from "next-intl";
@@ -102,6 +102,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <Bell className="h-5 w-5 text-muted-foreground" />
             {t("notifications")}
+          </Link>
+          
+          <Link 
+            href="/admin/users" 
+            onClick={() => setIsSidebarOpen(false)}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+          >
+            <Users className="h-5 w-5 text-muted-foreground" />
+            {t("userManagement")}
           </Link>
         </nav>
         
