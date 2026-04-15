@@ -528,7 +528,7 @@ export async function addCustomService(hubSlug: string, prevState: any, formData
     const result = await res.json();
     if (res.ok) {
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
-      revalidateTag(`hub-services-${hubSlug}`);
+      revalidateTag(`hub-services-${hubSlug}`, 'page');
       return { success: true, data: result.data, message: "Custom service added successfully" };
     }
     return { error: result.message || "Failed to add custom service" };
@@ -553,7 +553,7 @@ export async function deleteCustomService(hubSlug: string, serviceId: number) {
     
     if (res.ok) {
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
-      revalidateTag(`hub-services-${hubSlug}`);
+      revalidateTag(`hub-services-${hubSlug}`, 'page');
       return { success: true, message: "Custom service deleted successfully" };
     }
     const result = await res.json();
@@ -697,7 +697,7 @@ export async function deleteHubOffer(hubSlug: string, offerId: number) {
     if (res.ok) {
       revalidatePath(`/hubs/${hubSlug}`);
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
-      revalidateTag(`offers-${hubSlug}`);
+      revalidateTag(`offers-${hubSlug}`, 'page');
       return { success: true, message: "Deleted" };
     }
     const result = await res.json();
