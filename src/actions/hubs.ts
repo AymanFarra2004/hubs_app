@@ -100,6 +100,46 @@ export async function getHubBySlug(slugOrId: string, locale: string = "ar") {
   }
 }
 
+export async function getHubDataBySlugForManagement(slugOrId: string) {
+  try {
+    const [resAr, resEn] = await Promise.all([
+      fetch(`${API_BASE_URL}/front/hubs/${slugOrId}?lang=ar`, { next: { revalidate: 0 } }),
+      fetch(`${API_BASE_URL}/front/hubs/${slugOrId}?lang=en`, { next: { revalidate: 0 } })
+    ]);
+
+    if (!resAr.ok || !resEn.ok) {
+      throw new Error("Failed to fetch data from one or both locales");
+    }
+
+    const jsonAr = await resAr.json();
+    const jsonEn = await resEn.json();
+
+    const dataAr = jsonAr.data;
+    const dataEn = jsonEn.data;
+
+    return {
+      success: true,
+      data: {
+        name: {
+          ar: dataAr.name || "",
+          en: dataEn.name || ""
+        },
+        description: {
+          ar: dataAr.description || "",
+          en: dataEn.description || ""
+        },
+        address_details: {
+          ar: dataAr.address_details || "",
+          en: dataEn.address_details || ""
+        },
+      }
+    };
+  } catch (error) {
+    console.error("Error in getHubDataBySlugForManagement:", error);
+    return { success: false, error: "Network Error or Data Mismatch" };
+  }
+}
+
 export async function getPrivateHubBySlug(slugOrId: string, locale: string = "ar") {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
@@ -738,6 +778,19 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
       } else if (key === "remove_service_ids" || key === "remove_service_ids[]") {
         if (!payload["remove_service_ids"]) payload["remove_service_ids"] = [];
         payload["remove_service_ids"].push(Number(value));
+      } else if (key.includes("[") && key.endsWith("]")) {
+        // Handle nested keys like name[en] or description[ar]
+        const parts = key.split(/[\[\]]/).filter(Boolean);
+        let current = payload;
+        for (let i = 0; i < parts.length; i++) {
+          const part = parts[i];
+          if (i === parts.length - 1) {
+            current[part] = value;
+          } else {
+            current[part] = current[part] || {};
+            current = current[part];
+          }
+        }
       } else {
         payload[key] = value;
       }

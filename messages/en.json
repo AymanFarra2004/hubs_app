@@ -285,7 +285,18 @@
       "closingTime": "Closing Time",
       "am": "AM",
       "pm": "PM",
-      "save": "Save"
+      "save": "Save",
+      "edit": "Edit",
+      "hub_name_ar": "Hub Name (Arabic)",
+      "hub_name_en": "Hub Name (English)",
+      "save_btn": "Save Changes",
+      "hub_name_updated": "Hub name updated successfully",
+      "description_ar": "Address (Arabic)",
+      "description_en": "Address (English)",
+      "address_ar": "Address Details (Arabic)",
+      "address_en": "Address Details (English)",
+      "lang_ar": "Arabic",
+      "lang_en": "English"
     },
     "services": {
       "currentTitle": "Current Hub Services",

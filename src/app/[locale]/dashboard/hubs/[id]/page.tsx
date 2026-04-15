@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, use, useEffect, useActionState, useRef } from "react";
-import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2, AlertTriangle, MapPin, Phone, Trash2, Clock, Calendar, Edit, X } from "lucide-react";
+import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2, AlertTriangle, MapPin, Phone, Trash2, Clock, Calendar, Edit, X, User } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
-import { getPrivateHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, updateHubOffer, deleteHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService } from "@/src/actions/hubs";
+import { getPrivateHubBySlug, updateHub, deleteHub, addHubSocial, getHubOffers, addHubOffer, updateHubOffer, deleteHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService, getHubDataBySlugForManagement } from "@/src/actions/hubs";
 import { toast } from "react-hot-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 import HubGalleryManager from "@/src/app/[locale]/components/dashboard/HubGalleryManager";
@@ -13,13 +14,43 @@ import { getHubBySlug } from "@/src/actions/hubs";
 
 // General Tab - shows real hub data
 function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
+  const t = useTranslations("HubManagement.general");
+  const locale = useLocale();
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isSavingHours, setIsSavingHours] = useState(false);
+  const [isSavingName, setIsSavingName] = useState(false);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const t = useTranslations("HubManagement.general");
-  const locale = useLocale();
+  const originalDataRef = useRef<any>(null);
+
+  const [hubNameAr, setHubNameAr] = useState("");
+  const [hubNameEn, setHubNameEn] = useState("");
+  const [hubDescAr, setHubDescAr] = useState("");
+  const [hubDescEn, setHubDescEn] = useState("");
+  const [hubAddrAr, setHubAddrAr] = useState("");
+  const [hubAddrEn, setHubAddrEn] = useState("");
+
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoadingData(true);
+      const res = await getHubDataBySlugForManagement(hub.slug);
+      if (res.success && res.data) {
+        originalDataRef.current = res.data;
+        setHubNameAr(res.data.name.ar || "");
+        setHubNameEn(res.data.name.en || "");
+        setHubDescAr(res.data.description.ar || "");
+        setHubDescEn(res.data.description.en || "");
+        setHubAddrAr(res.data.address_details.ar || "");
+        setHubAddrEn(res.data.address_details.en || "");
+      }
+      setIsLoadingData(false);
+    }
+    fetchData();
+  }, [hub.slug]);
 
   // Parse existing hours
   const parseTime = (timeStr: string) => {
@@ -55,6 +86,43 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
       toast.error(res.error || "Failed to update hours");
     }
     setIsSavingHours(false);
+  };
+
+  const handleSaveGeneralSettings = async () => {
+    if (!hubNameAr.trim() || !hubNameEn.trim()) {
+      toast.error("Both Arabic and English names are required");
+      return;
+    }
+    setIsSavingName(true);
+    const formData = new FormData();
+    formData.append("name[ar]", hubNameAr.trim());
+    formData.append("name[en]", hubNameEn.trim());
+    formData.append("description[ar]", hubDescAr.trim());
+    formData.append("description[en]", hubDescEn.trim());
+    formData.append("address_details[ar]", hubAddrAr.trim());
+    formData.append("address_details[en]", hubAddrEn.trim());
+
+    const res = await updateHub(hub.slug, null, formData);
+    if (res.success) {
+      toast.success(t("hub_name_updated") || "Settings updated successfully");
+      setIsEditing(false);
+      onUpdate();
+    } else {
+      toast.error(res.error || "Failed to update hub settings");
+    }
+    setIsSavingName(false);
+  };
+
+  const handleCancel = () => {
+    if (originalDataRef.current) {
+      setHubNameAr(originalDataRef.current.name.ar || "");
+      setHubNameEn(originalDataRef.current.name.en || "");
+      setHubDescAr(originalDataRef.current.description.ar || "");
+      setHubDescEn(originalDataRef.current.description.en || "");
+      setHubAddrAr(originalDataRef.current.address_details.ar || "");
+      setHubAddrEn(originalDataRef.current.address_details.en || "");
+    }
+    setIsEditing(false);
   };
 
   const mainImage = hub.images?.main || hub.main_image;
@@ -98,32 +166,243 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">{t("hubName")}</label>
-            <input type="text" className="w-full px-4 py-2 border border-input rounded-xl bg-background" defaultValue={hub.name?.[locale] || hub.name || ""} readOnly />
-          </div>
+<AnimatePresence mode="wait">
+  {!isEditing ? (
+    <motion.div 
+      key="view-mode"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+      className="space-y-6"
+    >
+      <div className="flex items-center justify-between">
+         <h4 className="text-sm font-bold flex items-center gap-2 text-primary uppercase tracking-tight">
+          <User className="h-4 w-4" /> Hub Profile
+        </h4>
+        <button 
+          onClick={() => setIsEditing(true)}
+          className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground text-xs rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
+        >
+          <Edit className="h-3.5 w-3.5" />
+          {t("edit")}
+        </button>
+      </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">{t("description")}</label>
-            <textarea className="w-full px-4 py-2 border border-input rounded-xl bg-background resize-none" rows={3} defaultValue={hub.description?.[locale] || hub.description || ""} readOnly />
-          </div>
+      {/* View Mode Content */}
+      <div className="space-y-6">
+         {/* Name Card */}
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="p-4 border border-border rounded-2xl bg-muted/5">
+              <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("hub_name_en")}</label>
+              <p className="text-sm font-semibold">{hubNameEn || "---"}</p>
+           </div>
+           <div className="p-4 border border-border rounded-2xl bg-muted/5 text-right">
+              <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("hub_name_ar")}</label>
+              <p className="text-sm font-semibold font-arabic" dir="rtl">{hubNameAr || "---"}</p>
+           </div>
+         </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-1">{t("status")}</label>
-              <span className={`inline-block px-3 py-1.5 rounded-full text-xs font-semibold ${
+         {/* Description Card */}
+         <div className="p-5 border border-border rounded-2xl bg-muted/5 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-bold mb-2 uppercase tracking-widest text-muted-foreground">{t("description_en")}</label>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{hubDescEn || "No English description provided."}</p>
+              </div>
+              <div className="text-right">
+                <label className="block text-[10px] font-bold mb-2 uppercase tracking-widest text-muted-foreground">{t("description_ar")}</label>
+                <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap font-arabic" dir="rtl">{hubDescAr || "لا يوجد وصف عربي."}</p>
+              </div>
+            </div>
+         </div>
+
+         {/* Address Card */}
+         <div className="p-5 border border-border rounded-2xl bg-muted/5 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-[10px] font-bold mb-2 uppercase tracking-widest text-muted-foreground">{t("address_en")}</label>
+                <p className="text-sm text-muted-foreground font-medium">{hubAddrEn || "No address details."}</p>
+              </div>
+              <div className="text-right">
+                <label className="block text-[10px] font-bold mb-2 uppercase tracking-widest text-muted-foreground">{t("address_ar")}</label>
+                <p className="text-sm text-muted-foreground font-medium font-arabic" dir="rtl">{hubAddrAr || "لا توجد بيانات عنوان."}</p>
+              </div>
+            </div>
+         </div>
+
+         {/* Status & Slug Row */}
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="flex items-center justify-between p-4 border border-border rounded-2xl bg-muted/5">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("status")}</span>
+              <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase ${
                 hub.status === "approved" || hub.status === "active" ? "bg-green-100 text-green-700" :
                 hub.status === "rejected" ? "bg-red-100 text-red-700" :
                 "bg-yellow-100 text-yellow-700"
               }`}>
                 {hub.status || "Pending"}
               </span>
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">{t("slug")}</label>
-              <span className="text-sm text-muted-foreground font-mono">{hub.slug}</span>
+           </div>
+           <div className="flex items-center justify-between p-4 border border-border rounded-2xl bg-muted/5">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">{t("slug")}</span>
+              <span className="text-xs font-mono opacity-60">{hub.slug}</span>
+           </div>
+         </div>
+      </div>
+    </motion.div>
+  ) : (
+    <motion.div 
+      key="edit-mode"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2 }}
+      className="space-y-6"
+    >
+      <div className="flex items-center justify-between">
+         <h4 className="text-sm font-bold flex items-center gap-2 text-primary uppercase tracking-tight">
+          <Edit className="h-4 w-4" /> Editing Settings
+        </h4>
+        <button 
+          onClick={handleCancel}
+          className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 text-xs rounded-lg font-medium hover:bg-red-100 transition-colors shadow-sm"
+        >
+          <X className="h-3.5 w-3.5" />
+          {t("cancel")}
+        </button>
+      </div>
+
+      {isLoadingData ? (
+        <div className="space-y-6 py-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="h-10 bg-muted/50 rounded-xl animate-pulse" />
+            <div className="h-10 bg-muted/50 rounded-xl animate-pulse" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="h-24 bg-muted/50 rounded-xl animate-pulse" />
+            <div className="h-24 bg-muted/50 rounded-xl animate-pulse" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="h-24 bg-muted/50 rounded-xl animate-pulse" />
+            <div className="h-24 bg-muted/50 rounded-xl animate-pulse" />
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          {/* Name Section */}
+          <div className="p-5 border border-border rounded-xl bg-card space-y-4 shadow-sm">
+            <h4 className="text-sm font-bold flex items-center gap-2 text-primary uppercase tracking-tight">
+              <Edit className="h-4 w-4" /> {t("hubName")}
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {t("lang_en")} <span className="text-[14px]">🇺🇸</span>
+                </label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                  value={hubNameEn}
+                  onChange={(e) => setHubNameEn(e.target.value)}
+                  placeholder="e.g. Al-Bahr Connection"
+                />
+              </div>
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  <span className="text-[14px]">🇸🇦</span> {t("lang_ar")}
+                </label>
+                <input 
+                  type="text" 
+                  dir="rtl"
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm text-right focus:ring-2 focus:ring-primary/20 transition-all font-arabic" 
+                  value={hubNameAr}
+                  onChange={(e) => setHubNameAr(e.target.value)}
+                  placeholder="مثال: مركز البحر"
+                />
+              </div>
             </div>
           </div>
+
+          {/* Description Section */}
+          <div className="p-5 border border-border rounded-xl bg-card space-y-4 shadow-sm">
+            <h4 className="text-sm font-bold flex items-center gap-2 text-primary uppercase tracking-tight">
+              <Settings className="h-4 w-4" /> {t("description")}
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {t("description_en")} <span>🇺🇸</span>
+                </label>
+                <textarea 
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20 transition-all" 
+                  value={hubDescEn}
+                  onChange={(e) => setHubDescEn(e.target.value)}
+                  placeholder="Describe your hub in English..."
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  <span>🇸🇦</span> {t("description_ar")}
+                </label>
+                <textarea 
+                  dir="rtl"
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm text-right min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20 transition-all font-arabic" 
+                  value={hubDescAr}
+                  onChange={(e) => setHubDescAr(e.target.value)}
+                  placeholder="صف المركز باللغة العربية..."
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Address Section */}
+          <div className="p-5 border border-border rounded-xl bg-card space-y-4 shadow-sm">
+            <h4 className="text-sm font-bold flex items-center gap-2 text-primary uppercase tracking-tight">
+              <MapPin className="h-4 w-4" /> {t("address_en")?.split(' ')[0]}
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {t("address_en")} <span>🇺🇸</span>
+                </label>
+                <textarea 
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm min-h-[80px] resize-none focus:ring-2 focus:ring-primary/20 transition-all" 
+                  value={hubAddrEn}
+                  onChange={(e) => setHubAddrEn(e.target.value)}
+                  placeholder="Full English address details..."
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  <span>🇸🇦</span> {t("address_ar")}
+                </label>
+                <textarea 
+                  dir="rtl"
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm text-right min-h-[80px] resize-none focus:ring-2 focus:ring-primary/20 transition-all font-arabic" 
+                  value={hubAddrAr}
+                  onChange={(e) => setHubAddrAr(e.target.value)}
+                  placeholder="تفاصيل العنوان بالعربية..."
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-4">
+              <button 
+                onClick={handleSaveGeneralSettings}
+                disabled={isSavingName}
+                className="flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 active:scale-95"
+              >
+                {isSavingName ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
+                {t("save_btn")}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </motion.div>
+  )}
+</AnimatePresence>
+
 
           {hub.rejection_reason && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-sm text-red-700">
