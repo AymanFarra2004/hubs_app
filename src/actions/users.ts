@@ -78,8 +78,8 @@ export async function createAdminUser(data: any) {
       return { error: result.message || result.error || "Failed to create user" };
     }
     
-    revalidateTag("admin-users");
-    revalidateTag("admin-users-statistics");
+    revalidateTag("admin-users", "layout");
+    revalidateTag("admin-users-statistics", "layout");
     return { success: true, data: result.data || result };
   } catch (error) {
     console.log("addinng user error: ",error);
@@ -108,7 +108,7 @@ export async function updateAdminUser(id: string | number, data: any) {
       return { error: result.message || result.error || "Failed to update user" };
     }
     
-    revalidateTag("admin-users");
+    revalidateTag("admin-users", "layout");
     return { success: true, data: result.data || result };
   } catch (error) {
     return { error: "Network Error" };
@@ -130,8 +130,8 @@ export async function deleteAdminUser(id: string | number) {
       return { error: result.message || result.error || "Failed to delete user" };
     }
     
-    revalidateTag("admin-users");
-    revalidateTag("admin-users-statistics");
+    revalidateTag("admin-users", "layout");
+    revalidateTag("admin-users-statistics", "layout");
     return { success: true };
   } catch (error) {
     return { error: "Network Error" };

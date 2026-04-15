@@ -400,7 +400,7 @@ export async function createHub(prevState: any, formData: FormData) {
       revalidatePath('/dashboard');
       revalidatePath('/[locale]/dashboard', 'page');
       revalidatePath('/', 'layout');
-      revalidateTag('all-hubs');
+      revalidateTag('all-hubs', 'layout');
     }
 
     return {
@@ -898,7 +898,7 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     revalidatePath('/[locale]/dashboard', 'page');
     revalidatePath(`/hubs/${slug}`);
     revalidatePath('/', 'layout');
-    revalidateTag('all-hubs');
+    revalidateTag('all-hubs', 'layout');
     return { success: true, message: jsonResult.message || "Updated" };
   } catch (e) {
     return { error: "Network Error" };
@@ -921,7 +921,7 @@ export async function deleteHub(slug: string) {
       revalidatePath('/dashboard');
       revalidatePath('/[locale]/dashboard', 'page');
       revalidatePath('/', 'layout');
-      revalidateTag('all-hubs');
+      revalidateTag('all-hubs', 'layout');
       return { success: true, message: "Deleted" };
     }
     return { error: result.message || "Failed" };
