@@ -28,23 +28,23 @@ export type GovernorateKey = keyof typeof GOVERNORATE_ID_MAP;
 export function getGovernorateKeyByLocationId(locationId: number | null | undefined): string {
   if (!locationId) return "gazaCity"; // Fallback when there is no location
 
-  if (GOVERNORATE_ID_MAP.northGaza.includes(locationId)) {
+  if ((GOVERNORATE_ID_MAP.northGaza as readonly number[]).includes(locationId)) {
     return "northGaza";
   }
   
-  if (GOVERNORATE_ID_MAP.middleArea.includes(locationId)) {
+  if ((GOVERNORATE_ID_MAP.middleArea as readonly number[]).includes(locationId)) {
     return "deirAlBalah"; // Using Deir Al Balah key as it represents Middle Area conventionally in your app
   }
   
-  if (GOVERNORATE_ID_MAP.khanYunis.includes(locationId)) {
+  if ((GOVERNORATE_ID_MAP.khanYunis as readonly number[]).includes(locationId)) {
     return "khanYunis";
   }
   
-  if (GOVERNORATE_ID_MAP.gazaCity.includes(locationId)) {
+  if ((GOVERNORATE_ID_MAP.gazaCity as readonly number[]).includes(locationId)) {
     return "gazaCity";
   }
   
-  if (GOVERNORATE_ID_MAP.rafah.includes(locationId)) {
+  if ((GOVERNORATE_ID_MAP.rafah as readonly number[]).includes(locationId)) {
     return "rafah";
   }
 

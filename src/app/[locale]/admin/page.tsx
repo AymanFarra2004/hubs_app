@@ -12,12 +12,8 @@ export default async function AdminDashboardOverview() {
   const t = await getTranslations("Admin");
   const tUsers = await getTranslations("AdminUsers");
   
-  // Handle pagination wrap (result.data.data) or simple array
-  let hubs = hubsRes.data || [];
-  if (!Array.isArray(hubs)) {
-    hubs = hubs.data || [];
-  }
-  if (!Array.isArray(hubs)) hubs = [];
+  // hubsRes.data is already flattened and guaranteed to be an array by getAdminHubs
+  const hubs = hubsRes.data || [];
 
   const pendingHubs = hubs.filter((h: any) => h.status === 'pending').length;
   const activeHubs = hubs.filter((h: any) => h.status === 'approved' || h.status === 'active').length;
