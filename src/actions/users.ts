@@ -82,6 +82,7 @@ export async function createAdminUser(data: any) {
     revalidateTag("admin-users-statistics");
     return { success: true, data: result.data || result };
   } catch (error) {
+    console.log("addinng user error: ",error);
     return { error: "Network Error" };
   }
 }

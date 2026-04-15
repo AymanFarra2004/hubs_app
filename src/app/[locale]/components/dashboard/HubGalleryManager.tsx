@@ -7,6 +7,8 @@ import Image from "next/image";
 import { updateHub, downloadImageServer } from "@/src/actions/hubs";
 import { toast } from "react-hot-toast";
 import { useTranslations } from "next-intl";
+import { uploadWithProgress } from "@/src/lib/uploadHelper";
+import { motion } from "framer-motion";
 
 interface FileWithPreview extends File {
   preview: string;
@@ -29,6 +31,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
   const [mainPhotoId, setMainPhotoId] = useState<string | null>(null);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Initialize from hub data
   useEffect(() => {
@@ -59,6 +62,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
 
       setOldPhotos(parsedOld);
       setNewFiles([]);
+      setUploadProgress(0);
     }
   }, [hub, isOpen]);
 
@@ -157,6 +161,8 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
     }
 
     setIsSubmitting(true);
+    setUploadProgress(0);
+
     try {
       const formData = new FormData();
       let finalMainFile: File | null = null;
@@ -177,18 +183,18 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
          }
       });
 
-      const res = await updateHub(hub.slug, null, formData);
-      if (res.success) {
-        toast.success("Gallery updated successfully!");
-        onUpdate();
-        onClose();
-      } else {
-        toast.error(res.error || "Failed to update gallery");
-      }
+      // Upload Images with Progress leveraging the proxy route
+      await uploadWithProgress(`/api/hubs/${hub.slug}/images`, formData, (progress) => {
+        setUploadProgress(progress);
+      });
+
+      toast.success("Gallery updated successfully!");
+      onUpdate();
+      onClose();
 
     } catch(err) {
       console.error(err);
-      toast.error("An error occurred during upload.");
+      toast.error("An error occurred during upload. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -342,23 +348,39 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="p-6 border-t border-border bg-muted/10 flex items-center justify-end gap-3 rounded-b-3xl">
-          <button 
-            onClick={onClose}
-            disabled={isSubmitting}
-            className="px-6 py-2.5 font-medium text-muted-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
-          >
-            {t("cancel") || "Cancel"}
-          </button>
-          <button 
-            onClick={handleSubmit}
-            disabled={isSubmitting || (!newFiles.length && mainPhotoId === (oldPhotos.find(p=>p.isMain)?.url))}
-            className="px-6 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors shadow-lg disabled:opacity-50 disabled:shadow-none flex items-center gap-2"
-          >
-            {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
-            {isSubmitting ? t("saving") : t("save")}
-          </button>
+        {/* Progress Bar and Footer Actions */}
+        <div className="border-t border-border bg-muted/10 rounded-b-3xl">
+          {/* Framer Motion Progress Bar */}
+          {isSubmitting && (
+            <div className="px-6 pt-4 pb-0">
+              <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${uploadProgress}%` }}
+                  transition={{ ease: "linear", duration: 0.1 }}
+                  className="h-full bg-primary rounded-full"
+                />
+              </div>
+            </div>
+          )}
+
+          <div className="p-6 flex items-center justify-end gap-3 max-sm:p-4">
+            <button 
+              onClick={onClose}
+              disabled={isSubmitting}
+              className="px-6 py-2.5 font-medium text-muted-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
+            >
+              {t("cancel") || "Cancel"}
+            </button>
+            <button 
+              onClick={handleSubmit}
+              disabled={isSubmitting || (!newFiles.length && mainPhotoId === (oldPhotos.find(p=>p.isMain)?.url))}
+              className={`px-6 py-2.5 bg-primary text-primary-foreground font-semibold rounded-xl hover:bg-primary/90 transition-colors shadow-lg flex items-center gap-2 ${(isSubmitting || (!newFiles.length && mainPhotoId === (oldPhotos.find(p=>p.isMain)?.url))) ? "opacity-50 shadow-none cursor-not-allowed" : ""}`}
+            >
+              {isSubmitting && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isSubmitting ? `${uploadProgress}% | ${t("saving") || "Saving..."}` : (t("save") || "Save")}
+            </button>
+          </div>
         </div>
       </div>
     </div>

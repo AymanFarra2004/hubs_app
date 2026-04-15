@@ -5,15 +5,13 @@ export default createMiddleware(routing);
 
 export const config = {
   matcher: [
-    // Enable a redirect to a matching locale at the root
-    '/',
+    // 1. استثناء الـ api والملفات الثابتة من إعادة التوجيه
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
 
-    // Set a cookie to remember the previous locale for
-    // all requests that have a locale prefix
+    // 2. التعامل مع الروابط التي تحتوي فعلياً على كود لغة
     '/(ar|en)/:path*',
 
-    // Enable redirects that add a locale prefix to requests
-    // that don't have one
-    '/((?!_next|_vercel|.*\\..*).*)'
+    // 3. القاعدة الثالثة (التي كانت تسبب المشكلة) - أضفنا لها api هنا أيضاً
+    '/((?!api|_next|_vercel|.*\\..*).*)' 
   ]
 };

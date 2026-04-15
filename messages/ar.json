@@ -394,7 +394,9 @@
     "closingTime": "وقت الإغلاق",
     "am": "صباحاً",
     "pm": "مساءً",
-    "selectHour": "اختر الساعة"
+    "selectHour": "اختر الساعة",
+    "uploading": "جارٍ الرفع...",
+    "pleaseWait": "الرجاء الانتظار..."
   },
   "AdminNotifications": {
     "title": "إشعارات المنصة",

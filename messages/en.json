@@ -394,7 +394,9 @@
     "closingTime": "Closing Time",
     "am": "AM",
     "pm": "PM",
-    "selectHour": "Select Hour"
+    "selectHour": "Select Hour",
+    "uploading": "Uploading...",
+    "pleaseWait": "Please wait..."
   },
   "AdminNotifications": {
     "title": "Platform Notifications",

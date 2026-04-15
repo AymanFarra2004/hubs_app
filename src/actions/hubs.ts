@@ -244,20 +244,74 @@ export async function createHub(prevState: any, formData: FormData) {
 
     // ─── Step 1: Create hub with JSON (text fields only) ───────────────────────
     const langParam = getLangParam();
-    const res = await fetch(`${API_BASE_URL}/hubs?${langParam}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
+    
+    let result: any = null;
+    let resOk = false;
+    let resStatus = 0;
 
-    const result = await res.json();
+    try {
+      const controller = new AbortController();
+      // Increase timeout slightly before aborting (e.g. 45 seconds to allow backend to finish)
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
 
-    if (!res.ok && result.status !== 'success') {
-      return { error: result.message || `Failed to create hub (Status ${res.status})` };
+      const res = await fetch(`${API_BASE_URL}/hubs?${langParam}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+      resOk = res.ok;
+      resStatus = res.status;
+
+      const text = await res.text();
+      try {
+        result = JSON.parse(text);
+      } catch (e) {
+        console.error("JSON parse error for Hub creation. Raw:", text);
+      }
+    } catch (fetchError) {
+      console.error("Fetch API error during hub creation:", fetchError);
+    }
+
+    // ─── Recovery Check: If we failed to get a normal success response ────────
+    if (!result || (!resOk && result?.status !== 'success')) {
+      console.log("Creation API failed or timed out. Attempting recovery check...");
+      
+      // Delay to give Laravel time to commit the transaction if it was just a timeout
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      try {
+        // We call getMyHubs from the same file, to see if the hub got created
+        const myHubsRes = await getMyHubs();
+        if (myHubsRes.success && Array.isArray(myHubsRes.data)) {
+          const enName = payload.name.en;
+          const recoveredHub = myHubsRes.data.find((h: any) => 
+             h.name === enName || (h.name && h.name.en === enName)
+          );
+          
+          if (recoveredHub && recoveredHub.slug) {
+            console.log("Recovery successful! Hub found:", recoveredHub.slug);
+            result = {
+              status: 'success',
+              message: "Hub created (Recovered from timeout)",
+              data: recoveredHub
+            };
+            resOk = true;
+          }
+        }
+      } catch (recoveryError) {
+        console.error("Recovery check failed:", recoveryError);
+      }
+    }
+
+    if (!result || (!resOk && result.status !== 'success')) {
+      return { error: result?.message || `Failed to create hub (Status ${resStatus || 'Timeout/Network Error'})` };
     }
 
     const hub = result.data || result;
