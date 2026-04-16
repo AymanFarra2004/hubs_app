@@ -4,10 +4,11 @@ import { Wifi, Zap, Monitor, Coffee, ChevronLeft } from "lucide-react"
 
 import { Header } from "@/components/header/Header"
 import { Footer } from "@/components/footer/Footer"
-import { getAllHubs, getHubOffers, getHubBySlug } from "@/src/actions/hubs"
+import { getHubOffers, getHubBySlug, getHubReviews, getMyHubReview } from "@/src/actions/hubs"
 import HubHeroImage from "@/components/hubs/hub/HubHeroImage"
 import HubMainContent from "@/components/hubs/hub/HubMainContent"
 import HhubSideBar from "@/components/hubs/hub/HhubSideBar"
+import HubReviews from "@/components/hubs/hub/HubReviews"
 import { getLocale, getTranslations } from "next-intl/server"
 import { format24to12 } from "@/src/lib/utils"
 
@@ -19,6 +20,8 @@ const serviceIcons: Record<string, React.ReactNode> = {
 }
 
 function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", pmLabel: string = "PM") {
+  const mainImage = typeof apiHub.images?.main === 'string' ? apiHub.images.main : null;
+
   return {
     id: String(apiHub.id),
     slug: apiHub.slug,
@@ -35,23 +38,23 @@ function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", p
     pricing: apiHub.hourly_price
       ? `${apiHub.hourly_price} / hour`
       : apiHub.pricing || "Contact for pricing",
-    operatingHours: apiHub.working_hours 
+    operatingHours: apiHub.working_hours
       ? `${format24to12(apiHub.working_hours.start, amLabel, pmLabel)} - ${format24to12(apiHub.working_hours.end, amLabel, pmLabel)}`
       : apiHub.operating_hours || "Contact for hours",
     services: Array.isArray((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services)
       ? ((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s))
       : [],
-    imageUrl: apiHub.images?.main
-      ? apiHub.images.main.startsWith("http")
-        ? apiHub.images.main
-        : `https://karam.idreis.net${
-            apiHub.images.main.startsWith("/") ? "" : "/"
-          }${apiHub.images.main}`
+    imageUrl: mainImage
+      ? mainImage.startsWith("http")
+        ? mainImage
+        : `https://karam.idreis.net${mainImage.startsWith("/") ? "" : "/"}${mainImage}`
       : "https://placehold.co/600x400?text=No+Image",
     galleryUrls: Array.isArray(apiHub.images?.gallery)
-      ? apiHub.images.gallery.map((g: string) =>
-          g.startsWith("http") ? g : `https://karam.idreis.net${g.startsWith("/") ? "" : "/"}${g}`
-        )
+      ? apiHub.images.gallery.map((g: any) => {
+          const url = typeof g === 'string' ? g : g?.url;
+          if (typeof url !== 'string') return null;
+          return url.startsWith("http") ? url : `https://karam.idreis.net${url.startsWith("/") ? "" : "/"}${url}`;
+        }).filter(Boolean)
       : [],
     verificationStatus: (apiHub.status === "approved" ? "Verified" : "Pending") as "Verified" | "Pending",
     contact: {
@@ -69,20 +72,30 @@ export default async function HubDetails({
   const { id } = await params
   const locale = await getLocale()
 
-  // Fetch the detailed hub directly
-  const res = await getHubBySlug(id, locale)
-  const rawHub = res.success ? res.data : null
+  const [hubRes, t] = await Promise.all([
+    getHubBySlug(id, locale),
+    getTranslations("HubManagement.general"),
+  ])
 
-  if (!rawHub) {
-    notFound()
-  }
-  
-  const t = await getTranslations("HubManagement.general");
-  const hub = mapApiHub(rawHub, locale, t("am"), t("pm"));
+  const rawHub = hubRes.success ? hubRes.data : null
+  if (!rawHub) notFound()
 
-  // Fetch offers for this specific hub
-  const offersRes = await getHubOffers(rawHub.slug || id, locale);
-  const offers = offersRes.success ? offersRes.data : [];
+  const slug = rawHub.slug || id
+
+  const [offersRes, reviewsRes, myReviewRes] = await Promise.all([
+    getHubOffers(slug, locale),
+    getHubReviews(slug),
+    getMyHubReview(slug),
+  ])
+
+  const hub = mapApiHub(rawHub, locale, t("am"), t("pm"))
+  const offers = offersRes.success ? offersRes.data : []
+
+  // getHubReviews now extracts data.reviews correctly and parses average_rating as float
+  const reviews: any[] = reviewsRes.data ?? []
+  const isAuthenticated: boolean = myReviewRes.authenticated ?? false
+  const myReview: any | null = myReviewRes.data ?? null
+  const averageRating: number = reviewsRes.averageRating ?? 0
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -102,7 +115,19 @@ export default async function HubDetails({
           <HubHeroImage hub={hub} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-            <HubMainContent hub={hub} serviceIcons={serviceIcons} offers={offers} />
+            <div className="lg:col-span-2 space-y-10">
+              <HubMainContent hub={hub} serviceIcons={serviceIcons} offers={offers} />
+
+              <hr className="border-border" />
+
+              <HubReviews
+                hubSlug={slug}
+                reviews={reviews}
+                isAuthenticated={isAuthenticated}
+                myReview={myReview}
+                averageRating={averageRating}
+              />
+            </div>
             <HhubSideBar hub={hub} />
           </div>
 
@@ -111,5 +136,5 @@ export default async function HubDetails({
 
       <Footer />
     </div>
-  );
+  )
 }

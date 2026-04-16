@@ -82,7 +82,7 @@ export async function getHubBySlug(slugOrId: string, locale: string = "ar") {
       headers,
       next: { revalidate: 0 }
     });
-    
+
     let result;
     try {
       result = await res.json();
@@ -926,6 +926,94 @@ export async function deleteHub(slug: string) {
     }
     return { error: result.message || "Failed" };
   } catch (e) {
+    return { error: "Network Error" };
+  }
+}
+
+// ============== REVIEWS ==============
+
+/** Fetch all reviews for a hub (public, no auth needed)
+ * API response: { data: { reviews: [...], average_rating: "5.0000", review_count: 2 } }
+ */
+export async function getHubReviews(hubSlug: string) {
+  try {
+    const res = await fetch(`${API_BASE_URL}/hubs/${hubSlug}/reviews`, {
+      headers: { "Accept": "application/json" },
+      next: { tags: [`reviews-${hubSlug}`], revalidate: 0 },
+    });
+    let result: any = null;
+    try { result = await res.json(); } catch { result = null; }
+    if (res.ok && result) {
+      // Real shape: { status:'success', data: { reviews: [...], average_rating, review_count } }
+      const inner = result.data || result;
+      const reviews = Array.isArray(inner?.reviews) ? inner.reviews
+        : Array.isArray(inner) ? inner
+        : [];
+      const averageRating = parseFloat(inner?.average_rating) || 0;
+      const reviewCount = inner?.review_count ?? reviews.length;
+      return { success: true, data: reviews, averageRating, reviewCount };
+    }
+    return { error: result?.message || "Failed to fetch reviews", data: [], averageRating: 0, reviewCount: 0 };
+  } catch {
+    return { error: "Network Error", data: [], averageRating: 0, reviewCount: 0 };
+  }
+}
+
+/** Fetch the currently authenticated user's review for a hub (null when they haven't reviewed) */
+export async function getMyHubReview(hubSlug: string) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { success: true, data: null, authenticated: false };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/hubs/${hubSlug}/my-review`, {
+      headers: { "Accept": "application/json", "Authorization": `Bearer ${token}` },
+      next: { revalidate: 0 },
+    });
+
+    // A 404 or any non-success status just means the user hasn't reviewed yet — not an error
+    if (!res.ok) return { success: true, data: null, authenticated: true };
+
+    let result: any = null;
+    try { result = await res.json(); } catch { result = null; }
+
+    if (result?.status === "success" && result?.data) {
+      return { success: true, data: result.data, authenticated: true };
+    }
+    // status !== "success" (e.g. "لم تقم بتقييم هذا الهب") → no review yet
+    return { success: true, data: null, authenticated: true };
+  } catch {
+    return { success: true, data: null, authenticated: true };
+  }
+}
+
+/** Create (POST) or update (PUT) the authenticated user's review for a hub */
+export async function submitHubReview(hubSlug: string, rating: number, comment: string, isUpdate = false) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const method = isUpdate ? "PUT" : "POST";
+    const res = await fetch(`${API_BASE_URL}/hubs/${hubSlug}/reviews`, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({ rating, comment }),
+    });
+
+    let result: any = null;
+    try { result = await res.json(); } catch { result = null; }
+
+    if (res.ok) {
+      revalidateTag(`reviews-${hubSlug}`);
+      return { success: true, data: result?.data || result };
+    }
+    return { error: result?.message || `Failed to ${isUpdate ? 'update' : 'submit'} review` };
+  } catch {
     return { error: "Network Error" };
   }
 }

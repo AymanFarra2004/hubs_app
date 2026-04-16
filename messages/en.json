@@ -296,7 +296,8 @@
       "address_ar": "Address Details (Arabic)",
       "address_en": "Address Details (English)",
       "lang_ar": "Arabic",
-      "lang_en": "English"
+      "lang_en": "English",
+      "hour": "Hour"
     },
     "services": {
       "currentTitle": "Current Hub Services",
@@ -487,5 +488,26 @@
     "confirmDeleteDesc": "Are you sure you want to delete name ? This action cannot be undone.",
     "confirmBtn": "Confirm Delete",
     "cancelBtn": "Cancel"
+  },
+  "HubReviews": {
+    "title": "Reviews",
+    "reviewCount": "{count, plural, one {review} other {reviews}}",
+    "leaveReview": "Leave a Review",
+    "yourReview": "Your Review",
+    "yourRating": "Your Rating",
+    "commentLabel": "Comment (optional)",
+    "commentPlaceholder": "Share your experience at this hub...",
+    "submit": "Submit Review",
+    "saveChanges": "Save Changes",
+    "edit": "Edit Review",
+    "cancel": "Cancel",
+    "submitted": "Review submitted! Thank you.",
+    "updated": "Review updated successfully.",
+    "ratingRequired": "Please select a star rating before submitting.",
+    "noReviews": "No reviews yet",
+    "beFirst": "Be the first to share your experience!",
+    "loginToReview": "Sign in to leave a review",
+    "loginDesc": "Only logged-in users can submit a review for this hub.",
+    "signIn": "Sign In"
   }
 }

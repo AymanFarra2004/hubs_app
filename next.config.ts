@@ -28,6 +28,13 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    cacheLife: {
+      layout: {
+        stale: 3600,
+        revalidate: 86400,
+        expire: 2592000,
+      },
+    },
   },
 };
  

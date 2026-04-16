@@ -189,6 +189,8 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                              ) : (
                                <Link
                                  href={`/${locale}/admin/hubs/${hub.slug}/preview`}
+                                 target="_blank"
+                                 rel="noopener noreferrer"
                                  title={t("view_preview")}
                                  className="flex items-center gap-1.5 px-3 py-2 border border-border text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-xl transition-all font-semibold text-xs"
                                >
