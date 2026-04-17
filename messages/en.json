@@ -145,7 +145,8 @@
     "accessDenied": "Access Denied",
     "accessDeniedDesc": "This area is for system administrators only. You do not have permission to view this page.",
     "returnHome": "Return to Home",
-    "admin": "Admin"
+    "admin": "Admin",
+    "locations": "Locations"
   },
   "AdminHeader": {
     "adminPanel": "Admin Panel",
@@ -542,5 +543,33 @@
     "deleted": "Review deleted successfully.",
     "noReviews": "No reviews found.",
     "noComment": "No comment"
+  },
+  "AdminLocations": {
+    "title": "Locations Management",
+    "description": "Manage the hierarchical structure of governorates, cities, and areas.",
+    "addLocation": "Add Location",
+    "editLocation": "Edit Location",
+    "deleteLocation": "Delete Location",
+    "nameAr": "Name (Arabic)",
+    "nameEn": "Name (English)",
+    "type": "Type",
+    "parent": "Parent Location",
+    "selectType": "Select Type",
+    "selectParent": "Select Parent",
+    "deleteErrorHasChildren": "Cannot delete this location because it contains sub-locations.",
+    "governorate": "Governorate",
+    "city": "City",
+    "area": "Area",
+    "confirmDeleteTitle": "Delete Location",
+    "confirmDeleteDesc": "Are you sure you want to delete {name}? This action cannot be undone.",
+    "searchPlaceholder": "Search by name...",
+    "noLocations": "No locations found.",
+    "loading": "Loading locations...",
+    "successCreate": "Location created successfully",
+    "successUpdate": "Location updated successfully",
+    "successDelete": "Location deleted successfully",
+    "cancel": "Cancel",
+    "confirmDelete": "Confirm Delete",
+    "save": "Save"
   }
 }

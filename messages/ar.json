@@ -145,7 +145,8 @@
     "accessDenied": "الوصول مرفوض",
     "accessDeniedDesc": "هذه المنطقة للمسؤولين فقط. ليس لديك صلاحية לرؤية هذه الصفحة.",
     "returnHome": "العودة إلى الرئيسية",
-    "admin": "الإدارة"
+    "admin": "الإدارة",
+    "locations": "المواقع"
   },
   "AdminHeader": {
     "adminPanel": "لوحة التحكم للمسؤول",
@@ -542,5 +543,33 @@
     "deleted": "تم حذف التقييم بنجاح.",
     "noReviews": "لم يتم العثور على تقييمات.",
     "noComment": "لا يوجد تعليق"
+  },
+  "AdminLocations": {
+    "title": "إدارة المواقع",
+    "description": "إدارة الهيكل الهرمي للمحافظات والمدن والمناطق.",
+    "addLocation": "إضافة موقع",
+    "editLocation": "تعديل الموقع",
+    "deleteLocation": "حذف الموقع",
+    "nameAr": "الاسم (بالعربية)",
+    "nameEn": "الاسم (بالإنجليزية)",
+    "type": "النوع",
+    "parent": "الموقع الأب",
+    "selectType": "اختر النوع",
+    "selectParent": "اختر الموقع الأب",
+    "deleteErrorHasChildren": "لا يمكن حذف هذا الموقع لأنه تندرج تحته مواقع أخرى",
+    "governorate": "محافظة",
+    "city": "مدينة",
+    "area": "منطقة",
+    "confirmDeleteTitle": "حذف الموقع",
+    "confirmDeleteDesc": "هل أنت متأكد من رغبتك في حذف {name}؟ لا يمكن التراجع عن هذا الإجراء.",
+    "searchPlaceholder": "البحث بالاسم...",
+    "noLocations": "لم يتم العثور على مواقع.",
+    "loading": "جارٍ تحميل المواقع...",
+    "successCreate": "تم إنشاء الموقع بنجاح",
+    "successUpdate": "تم تحديث الموقع بنجاح",
+    "successDelete": "تم حذف الموقع بنجاح",
+    "cancel": "إلغاء",
+    "confirmDelete": "تأكيد الحذف",
+    "save": "حفظ"
   }
 }

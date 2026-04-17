@@ -262,3 +262,159 @@ export async function deleteAdminReview(reviewId: number | string) {
     return { error: "Network Error" };
   }
 }
+
+// ============== ADMIN LOCATIONS ==============
+
+/** Fetch all locations in a hierarchical structure if the API supports it, or just all locations */
+export async function getAdminLocations(locale: string = "ar") {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated", data: [] };
+
+  try {
+    const langParam = getLangParam(locale);
+    const res = await fetch(`${API_BASE_URL}/locations?${langParam}`, {
+      method: "GET",
+      headers: { 
+        "Accept": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      next: { tags: ["admin-locations"], revalidate: 0 }
+    });
+    const result = await res.json();
+    if (!res.ok) return { error: result.message || "Failed to fetch locations", data: [] };
+    
+    // The API might return the data directly or nested
+    const locations = result.data || result;
+    return { success: true, data: Array.isArray(locations) ? locations : [] };
+  } catch (error) {
+    return { error: "Network Error", data: [] };
+  }
+}
+
+/** Fetch a single location by its slug */
+export async function getLocationBySlug(slug: string, locale: string = "ar") {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated", data: null };
+
+  try {
+    const langParam = getLangParam(locale);
+    const res = await fetch(`${API_BASE_URL}/locations/${slug}?${langParam}`, {
+      method: "GET",
+      headers: { 
+        "Accept": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      next: { revalidate: 0 }
+    });
+    const result = await res.json();
+    if (!res.ok) return { error: result.message || "Failed to fetch location details", data: null };
+    return { success: true, data: result.data || result };
+  } catch (error) {
+    return { error: "Network Error", data: null };
+  }
+}
+
+/** Create a new location */
+export async function createLocation(formData: FormData) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const payload = {
+      name: {
+        ar: formData.get("name[ar]"),
+        en: formData.get("name[en]")
+      },
+      type: formData.get("type"),
+      parent_id: formData.get("parent_id") || null
+    };
+
+    const res = await fetch(`${API_BASE_URL}/locations`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "Accept": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const result = await res.json();
+    if (res.ok) {
+      revalidatePath("/admin/locations");
+      revalidateTag("admin-locations");
+      return { success: true, message: result.message || "Location created successfully", data: result.data };
+    }
+    return { error: result.message || "Failed to create location" };
+  } catch (error) {
+    return { error: "Network Error" };
+  }
+}
+
+/** Update an existing location */
+export async function updateLocation(slug: string, formData: FormData) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const payload = {
+      name: {
+        ar: formData.get("name[ar]"),
+        en: formData.get("name[en]")
+      },
+      type: formData.get("type"),
+      parent_id: formData.get("parent_id") || null
+    };
+
+    const res = await fetch(`${API_BASE_URL}/locations/${slug}`, {
+      method: "PUT",
+      headers: { 
+        "Content-Type": "application/json",
+        "Accept": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      },
+      body: JSON.stringify(payload)
+    });
+    
+    const result = await res.json();
+    if (res.ok) {
+      revalidatePath("/admin/locations");
+      revalidateTag("admin-locations");
+      return { success: true, message: result.message || "Location updated successfully", data: result.data };
+    }
+    return { error: result.message || "Failed to update location" };
+  } catch (error) {
+    return { error: "Network Error" };
+  }
+}
+
+/** Delete a location */
+export async function deleteLocation(slug: string) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/locations/${slug}`, {
+      method: "DELETE",
+      headers: { 
+        "Accept": "application/json", 
+        "Authorization": `Bearer ${token}` 
+      }
+    });
+    
+    const result = await res.json();
+    if (res.ok) {
+      revalidatePath("/admin/locations");
+      revalidateTag("admin-locations");
+      return { success: true, message: result.message || "Location deleted successfully" };
+    }
+    return { error: result.message || "Failed to delete location" };
+  } catch (error) {
+    return { error: "Network Error" };
+  }
+}
