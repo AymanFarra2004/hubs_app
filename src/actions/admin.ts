@@ -345,7 +345,7 @@ export async function createLocation(formData: FormData) {
     const result = await res.json();
     if (res.ok) {
       revalidatePath("/admin/locations");
-      revalidateTag("admin-locations");
+      revalidateTag("admin-locations", "layout");
       return { success: true, message: result.message || "Location created successfully", data: result.data };
     }
     return { error: result.message || "Failed to create location" };
@@ -383,7 +383,7 @@ export async function updateLocation(slug: string, formData: FormData) {
     const result = await res.json();
     if (res.ok) {
       revalidatePath("/admin/locations");
-      revalidateTag("admin-locations");
+      revalidateTag("admin-locations", "layout");
       return { success: true, message: result.message || "Location updated successfully", data: result.data };
     }
     return { error: result.message || "Failed to update location" };
@@ -410,7 +410,7 @@ export async function deleteLocation(slug: string) {
     const result = await res.json();
     if (res.ok) {
       revalidatePath("/admin/locations");
-      revalidateTag("admin-locations");
+      revalidateTag("admin-locations", "layout");
       return { success: true, message: result.message || "Location deleted successfully" };
     }
     return { error: result.message || "Failed to delete location" };

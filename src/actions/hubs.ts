@@ -1017,7 +1017,7 @@ export async function submitHubReview(hubSlug: string, rating: number, comment: 
     try { result = await res.json(); } catch { result = null; }
 
     if (res.ok) {
-      revalidateTag(`reviews-${hubSlug}`);
+      revalidateTag(`reviews-${hubSlug}`, "page");
       return { success: true, data: result?.data || result };
     }
 
@@ -1035,7 +1035,7 @@ export async function submitHubReview(hubSlug: string, rating: number, comment: 
       let retryResult: any = null;
       try { retryResult = await retryRes.json(); } catch { retryResult = null; }
       if (retryRes.ok) {
-        revalidateTag(`reviews-${hubSlug}`);
+        revalidateTag(`reviews-${hubSlug}`, "page");
         return { success: true, data: retryResult?.data || retryResult };
       }
       return { error: retryResult?.message || "Failed to submit review" };
@@ -1066,7 +1066,7 @@ export async function deleteMyHubReview(hubSlug: string) {
     try { result = await res.json(); } catch { result = null; }
 
     if (res.ok) {
-      revalidateTag(`reviews-${hubSlug}`);
+      revalidateTag(`reviews-${hubSlug}`, "page");
       return { success: true, message: result?.message || "Review deleted" };
     }
     return { error: result?.message || "Failed to delete review" };
