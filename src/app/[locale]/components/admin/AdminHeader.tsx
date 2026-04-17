@@ -102,7 +102,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           </button>
 
           {showMenu && (
-            <div className="absolute right-0 rtl:left-0 rtl:right-auto mt-2 w-48 bg-background border border-border rounded-xl shadow-lg py-1 z-50">
+            <div className="absolute end-0 mt-2 w-48 bg-background border border-border rounded-xl shadow-lg py-1 z-50">
               <div className="px-4 py-2 border-b border-border mb-1">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Administrator</p>
                 <p className="text-sm font-medium text-foreground truncate">{userName}</p>
