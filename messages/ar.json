@@ -571,5 +571,13 @@
     "cancel": "إلغاء",
     "confirmDelete": "تأكيد الحذف",
     "save": "حفظ"
+  },
+  "TimePicker": {
+    "hours": "الساعات",
+    "minutes": "الدقائق",
+    "period": "الفترة",
+    "selectTime": "اختر الوقت",
+    "am": "صباحاً",
+    "pm": "مساءً"
   }
 }

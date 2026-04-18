@@ -571,5 +571,13 @@
     "cancel": "Cancel",
     "confirmDelete": "Confirm Delete",
     "save": "Save"
+  },
+  "TimePicker": {
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "period": "Period",
+    "selectTime": "Select Time",
+    "am": "AM",
+    "pm": "PM"
   }
 }

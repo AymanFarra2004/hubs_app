@@ -10,6 +10,7 @@ import { toast } from "react-hot-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/src/app/[locale]/components/ui/alert-dialog";
 import HubGalleryManager from "@/src/app/[locale]/components/dashboard/HubGalleryManager";
 import { useTranslations, useLocale } from "next-intl";
+import { TimePicker } from "@/src/app/[locale]/components/ui/time-picker";
 import { getHubBySlug } from "@/src/actions/hubs";
 
 // General Tab - shows real hub data
@@ -52,31 +53,14 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
     fetchData();
   }, [hub.slug]);
 
-  // Parse existing hours
-  const parseTime = (timeStr: string) => {
-    if (!timeStr) return { hour: "8", period: "AM" };
-    const [h] = timeStr.split(':');
-    let hour = parseInt(h, 10);
-    const period = hour >= 12 ? "PM" : "AM";
-    hour = hour % 12 || 12;
-    return { hour: String(hour), period };
-  };
-
-  const initialStart = parseTime(hub.working_hours?.start);
-  const initialEnd = parseTime(hub.working_hours?.end);
-
-  const [startHour, setStartHour] = useState(initialStart.hour);
-  const [startPeriod, setStartPeriod] = useState(initialStart.period);
-  const [endHour, setEndHour] = useState(initialEnd.hour);
-  const [endPeriod, setEndPeriod] = useState(initialEnd.period);
+  const [startTime, setStartTime] = useState(hub.working_hours?.start || "08:00");
+  const [endTime, setEndTime] = useState(hub.working_hours?.end || "17:00");
 
   const handleSaveHours = async () => {
     setIsSavingHours(true);
     const formData = new FormData();
-    formData.append("start_hour", startHour);
-    formData.append("start_period", startPeriod);
-    formData.append("end_hour", endHour);
-    formData.append("end_period", endPeriod);
+    formData.append("start_time", startTime);
+    formData.append("end_time", endTime);
 
     const res = await updateHub(hub.slug, null, formData);
     if (res.success) {
@@ -425,48 +409,21 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             <h4 className="text-sm font-bold mb-3 uppercase tracking-wider">{t("workingHours")}</h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
               <div className="p-3 border border-border rounded-xl bg-muted/5">
-                <label className="block text-xs text-muted-foreground mb-2 uppercase">{t("openingTime")}</label>
-                <div className="flex gap-2">
-                  <select 
-                    value={startHour} 
-                    onChange={(e) => setStartHour(e.target.value)}
-                    className="flex-1 bg-background border border-input rounded-lg px-2 py-1 text-sm focus:outline-none"
-                  >
-                    {[...Array(12)].map((_, i) => (
-                      <option key={i+1} value={i+1}>{String(i+1).padStart(2, '0')}</option>
-                    ))}
-                  </select>
-                  <select 
-                    value={startPeriod} 
-                    onChange={(e) => setStartPeriod(e.target.value)}
-                    className="bg-background border border-input rounded-lg px-2 py-1 text-sm focus:outline-none"
-                  >
-                    <option value="AM">{t("am")}</option>
-                    <option value="PM">{t("pm")}</option>
-                  </select>
-                </div>
+                <TimePicker 
+                   value={startTime}
+                   onChange={setStartTime}
+                   label={t("openingTime")}
+                   minuteStep={5}
+                />
               </div>
               <div className="p-3 border border-border rounded-xl bg-muted/5">
-                <label className="block text-xs text-muted-foreground mb-2 uppercase">{t("closingTime")}</label>
-                <div className="flex gap-2">
-                  <select 
-                    value={endHour} 
-                    onChange={(e) => setEndHour(e.target.value)}
-                    className="flex-1 bg-background border border-input rounded-lg px-2 py-1 text-sm focus:outline-none"
-                  >
-                    {[...Array(12)].map((_, i) => (
-                      <option key={i+1} value={i+1}>{String(i+1).padStart(2, '0')}</option>
-                    ))}
-                  </select>
-                  <select 
-                    value={endPeriod} 
-                    onChange={(e) => setEndPeriod(e.target.value)}
-                    className="bg-background border border-input rounded-lg px-2 py-1 text-sm focus:outline-none"
-                  >
-                    <option value="AM">{t("am")}</option>
-                    <option value="PM">{t("pm")}</option>
-                  </select>
-                </div>
+                <TimePicker 
+                   value={endTime}
+                   onChange={setEndTime}
+                   label={t("closingTime")}
+                   minuteStep={5}
+                   defaultPeriod="PM"
+                />
               </div>
             </div>
             <button 

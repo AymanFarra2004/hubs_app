@@ -222,12 +222,23 @@ export async function createHub(prevState: any, formData: FormData) {
     };
 
     // Handle working hours (mandatory)
+    const startTime = formData.get("start_time") as string;
+    const endTime = formData.get("end_time") as string;
+    
+    // Fallback for old fields
     const startHour = formData.get("start_hour");
     const startPeriod = formData.get("start_period") as string;
     const endHour = formData.get("end_hour");
     const endPeriod = formData.get("end_period") as string;
 
-    if (startHour && startPeriod && endHour && endPeriod) {
+    if (startTime && endTime) {
+      payload.working_hours = {
+        start: startTime,
+        end: endTime
+      };
+      payload.working_hours_start = startTime;
+      payload.working_hours_end = endTime;
+    } else if (startHour && startPeriod && endHour && endPeriod) {
       const start24 = format12to24(Number(startHour), startPeriod);
       const end24 = format12to24(Number(endHour), endPeriod);
       
@@ -797,12 +808,22 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     });
 
     // Handle working hours specifically if present
+    const startTime = formData.get("start_time") as string;
+    const endTime = formData.get("end_time") as string;
+
     const startHour = formData.get("start_hour");
     const startPeriod = formData.get("start_period") as string;
     const endHour = formData.get("end_hour");
     const endPeriod = formData.get("end_period") as string;
 
-    if (startHour && startPeriod && endHour && endPeriod) {
+    if (startTime && endTime) {
+      payload.working_hours = {
+        start: startTime,
+        end: endTime
+      };
+      payload.working_hours_start = startTime;
+      payload.working_hours_end = endTime;
+    } else if (startHour && startPeriod && endHour && endPeriod) {
       const start24 = format12to24(Number(startHour), startPeriod);
       const end24 = format12to24(Number(endHour), endPeriod);
       
