@@ -1,72 +1,153 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { Filter, Search, MapPin, Zap, Wifi, X } from "lucide-react";
+import { Filter, Search, MapPin, X, ChevronRight, Loader2 } from "lucide-react";
 import { HubCard } from "../general/HubCard";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 type HubsClientProps = {
   hubs: any[];
 };
 
-import { getGovernorateKeyByLocationId } from "@/src/lib/locationMapping";
+type Location = {
+  id: number;
+  name: string;
+  slug: string;
+  parent_id: number | null;
+  type: string;
+};
 
 export default function HubsClient({ hubs }: HubsClientProps) {
   const t = useTranslations("HubsPage");
-  const tGov = useTranslations("Hero.filters.governorates");
+  const locale = useLocale();
 
+  // ── State ────────────────────────────────────────────────────────────────
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedGovernorates, setSelectedGovernorates] = useState<string[]>([]);
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
-  // Fixed standard Gaza governorates with translations
-  const governorateOptions = useMemo(() => {
-    const keys = ["northGaza", "gazaCity", "deirAlBalah", "khanYunis", "rafah"];
-    return keys.map(key => ({
-      key,
-      name: tGov(key as any),
-    }));
-  }, [tGov]);
+  // Location hierarchy state
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [locationsLoading, setLocationsLoading] = useState(true);
 
-  // Derive unique services from actual hub data
-  const services = useMemo(() => {
-    const set = new Set<string>();
-    hubs.forEach((h) => (h.services || []).forEach((s: string) => set.add(s)));
-    return Array.from(set).sort().map((name) => ({
-      name,
-      icon: name.toLowerCase().includes("internet") || name.toLowerCase().includes("wifi") || name.toLowerCase().includes("web")
-        ? <Wifi className="h-3 w-3 inline me-1" />
-        : name.toLowerCase().includes("electric") || name.toLowerCase().includes("power") || name.toLowerCase().includes("solar")
-        ? <Zap className="h-3 w-3 inline me-1" />
-        : null,
-    }));
-  }, [hubs]);
+  const [selectedGovernorateId, setSelectedGovernorateId] = useState<number | null>(null);
+  const [selectedCityId, setSelectedCityId] = useState<number | null>(null);
+  const [selectedAreaId, setSelectedAreaId] = useState<number | null>(null);
 
-  const toggleGovernorate = (govKey: string) => {
-    setSelectedGovernorates((prev) =>
-      prev.includes(govKey) ? prev.filter((g) => g !== govKey) : [...prev, govKey]
-    );
+  // ── Fetch locations from API ─────────────────────────────────────────────
+  useEffect(() => {
+    setLocationsLoading(true);
+    fetch(`https://karam.idreis.net/api/v1/locations?lang=${locale}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          setLocations(data.data);
+        }
+      })
+      .catch((err) => console.error("Failed to fetch locations", err))
+      .finally(() => setLocationsLoading(false));
+  }, [locale]);
+
+  // ── Derived location lists ───────────────────────────────────────────────
+  const governorates = useMemo(
+    () => locations.filter((l) => l.parent_id === null && l.type === "governorate"),
+    [locations]
+  );
+
+  const cities = useMemo(
+    () =>
+      selectedGovernorateId
+        ? locations.filter(
+            (l) => l.parent_id === selectedGovernorateId && l.type === "city"
+          )
+        : [],
+    [locations, selectedGovernorateId]
+  );
+
+  const areas = useMemo(
+    () =>
+      selectedCityId
+        ? locations.filter(
+            (l) => l.parent_id === selectedCityId && l.type === "area"
+          )
+        : [],
+    [locations, selectedCityId]
+  );
+
+  // ── All IDs that fall under the selected location ────────────────────────
+  /**
+   * Build a set of all location IDs that match the current selection.
+   * - If an area is selected → only that area.
+   * - If a city is selected (no area) → that city + all its children areas.
+   * - If a governorate is selected (no city) → that gov + all cities under it + all areas under those cities.
+   * - If nothing selected → empty set (show all).
+   */
+  const selectedLocationIds = useMemo<Set<number>>(() => {
+    const ids = new Set<number>();
+
+    if (selectedAreaId) {
+      ids.add(selectedAreaId);
+      return ids;
+    }
+
+    if (selectedCityId) {
+      ids.add(selectedCityId);
+      // add child areas of this city
+      locations
+        .filter((l) => l.parent_id === selectedCityId && l.type === "area")
+        .forEach((a) => ids.add(a.id));
+      return ids;
+    }
+
+    if (selectedGovernorateId) {
+      ids.add(selectedGovernorateId);
+      const childCities = locations.filter(
+        (l) => l.parent_id === selectedGovernorateId && l.type === "city"
+      );
+      childCities.forEach((c) => {
+        ids.add(c.id);
+        locations
+          .filter((l) => l.parent_id === c.id && l.type === "area")
+          .forEach((a) => ids.add(a.id));
+      });
+    }
+
+    return ids;
+  }, [locations, selectedGovernorateId, selectedCityId, selectedAreaId]);
+
+  // ── Handlers ─────────────────────────────────────────────────────────────
+  const selectGovernorate = (id: number) => {
+    setSelectedGovernorateId((prev) => (prev === id ? null : id));
+    setSelectedCityId(null);
+    setSelectedAreaId(null);
   };
 
-  const toggleService = (srv: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(srv) ? prev.filter((s) => s !== srv) : [...prev, srv]
-    );
+  const selectCity = (id: number) => {
+    setSelectedCityId((prev) => (prev === id ? null : id));
+    setSelectedAreaId(null);
+  };
+
+  const selectArea = (id: number) => {
+    setSelectedAreaId((prev) => (prev === id ? null : id));
   };
 
   const clearFilters = () => {
     setSearchQuery("");
-    setSelectedGovernorates([]);
-    setSelectedServices([]);
+    setSelectedGovernorateId(null);
+    setSelectedCityId(null);
+    setSelectedAreaId(null);
   };
 
-  const activeFilterCount = selectedGovernorates.length + selectedServices.length + (searchQuery ? 1 : 0);
+  const activeFilterCount =
+    (searchQuery ? 1 : 0) +
+    (selectedGovernorateId ? 1 : 0) +
+    (selectedCityId ? 1 : 0) +
+    (selectedAreaId ? 1 : 0);
 
+  // ── Filtering ─────────────────────────────────────────────────────────────
   const filteredHubs = useMemo(() => {
     return hubs.filter((hub) => {
+      // Search filter
       if (searchQuery) {
         const q = searchQuery.toLowerCase();
         const nameMatch = (hub.name || "").toLowerCase().includes(q);
@@ -75,29 +156,21 @@ export default function HubsClient({ hubs }: HubsClientProps) {
         if (!nameMatch && !descMatch && !locMatch) return false;
       }
 
-      if (selectedGovernorates.length > 0) {
-        // Match based on resolved governorate key from location ID
-        const hubGovKey = getGovernorateKeyByLocationId(hub.locationId ? Number(hub.locationId) : null);
-        if (!selectedGovernorates.includes(hubGovKey)) {
+      // Location filter
+      if (selectedLocationIds.size > 0) {
+        const hubLocationId = hub.locationId ? Number(hub.locationId) : null;
+        if (!hubLocationId || !selectedLocationIds.has(hubLocationId)) {
           return false;
         }
       }
 
-      if (selectedServices.length > 0) {
-        const hubServices: string[] = hub.services || [];
-        const hasMatch = selectedServices.every((sel) =>
-          hubServices.some((s) => s.toLowerCase().includes(sel.toLowerCase()))
-        );
-        if (!hasMatch) return false;
-      }
-
       return true;
     });
-  }, [hubs, searchQuery, selectedGovernorates, selectedServices]);
+  }, [hubs, searchQuery, selectedLocationIds]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedGovernorates, selectedServices]);
+  }, [searchQuery, selectedLocationIds]);
 
   const totalPages = Math.ceil(filteredHubs.length / itemsPerPage);
   const paginatedHubs = filteredHubs.slice(
@@ -105,11 +178,17 @@ export default function HubsClient({ hubs }: HubsClientProps) {
     currentPage * itemsPerPage
   );
 
+  // ── Selected location label ───────────────────────────────────────────────
+  const selectedGovName = governorates.find((g) => g.id === selectedGovernorateId)?.name;
+  const selectedCityName = cities.find((c) => c.id === selectedCityId)?.name;
+  const selectedAreaName = areas.find((a) => a.id === selectedAreaId)?.name;
+
   return (
     <div className="flex flex-col lg:flex-row gap-8">
-      {/* Filters Sidebar */}
+      {/* ── Filters Sidebar ────────────────────────────────────────────── */}
       <aside className="w-full lg:w-80 flex-shrink-0 space-y-6">
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm sticky top-24">
+          {/* Header */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
             <div className="flex items-center gap-2 font-semibold text-lg">
               <Filter className="h-5 w-5" />
@@ -128,7 +207,9 @@ export default function HubsClient({ hubs }: HubsClientProps) {
 
           {/* Search */}
           <div className="space-y-3 mb-6">
-            <label className="text-sm font-medium text-foreground">{t("searchName")}</label>
+            <label className="text-sm font-medium text-foreground">
+              {t("searchName")}
+            </label>
             <div className="relative">
               <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
@@ -141,61 +222,112 @@ export default function HubsClient({ hubs }: HubsClientProps) {
             </div>
           </div>
 
-          {/* Governorate Filter */}
-          <div className="space-y-3 mb-6">
+          {/* ── Hierarchical Location Filter ─────────────────────────── */}
+          <div className="space-y-4">
             <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <MapPin className="h-4 w-4" /> {t("governorate")}
+              <MapPin className="h-4 w-4" />
+              {t("governorate")}
             </label>
-            <div className="space-y-2">
-              {governorateOptions.map((gov) => (
-                <div key={gov.key} className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <input
-                    type="checkbox"
-                    id={`gov-${gov.key}`}
-                    checked={selectedGovernorates.includes(gov.key)}
-                    onChange={() => toggleGovernorate(gov.key)}
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
-                  />
-                  <label
-                    htmlFor={`gov-${gov.key}`}
-                    className="text-sm font-medium leading-none cursor-pointer"
-                  >
-                    {gov.name}
-                  </label>
-                </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Services Filter */}
-          <div className="space-y-3">
-            <label className="text-sm font-medium text-foreground flex items-center gap-2">
-              <Zap className="h-4 w-4" /> {t("essentialServices")}
-            </label>
-            <div className="space-y-2">
-              {services.map((service) => (
-                <div key={service.name} className="flex items-center space-x-2 rtl:space-x-reverse">
-                  <input
-                    type="checkbox"
-                    id={`srv-${service.name}`}
-                    checked={selectedServices.includes(service.name)}
-                    onChange={() => toggleService(service.name)}
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
-                  />
-                  <label
-                    htmlFor={`srv-${service.name}`}
-                    className="text-sm font-medium leading-none cursor-pointer"
-                  >
-                    {service.icon} {service.name}
-                  </label>
+            {locationsLoading ? (
+              <div className="flex items-center gap-2 text-muted-foreground py-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-xs">Loading locations…</span>
+              </div>
+            ) : (
+              <>
+                {/* Governorates */}
+                <div className="space-y-1">
+                  {governorates.map((gov) => (
+                    <button
+                      key={gov.id}
+                      onClick={() => selectGovernorate(gov.id)}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
+                        selectedGovernorateId === gov.id
+                          ? "bg-primary text-primary-foreground shadow-sm"
+                          : "hover:bg-muted text-foreground"
+                      }`}
+                    >
+                      <span>{gov.name}</span>
+                      {selectedGovernorateId === gov.id && cities.length > 0 && (
+                        <ChevronRight className="h-3.5 w-3.5 opacity-70" />
+                      )}
+                    </button>
+                  ))}
                 </div>
-              ))}
-            </div>
+
+                {/* Cities (shown when a governorate is selected) */}
+                {cities.length > 0 && (
+                  <div className="ps-4 border-s-2 border-primary/30 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
+                      {selectedGovName}
+                    </p>
+                    {cities.map((city) => (
+                      <button
+                        key={city.id}
+                        onClick={() => selectCity(city.id)}
+                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-all duration-150 ${
+                          selectedCityId === city.id
+                            ? "bg-primary/15 text-primary font-semibold"
+                            : "hover:bg-muted text-foreground"
+                        }`}
+                      >
+                        <span>{city.name}</span>
+                        {selectedCityId === city.id && areas.length > 0 && (
+                          <ChevronRight className="h-3.5 w-3.5 opacity-70" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Areas (shown when a city is selected) */}
+                {areas.length > 0 && (
+                  <div className="ps-8 border-s-2 border-primary/20 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
+                      {selectedCityName}
+                    </p>
+                    {areas.map((area) => (
+                      <button
+                        key={area.id}
+                        onClick={() => selectArea(area.id)}
+                        className={`w-full flex items-center px-3 py-1.5 rounded-lg text-sm transition-all duration-150 ${
+                          selectedAreaId === area.id
+                            ? "bg-primary/10 text-primary font-semibold"
+                            : "hover:bg-muted text-foreground"
+                        }`}
+                      >
+                        {area.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Breadcrumb / active selection badge */}
+                {selectedGovernorateId && (
+                  <div className="mt-3 flex flex-wrap gap-1">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-primary/10 text-primary text-xs rounded-full">
+                      <MapPin className="h-3 w-3" />
+                      {[selectedGovName, selectedCityName, selectedAreaName]
+                        .filter(Boolean)
+                        .join(" › ")}
+                      <button
+                        onClick={clearFilters}
+                        className="ms-1 hover:text-red-500 transition-colors"
+                        aria-label="Clear location filter"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </aside>
 
-      {/* Results */}
+      {/* ── Results ──────────────────────────────────────────────────────── */}
       <div className="flex-1">
         <div className="flex justify-between items-center mb-6">
           <p className="text-sm text-muted-foreground">
@@ -219,7 +351,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
             {totalPages > 1 && (
               <div className="flex justify-center items-center gap-2 mt-8">
                 <button
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
                   className="px-4 py-2 border border-input bg-background rounded-md text-sm font-medium hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
@@ -230,14 +362,18 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                     <button
                       key={i}
                       onClick={() => setCurrentPage(i + 1)}
-                      className={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${currentPage === i + 1 ? 'bg-primary text-primary-foreground' : 'hover:bg-muted bg-background border border-input'}`}
+                      className={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${
+                        currentPage === i + 1
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-muted bg-background border border-input"
+                      }`}
                     >
                       {i + 1}
                     </button>
                   ))}
                 </div>
                 <button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
                   className="px-4 py-2 border border-input bg-background rounded-md text-sm font-medium hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
@@ -249,10 +385,10 @@ export default function HubsClient({ hubs }: HubsClientProps) {
         ) : (
           <div className="py-20 text-center border border-dashed border-border rounded-2xl bg-muted/10">
             <Search className="h-12 w-12 text-muted-foreground/50 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">{t("noHubsFound")}</h3>
-            <p className="text-muted-foreground text-sm mb-4">
-              {t("noHubsTry")}
-            </p>
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              {t("noHubsFound")}
+            </h3>
+            <p className="text-muted-foreground text-sm mb-4">{t("noHubsTry")}</p>
             <button
               onClick={clearFilters}
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
