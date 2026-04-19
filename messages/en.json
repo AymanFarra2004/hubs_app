@@ -306,7 +306,11 @@
       "address_en": "Address Details (English)",
       "lang_ar": "Arabic",
       "lang_en": "English",
-      "hour": "Hour"
+      "hour": "Hour",
+      "contactUs": "Contact Us",
+      "per": "per",
+      "contact": "Contact",
+      "followUs": "Follow Us"
     },
     "services": {
       "currentTitle": "Current Hub Services",

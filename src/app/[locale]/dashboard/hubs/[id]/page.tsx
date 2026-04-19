@@ -758,7 +758,10 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
   const loadSocials = async () => {
     setLoading(true);
     const res = await getHubSocials(hubSlug);
+      console.log("before the res", res.data);
+
     if (res.success && Array.isArray(res.data)) {
+      console.log("the res", res.data);
       setSocials(res.data.map((s: any) => ({ platform: s.platform || "other", url: s.url || "" })));
     }
     setLoading(false);
@@ -768,10 +771,22 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
 
   // Save the whole array
   const handleSave = async () => {
+    let dataToSave = socials;
+    const trimmedUrl = newUrl.trim();
+    
+    if (showAddForm && trimmedUrl) {
+      dataToSave = [...socials, { platform: newPlatform, url: trimmedUrl }];
+    }
+
     setSaving(true);
-    const res = await updateHubSocials(hubSlug, socials);
+    const res = await updateHubSocials(hubSlug, dataToSave);
     if (res.success) {
       toast.success(t("saved") || "Social accounts saved!");
+      if (showAddForm && trimmedUrl) {
+        setSocials(dataToSave);
+        setNewUrl("");
+        setShowAddForm(false);
+      }
     } else {
       toast.error(res.error || "Failed to save social accounts");
     }
@@ -846,13 +861,6 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                   className="flex-1 px-3 py-2 border border-input rounded-xl bg-background text-sm"
                   onKeyDown={e => { if (e.key === "Enter") { e.preventDefault(); handleAdd(); } }}
                 />
-                <button
-                  onClick={handleAdd}
-                  disabled={!newUrl.trim()}
-                  className="px-4 py-2 bg-primary text-primary-foreground text-sm rounded-xl font-medium hover:bg-primary/90 transition-colors disabled:opacity-40"
-                >
-                  {t("add")}
-                </button>
                 <button
                   onClick={() => setShowAddForm(false)}
                   className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"

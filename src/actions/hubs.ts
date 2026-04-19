@@ -725,17 +725,23 @@ export async function deleteHubOffer(hubSlug: string, offerId: number) {
 
 export async function getHubSocials(hubId: string, locale: string = "ar") {
   const cookieStore = await cookies();
+  console.log("form the get hub socials")
   const token = cookieStore.get("token")?.value;
   if (!token) return { error: "Unauthenticated", data: [] };
 
   try {
     const langParam = getLangParam(locale);
-    const res = await fetch(`${API_BASE_URL}/hubs/${hubId}/social-accounts?${langParam}`, {
+    const res = await fetch(`${API_BASE_URL}/hubs/${hubId}?${langParam}`, {
       headers: { Authorization: `Bearer ${token}`, "Accept": "application/json" },
       next: { tags: [`socials-${hubId}`], revalidate: 0 }
     });
+    
     const result = await res.json();
-    return res.ok ? { success: true, data: result.data || result || [] } : { error: "Error", data: [] };
+    if (res.ok){
+      const socialsAccounts = result.data.social_accounts;
+      return { success: true, data: socialsAccounts };
+    }
+    return { error: "Error", data: [] };
   } catch (e) {
     return { error: "Network Error", data: [] };
   }

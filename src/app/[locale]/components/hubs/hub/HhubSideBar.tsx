@@ -1,10 +1,13 @@
 import React from 'react'
 import { IHub } from '@/data/hubs'
-import { Clock, Phone, MapPin, Share2 } from 'lucide-react'
+import { Clock, Phone } from 'lucide-react'
+import HubSocialAccounts from './HubSocialAccounts'
+import { useTranslations } from 'next-intl'
 
 export default function HhubSideBar({hub}: {hub: IHub}) {
+  const t = useTranslations("HubManagement.general");
   const priceParts = (hub.pricing || '').split('/');
-  const priceMain = priceParts[0]?.trim() || 'Contact';
+  const priceMain = priceParts[0]?.trim() || t("contact");
   const priceUnit = priceParts.length > 1 ? priceParts.slice(1).join('/').trim() : null;
 
   return (
@@ -16,7 +19,7 @@ export default function HhubSideBar({hub}: {hub: IHub}) {
                 </div>
                 {priceUnit && (
                   <div className="text-muted-foreground">
-                      per {priceUnit}
+                      {t("per") || "per"} {priceUnit}
                   </div>
                 )}
             </div>
@@ -26,7 +29,7 @@ export default function HhubSideBar({hub}: {hub: IHub}) {
                   <div className="flex items-start gap-3">
                       <Clock className="h-5 w-5 text-muted-foreground mt-0.5" />
                       <div>
-                          <div className="font-medium">Operating Hours</div>
+                          <div className="font-medium">{t("workingHours")}</div>
                           <div className="text-muted-foreground text-sm">{hub.operatingHours}</div>
                       </div>
                   </div>
@@ -35,22 +38,19 @@ export default function HhubSideBar({hub}: {hub: IHub}) {
                   <div className="flex items-start gap-3">
                       <Phone className="h-5 w-5 text-muted-foreground mt-0.5" />
                       <div>
-                          <div className="font-medium">Contact</div>
+                          <div className="font-medium">{t("contactUs")}</div>
                           <div className="text-muted-foreground text-sm" dir="ltr">{hub.contact.contactNumber}</div>
                       </div>
                   </div>
                 )}
             </div>
 
-            <div className="space-y-3">
-                <button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium py-3 rounded-xl transition-all shadow-md flex justify-center items-center gap-2">
-                    <MapPin className="h-4 w-4" />
-                    Get Directions
-                </button>
-                <button className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium py-3 rounded-xl transition-all flex justify-center items-center gap-2">
-                    <Share2 className="h-4 w-4" />
-                    Share Hub
-                </button>
+            <div className="pt-6 border-t border-border">
+                <HubSocialAccounts 
+                    socials={hub.socialAccounts || []} 
+                    title={t("followUs")} 
+                    titleClassName="font-medium mb-4"
+                />
             </div>
         </div>
     </div>
