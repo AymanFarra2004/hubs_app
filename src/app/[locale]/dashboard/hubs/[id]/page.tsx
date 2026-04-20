@@ -397,7 +397,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
-            <span>{hub.address_details?.[locale] || hub.address || t("noAddress")}</span>
+            <span>{hub.location?  hub.location.breadcrumb[1].name + " - " + hub.location.breadcrumb[2].name : t("noAddress")}</span>
             {hub.location && <span className="text-xs bg-muted px-2 py-0.5 rounded">({hub.location.name} - {hub.location.type})</span>}
           </div>
 
@@ -758,10 +758,8 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
   const loadSocials = async () => {
     setLoading(true);
     const res = await getHubSocials(hubSlug);
-      console.log("before the res", res.data);
 
     if (res.success && Array.isArray(res.data)) {
-      console.log("the res", res.data);
       setSocials(res.data.map((s: any) => ({ platform: s.platform || "other", url: s.url || "" })));
     }
     setLoading(false);

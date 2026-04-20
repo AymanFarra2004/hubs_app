@@ -9,6 +9,7 @@ export default async function DashboardOverviewPage() {
   const locale = await getLocale();
   const { data: hubs, error } = await getMyHubs(locale);
   const t = await getTranslations("Dashboard");
+  console.log("dashboard page" , hubs);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">

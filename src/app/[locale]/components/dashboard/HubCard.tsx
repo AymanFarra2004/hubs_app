@@ -46,7 +46,7 @@ export function HubCard({ hub }: HubCardProps) {
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
           <MapPin className="h-4 w-4" />
-          <span className="truncate">{hub.address_details?.[locale] || hub.address || t("locationUnavailable")}</span>
+          <span className="truncate">{hub.location.breadcrumb[1].name + " - " + hub.location.breadcrumb[2].name || hub.address || t("locationUnavailable")}</span>
         </div>
         
         <div className="pt-4 border-t border-border mt-auto flex gap-3">
