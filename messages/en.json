@@ -621,5 +621,17 @@
     "signIn": "Sign In",
     "errorTitle": "Could not load profile",
     "errorDesc": "Your session may have expired. Please sign in again."
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for doesn't exist or has been moved.",
+    "backHome": "Back to Home",
+    "error404": "404"
+  },
+  "ComingSoon": {
+    "title": "Coming Soon",
+    "description": "We are working hard to bring this feature to you. Stay tuned!",
+    "back": "Go Back",
+    "settings": "Settings Management"
   }
 }
