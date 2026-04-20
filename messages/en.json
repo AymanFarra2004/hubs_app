@@ -17,13 +17,16 @@
     "userMenu": {
       "dashboard": "Dashboard",
       "adminDashboard": "Admin Dashboard",
-      "profile": "Profile",
+      "profile": "Account",
       "logout": "Logout"
     }
   },
   "Hero": {
+    "titleQareeb": "Find Your <br></br> <primary>Digital Sanctuary</primary>",
     "title": "Find the connection <br></br> <primary>you need in Gaza.</primary>",
+    "descriptionQareeb": "Curated digital spaces designed for deep work. Discover meticulously vetted environments blending high-end design with uncompromising utility.",
     "description": "Discover safe, accessible hubs providing reliable internet, electricity, and quiet workspaces when you need them most.",
+    "searchByNamePlaceholder": "Search by Name...",
     "searchButton": "Search",
     "exploreHubs": "Explore Hubs",
     "createHub": "Create a Hub",
@@ -45,6 +48,9 @@
     }
   },
   "HubsGrid": {
+    "titleQareeb": "Closest",
+    "titleHighlightQareeb": "Workspaces",
+    "viewDetails": "View Details",
     "title": "Featured",
     "titleHighlight": "Hubs",
     "description": "Discover top-rated, premium spaces across Gaza designed for productivity, connection, and comfort.",
@@ -78,7 +84,7 @@
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "hubOwnerLogin": "Hub Owner Login",
-    "rights": "© {year} Habbat Connect. All rights reserved.",
+    "rights": "© {year} Qareeb. All rights reserved.",
     "builtFor": "Built for Gaza"
   },
   "HubsPage": {

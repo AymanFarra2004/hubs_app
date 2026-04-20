@@ -13,7 +13,6 @@ import { motion, AnimatePresence } from "framer-motion";
 const navLinks = [
   { href: "/", labelKey: "home" },
   { href: "/hubs", labelKey: "services" },
-  { href: "/about", labelKey: "about" },
   { href: "/contact", labelKey: "contact" },
 ];
 
@@ -68,7 +67,7 @@ export function Header() {
                 <MapPin className="h-6 w-6 text-white" />
               </div>
               <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-                Habbat
+                Qareeb | قريب
               </span>
             </Link>
           </div>

@@ -1,14 +1,11 @@
 "use client";
-import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
-import { MapPin, Zap, Clock, Tag, Coins } from "lucide-react";
+import { MapPin, Zap, Clock, Coins, Wifi, Power, Users } from "lucide-react";
 import { format24to12 } from "@/src/lib/utils";
-import { getGovernorateKeyByLocationId } from "@/src/lib/locationMapping";
 
-export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governorate: string, service: string }, hubs?: any[] }) {
+export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
   const t = useTranslations("HubsGrid");
-  const tOffers = useTranslations("HubManagement.offers");
   const locale = useLocale();
 
   const mappedHubs = hubs.map(apiHub => ({
@@ -19,12 +16,12 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
     location: typeof apiHub.address_details === 'string' ? apiHub.address_details : (apiHub.address_details?.[locale] || apiHub.address_details?.en || apiHub.address_details?.ar || "Unknown"),
     locationId: apiHub.location?.id || apiHub.location_id,
     city: (() => {
-      const breadcrumb = apiHub.location.breadcrumb || [];
+      const breadcrumb = apiHub.location?.breadcrumb || [];
       const city = breadcrumb[1]?.name || "";
       return city.trim();
     })(),
     area: (() => {
-      const breadcrumb = apiHub.location.breadcrumb || [];
+      const breadcrumb = apiHub.location?.breadcrumb || [];
       const area = breadcrumb[2]?.name || "";
       return area;
     })(),
@@ -41,137 +38,97 @@ export default function HubsBentoGrid({ filter, hubs = [] }: { filter: { governo
       (apiHub.images.main.startsWith('http') ? apiHub.images.main : `https://karam.idreis.net${apiHub.images.main.startsWith('/') ? '' : '/'}${apiHub.images.main}`)
       : "https://placehold.co/600x400?text=No+Image",
     verificationStatus: apiHub.status === "approved" ? "Verified" : "Pending",
-    contact: { contactNumber: apiHub.contact || "" },
   }));
 
-  // Only show approved hubs in the featured grid
+  // Only show approved hubs
   const displayHubs = mappedHubs.filter((apiHub: any) => apiHub.verificationStatus === "Verified");
+  const bentoHubs = displayHubs.slice(0, 6);
 
-  const filteredHubs = (filter.governorate === "" && filter.service === "")
-    ? displayHubs
-    : displayHubs.filter((hub) => {
-      const govMatch =
-        filter.governorate === "" ||
-        getGovernorateKeyByLocationId(hub.locationId ? Number(hub.locationId) : null) === filter.governorate;
-
-      const srvMatch =
-        filter.service === "" ||
-        (hub.services || []).some((s: string) =>
-          s.toLowerCase().includes(filter.service.toLowerCase())
-        );
-
-      return govMatch && srvMatch;
-    });
-
-  // Limit to max 6 for a balanced bento grid
-  const bentoHubs = filteredHubs.slice(0, 6);
+  // Helper to map a service string to an icon (simple matching)
+  const renderServiceIcon = (service: string, key: number) => {
+    const s = service.toLowerCase();
+    let Icon = MapPin;
+    if (s.includes("internet") || s.includes("wifi") || s.includes("fiber")) Icon = Wifi;
+    else if (s.includes("power") || s.includes("electricity") || s.includes("solar")) Icon = Power;
+    else if (s.includes("space") || s.includes("room") || s.includes("desk")) Icon = Users;
+    
+    return (
+      <div key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
+        <Icon className="text-purple-600 dark:text-purple-400 w-5 h-5" />
+        <span className="truncate max-w-[80px]">{service}</span>
+      </div>
+    );
+  };
 
   return (
-    <section className="py-24 bg-gray-50 dark:bg-[#050505] relative z-10 transition-colors duration-300" id="hubs">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-14 gap-6">
+    <section className="py-24 bg-background relative z-10 transition-colors duration-300" id="hubs">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
           <div className="max-w-2xl">
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-4">
-              {t("title")}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-blue-600 dark:from-purple-400 dark:to-blue-500">
-                {t("titleHighlight")}
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-2">
+              {t("titleQareeb")}{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-500">
+                {t("titleHighlightQareeb")}
               </span>
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="text-lg text-muted-foreground">
               {t("description")}
             </p>
           </div>
-          <a href="/hubs" className="group relative inline-flex items-center justify-center px-6 py-3 font-medium text-gray-800 dark:text-white bg-black/5 dark:bg-white/10 rounded-full overflow-hidden transition-all hover:bg-black/10 dark:hover:bg-white/20 hover:scale-105">
-            <span className="relative z-10 group-hover:text-white transition-colors">{t("viewAll")}</span>
-            <span className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 dark:group-hover:opacity-20 transition-opacity"></span>
+          <a href="/hubs" className="hidden md:flex items-center gap-2 text-[#9333EA] font-medium hover:text-[#7e22ce] transition-colors">
+            {t("viewAll")} <span className="transform rtl:rotate-180">&rarr;</span>
           </a>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 auto-rows-[280px]">
-          {bentoHubs.map((hub: any, i: number) => {
-            const styleClass =
-              i === 0 ? "md:col-span-4 lg:col-span-4 row-span-2" :
-                i === 1 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-                  i === 2 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-                    i === 3 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-                      i === 4 ? "md:col-span-2 lg:col-span-2 row-span-1" :
-                        "md:col-span-2 lg:col-span-2 row-span-1";
-
-            return (
-              <motion.div
-                key={hub.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                whileHover={{ y: -5, scale: 0.99 }}
-                className={`group relative rounded-3xl overflow-hidden bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 backdrop-blur-md transition-all hover:shadow-[0_0_40px_rgba(59,130,246,0.1)] dark:hover:shadow-[0_0_40px_rgba(59,130,246,0.15)] hover:border-black/10 dark:hover:border-white/20 ${styleClass}`}
-              >
-                <div className="absolute inset-0 z-0">
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent dark:from-black/80 dark:via-black/40 dark:to-black/10 z-10 transition-opacity group-hover:opacity-100 dark:group-hover:opacity-90" />
-                  <img
-                    src={hub.imageUrl}
-                    alt={hub.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                </div>
-
-                <div className="relative z-20 h-full flex flex-col justify-end p-6 md:p-8">
-                  {/* Verified Tag */}
-                  <div className="absolute top-6 end-6 px-3 py-1 bg-blue-500/20 border border-blue-400/30 rounded-full backdrop-blur-md">
-                    <span className="text-xs font-semibold text-blue-300 uppercase tracking-wider flex items-center gap-1">
-                      <Zap className="w-3 h-3" /> {t("verified")}
+        {/* 3-Column Grid Layout matching HTML exactly */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {bentoHubs.map((hub: any, i: number) => (
+            <motion.div
+              key={hub.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
+              className={`bg-card dark:bg-card/50 rounded-2xl overflow-hidden group hover:shadow-[0_20px_40px_rgba(25,28,30,0.06)] dark:hover:shadow-[0_20px_40px_rgba(255,255,255,0.02)] transition-shadow duration-300 border border-border/50 flex-col ${i >= 3 ? 'hidden md:flex' : 'flex'}`}
+            >
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src={hub.imageUrl}
+                  alt={hub.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                />
+                <div className="absolute top-4 left-4 flex gap-2">
+                  <span className="bg-background/70 backdrop-blur-md text-foreground text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm border border-border/50">
+                    <span className="w-2 h-2 rounded-full bg-green-500"></span> {t("verified")}
+                  </span>
+                  {hub.hourlyPrice && (
+                    <span className="bg-background/70 backdrop-blur-md text-foreground text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm border border-border/50">
+                      <Coins className="w-3 h-3 text-amber-500" /> ₪{hub.hourlyPrice}/{t("hour")}
                     </span>
-                  </div>
-
-
-                  {/* Content Section */}
-                  <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-2xl md:text-3xl font-bold text-white mb-2 line-clamp-1">{hub.name}</h3>
-
-                    <div className="flex flex-wrap items-center gap-4 text-gray-200 dark:text-gray-300 text-sm mb-4">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="w-4 h-4 text-blue-400" />
-                        <span>{(hub.city || "") + " - " + (hub.area || "")}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4 text-purple-400" />
-                        <span>{hub.operatingHours}</span>
-                      </div>
-                      {hub.hourlyPrice && (
-                        <div className="flex items-center gap-1">
-                          <Coins className="w-4 h-4 text-amber-400" />
-                          <span>₪{hub.hourlyPrice}/{t("hour")}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <p className="text-gray-200 dark:text-gray-400 text-sm md:text-base line-clamp-2 mb-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
-                      {hub.description}
-                    </p>
-                    {hub.activeOffer && (
-                      <div className="mb-6 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-150">
-                        <div className="px-2 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-lg">
-                          <p className="text-[10px] font-bold text-primary-foreground/70 uppercase tracking-tighter">{tOffers("specialOffer")}</p>
-                          <p className="text-xs font-bold text-white truncate max-w-[120px]">
-                            {typeof hub.activeOffer.title === 'string' ? hub.activeOffer.title : (hub.activeOffer.title?.[locale] || hub.activeOffer.title?.en || "Offer")}
-                          </p>
-                        </div>
-                        <div className="px-2 py-1.5 bg-primary text-white font-bold text-sm rounded-lg shadow-lg">
-                          ₪{hub.activeOffer.price}
-                        </div>
-                      </div>
-                    )}
-
-                    <a href={`/hubs/${hub.slug}`} className="inline-flex items-center text-sm font-semibold text-white group/btn">
-                      {t("exploreSpace")}
-                      <span className="ms-2 transform group-hover/btn:translate-x-1 rtl:group-hover/btn:-translate-x-1 transition-transform">&rarr;</span>
-                    </a>
-                  </div>
+                  )}
                 </div>
-              </motion.div>
-            );
-          })}
+              </div>
+
+              <div className="p-6 flex-1 flex flex-col">
+                <h3 className="text-xl font-bold text-foreground mb-1 line-clamp-1">{hub.name}</h3>
+                <p className="text-sm text-muted-foreground mb-6 line-clamp-1">
+                  {(hub.city || "") + (hub.city && hub.area ? " - " : "") + (hub.area || "")}
+                </p>
+
+                {/* Utility Icons */}
+                <div className="flex flex-wrap gap-4 mb-6 mt-auto">
+                  {hub.services.slice(0, 3).map((service: string, idx: number) => renderServiceIcon(service, idx))}
+                </div>
+
+                <a 
+                  href={`/hubs/${hub.slug}`} 
+                  className="w-full text-center py-3 rounded-xl bg-[#9333EA] hover:bg-[#7e22ce] text-white font-medium transition-colors block"
+                >
+                  {t("viewDetails")}
+                </a>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

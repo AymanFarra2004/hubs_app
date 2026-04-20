@@ -17,13 +17,16 @@
     "userMenu": {
       "dashboard": "لوحة التحكم",
       "adminDashboard": "لوحة الإدارة",
-      "profile": "الملف الشخصي",
+      "profile": "الحساب",
       "logout": "تسجيل الخروج"
     }
   },
   "Hero": {
+    "titleQareeb": "ابحث عن <br></br> <primary>ملاذك الرقمي</primary>",
     "title": "ابحث عن الاتصال <br></br> <primary>الذي تحتاجه في غزة.</primary>",
+    "descriptionQareeb": "مساحات رقمية منسقة مصممة للعمل العميق. اكتشف بيئات تم فحصها بدقة تمزج بين التصميم الراقي والمنفعة المطلقة.",
     "description": "اكتشف مراكز آمنة توفر إنترنت موثوق، كهرباء، ومساحات عمل هادئة عندما تكون في أمس الحاجة إليها.",
+    "searchByNamePlaceholder": "البحث بالاسم...",
     "searchButton": "بحث",
     "exploreHubs": "استكشف المراكز",
     "createHub": "أضف مركزاً",
@@ -45,6 +48,9 @@
     }
   },
   "HubsGrid": {
+    "titleQareeb": "أقرب مساحات",
+    "titleHighlightQareeb": "العمل عليك",
+    "viewDetails": "عرض التفاصيل",
     "title": "المراكز",
     "titleHighlight": "المميزة",
     "description": "اكتشف أفضل المساحات عبر قطاع غزة المصممة للإنتاجية والتواصل والراحة.",
@@ -78,7 +84,7 @@
     "privacyPolicy": "سياسة الخصوصية",
     "termsOfService": "شروط الخدمة",
     "hubOwnerLogin": "تسجيل دخول أصحاب المراكز",
-    "rights": "© {year} هبط كونكت. جميع الحقوق محفوظة.",
+    "rights": "© {year} قريب. جميع الحقوق محفوظة.",
     "builtFor": "صُنع لأجل غزة"
   },
   "HubsPage": {

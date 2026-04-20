@@ -16,7 +16,7 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2 mb-4">
               <MapPin className="h-6 w-6 text-primary" />
               <span className="font-bold text-xl tracking-tight text-foreground">
-                Habbat
+                Qareeb | قريب
               </span>
             </Link>
             <p className="text-muted-foreground text-sm max-w-sm mb-6">

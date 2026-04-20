@@ -1,48 +1,60 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart, Star, Sparkles, Coffee, Zap } from "lucide-react";
+import { MapPin } from "lucide-react";
+import { Link } from "@/src/i18n/routing";
+import { useLocale } from "next-intl";
+import { useEffect, useState } from "react";
 
-const heebatData = [
-  { id: 1, text: "Ali sent a Workspace Pass to Omar", icon: <Zap className="w-4 h-4 text-yellow-400" /> },
-  { id: 2, text: "Sarah gifted Coffee to Ahmed", icon: <Coffee className="w-4 h-4 text-amber-600" /> },
-  { id: 3, text: "Trending: 50% off at TechHub", icon: <Star className="w-4 h-4 text-blue-400" /> },
-  { id: 4, text: "Mona sent a Hug to Laila", icon: <Heart className="w-4 h-4 text-red-500" /> },
-  { id: 5, text: "New Hub added in Deir al-Balah", icon: <Sparkles className="w-4 h-4 text-purple-400" /> },
-  { id: 6, text: "Yousef sponsored Internet for 2 hours", icon: <Zap className="w-4 h-4 text-yellow-400" /> },
-];
+export default function HeebatRibbon({ hubs = [] }: { hubs?: any[] }) {
+  const locale = useLocale();
+  const approvedHubs = hubs.filter(hub => hub.status === "approved");
+  const [randomHubs, setRandomHubs] = useState<any[]>(approvedHubs.slice(0, 8));
 
-// Duplicate items for seamless infinite scroll
-const duplicatedHeebat = [...heebatData, ...heebatData, ...heebatData];
+  useEffect(() => {
+    if (approvedHubs.length > 0) {
+      const shuffled = [...approvedHubs].sort(() => 0.5 - Math.random());
+      setRandomHubs(shuffled.slice(0, 8));
+    }
+  }, [hubs]);
 
-export default function HeebatRibbon() {
+  if (randomHubs.length === 0) return null;
+
+  // Duplicate items for seamless infinite scroll
+  const duplicatedHubs = [...randomHubs, ...randomHubs, ...randomHubs, ...randomHubs];
+
   return (
-    <section className="py-10 border-y border-black/5 dark:border-white/5 bg-gray-100/50 dark:bg-[#0A0A0B]/50 backdrop-blur-sm overflow-hidden relative flex">
+    <section className="py-10 bg-background border-y border-black/10 dark:border-white/10 overflow-hidden relative flex">
       {/* Gradient fades for the edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-gray-50 dark:from-[#050505] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-gray-50 dark:from-[#050505] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
       <motion.div
         className="flex gap-6 items-center px-4"
-        animate={{ x: [0, -1035] }} // Adjust duration based on width. Roughly moving 1 set width.
+        animate={{ x: [0, -1500] }} 
         transition={{
           repeat: Infinity,
           ease: "linear",
-          duration: 20,
+          duration: 30,
         }}
         whileHover={{ animationPlayState: "paused" }}
       >
-        {duplicatedHeebat.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center gap-3 px-6 py-3 bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-full whitespace-nowrap backdrop-blur-md shadow-sm dark:shadow-lg hover:bg-gray-50 dark:hover:bg-white/10 transition-colors cursor-pointer"
-          >
-            <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 flex items-center justify-center">
-              {item.icon}
-            </div>
-            <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{item.text}</span>
-          </div>
-        ))}
+        {duplicatedHubs.map((hub, index) => {
+          const hubName = typeof hub.name === 'string' ? hub.name : (hub.name?.[locale] || hub.name?.en || hub.name?.ar || "Unknown Hub");
+          const imageUrl = hub.images?.main ? (hub.images.main.startsWith('http') ? hub.images.main : `https://karam.idreis.net${hub.images.main.startsWith('/') ? '' : '/'}${hub.images.main}`) : "https://placehold.co/100x100?text=Hub";
+          return (
+            <Link
+              href={`/hubs/${hub.slug}`}
+              key={`${hub.id}-${index}`}
+              className="flex items-center gap-3 pr-6 pl-2 py-2 bg-card border border-border/50 rounded-full whitespace-nowrap shadow-sm hover:shadow-md hover:border-purple-500/30 transition-all cursor-pointer group"
+            >
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform shadow-sm">
+                <img src={imageUrl} alt={hubName} className="w-full h-full object-cover" />
+              </div>
+              <span className="text-sm font-medium text-foreground">{hubName}</span>
+            </Link>
+          );
+        })}
       </motion.div>
     </section>
   );

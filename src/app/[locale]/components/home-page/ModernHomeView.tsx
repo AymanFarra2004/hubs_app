@@ -8,11 +8,9 @@ import ModernCta from "./ModernCta";
 import { motion } from "framer-motion";
 
 export default function ModernHomeView({ initialHubs = [] }: { initialHubs?: any[] }) {
-  const [filter, setFilter] = useState<{governorate: string, service: string}>({governorate: "", service: ""});
-
   return (
     <div className="bg-gray-50 dark:bg-[#050505] text-foreground min-h-screen">
-      <ModernHero setFilter={setFilter} />
+      <ModernHero hubs={initialHubs} />
       
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -20,7 +18,7 @@ export default function ModernHomeView({ initialHubs = [] }: { initialHubs?: any
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
-        <HeebatRibbon />
+        <HeebatRibbon hubs={initialHubs} />
       </motion.div>
 
       <motion.div
@@ -29,7 +27,7 @@ export default function ModernHomeView({ initialHubs = [] }: { initialHubs?: any
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.8 }}
       >
-        <HubsBentoGrid filter={filter} hubs={initialHubs} />
+        <HubsBentoGrid hubs={initialHubs} />
       </motion.div>
 
       <motion.div
