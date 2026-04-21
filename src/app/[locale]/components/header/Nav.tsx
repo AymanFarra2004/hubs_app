@@ -35,7 +35,6 @@ const isAdmin = isLoggedIn && auth?.user?.role === "admin";
     
     router.push("/");
   };
-console.log(auth);
   return (
     <>
       {/* Desktop Navigation */}

@@ -106,7 +106,10 @@ export default async function HubDetails({
       <Header />
 
       <main className="flex-grow pt-24 pb-20">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <HubHeroImage hub={hub} />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
 
           <Link
             href="/hubs"
@@ -115,8 +118,6 @@ export default async function HubDetails({
             <ChevronLeft className="h-4 w-4 mr-1" />
             Back to Hubs
           </Link>
-
-          <HubHeroImage hub={hub} />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             <div className="lg:col-span-2 space-y-10">

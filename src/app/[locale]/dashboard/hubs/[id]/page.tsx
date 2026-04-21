@@ -45,7 +45,6 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
       const res = await getHubDataBySlugForManagement(hub.slug);
       if (res.success && res.data) {
         originalDataRef.current = res.data;
-        console.log("res.data", res.data)
         setHubNameAr(res.data.name.ar || "");
         setHubNameEn(res.data.name.en || "");
         setHubDescAr(res.data.description.ar || "");
@@ -57,7 +56,6 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
     }
     fetchData();
   }, [hub.slug]);
-  console.log("hub name: ", hubNameEn, hubNameAr)
 
   const [startTime, setStartTime] = useState(hub.working_hours?.start || "08:00");
   const [endTime, setEndTime] = useState(hub.working_hours?.end || "17:00");

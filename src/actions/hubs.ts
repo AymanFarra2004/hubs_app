@@ -103,7 +103,6 @@ export async function getHubBySlug(slugOrId: string, locale: string = "ar") {
 export async function getHubDataBySlugForManagement(slugOrId: string) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
-  console.log("token", token);
   if (!token) return { error: "Unauthenticated", data: null };
   try {
     const [resAr, resEn] = await Promise.all([
@@ -119,12 +118,8 @@ export async function getHubDataBySlugForManagement(slugOrId: string) {
            "Authorization": `Bearer ${token}`
          }, next: { revalidate: 0 } })
     ]);
-      console.log("res EN", resEn)
-      console.log("res AR", resAr)
 
     if (!resAr.ok || !resEn.ok) {
-      console.log("res AR", resAr.ok)
-      console.log("res EN", resEn.ok)
       throw new Error("Failed to fetch data from one or both locales");
     }
 
@@ -133,8 +128,6 @@ export async function getHubDataBySlugForManagement(slugOrId: string) {
 
     const dataAr = jsonAr.data;
     const dataEn = jsonEn.data;
-    console.log("dataAr", dataAr);
-    console.log("dataEn", dataEn);
 
     return {
       success: true,
@@ -369,7 +362,6 @@ export async function createHub(prevState: any, formData: FormData) {
           );
           
           if (recoveredHub && recoveredHub.slug) {
-            console.log("Recovery successful! Hub found:", recoveredHub.slug);
             result = {
               status: 'success',
               message: "Hub created (Recovered from timeout)",
@@ -744,7 +736,6 @@ export async function deleteHubOffer(hubSlug: string, offerId: number) {
 
 export async function getHubSocials(hubId: string, locale: string = "ar") {
   const cookieStore = await cookies();
-  console.log("form the get hub socials")
   const token = cookieStore.get("token")?.value;
   if (!token) return { error: "Unauthenticated", data: [] };
 

@@ -56,31 +56,26 @@ export default function HubGallery({ hubName, galleryUrls }: { hubName: string, 
     <>
       <section className="mb-10">
         <h2 className="text-2xl font-bold mb-6">Gallery</h2>
-        {/* Premium Bento Grid for Image Previews */}
-        <div className={`grid gap-5 ${galleryUrls.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
-          {galleryUrls.map((url, idx) => {
-             const isFeatured = idx === 0 && galleryUrls.length >= 3;
-             return (
-              <div 
-                key={idx} 
-                onClick={() => setSelectedIndex(idx)}
-                className={`relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 ease-out border border-border group cursor-pointer ${
-                  isFeatured ? 'md:col-span-2 aspect-video' : 'aspect-[4/3] bg-muted'
-                }`}
-              >
-                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex items-center justify-center backdrop-blur-[2px] duration-500">
-                  <div className="bg-background/80 p-3 rounded-full text-foreground shadow-lg transform scale-90 group-hover:scale-100 transition-transform">
-                     <Maximize2 className="h-5 w-5" />
-                  </div>
+        {/* Modern Simple Grid for Image Previews */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {galleryUrls.map((url, idx) => (
+            <div 
+              key={idx} 
+              onClick={() => setSelectedIndex(idx)}
+              className="relative rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 ease-out group cursor-pointer aspect-square bg-muted border border-border/50"
+            >
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors z-10 flex items-center justify-center duration-300">
+                <div className="bg-background/90 p-2 rounded-full text-foreground shadow-sm transform scale-75 opacity-0 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
+                   <Maximize2 className="h-5 w-5" />
                 </div>
-                <img 
-                  src={url} 
-                  alt={`${hubName} gallery ${idx + 1}`} 
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                />
               </div>
-            );
-          })}
+              <img 
+                src={url} 
+                alt={`${hubName} gallery ${idx + 1}`} 
+                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              />
+            </div>
+          ))}
         </div>
       </section>
 

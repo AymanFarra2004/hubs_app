@@ -26,7 +26,6 @@ export async function loginUser(prevState: any, formData: FormData) {
 
     const body = await res.json();
 
-    console.log("FULL LOGIN RESPONSE:", JSON.stringify(body, null, 2));
     if (!res.ok || body.status !== "success") {
       return { error: body.message || "Failed to log in. Please check your credentials.", fields: { email, password: "" } };
     }

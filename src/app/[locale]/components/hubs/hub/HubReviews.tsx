@@ -181,9 +181,9 @@ export default function HubReviews({
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  console.log("myReview", myReview?.has_reviewed);
+
   const hasExistingReview = myReview?.has_reviewed == true;
-  console.log("hasExistingReview", hasExistingReview);
+
 
   const avg =
     averageRating ??
@@ -328,7 +328,6 @@ export default function HubReviews({
                 />: <StarDisplay
                   value={0}
                   onClick={() => {
-                    console.log("hasExistingReview", hasExistingReview);
                   }}
                   size="lg"
                 />}
