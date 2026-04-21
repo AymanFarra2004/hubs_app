@@ -101,13 +101,30 @@ export async function getHubBySlug(slugOrId: string, locale: string = "ar") {
 }
 
 export async function getHubDataBySlugForManagement(slugOrId: string) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  console.log("token", token);
+  if (!token) return { error: "Unauthenticated", data: null };
   try {
     const [resAr, resEn] = await Promise.all([
-      fetch(`${API_BASE_URL}/front/hubs/${slugOrId}?lang=ar`, { next: { revalidate: 0 } }),
-      fetch(`${API_BASE_URL}/front/hubs/${slugOrId}?lang=en`, { next: { revalidate: 0 } })
+      fetch(`${API_BASE_URL}/hubs/${slugOrId}?lang=ar`,{
+         headers: {
+           "Accept":"application/json",
+           "Authorization": `Bearer ${token}`
+         },
+          next: { revalidate: 0 } }),
+      fetch(`${API_BASE_URL}/hubs/${slugOrId}?lang=en`, {
+         headers: {
+           "Accept":"application/json",
+           "Authorization": `Bearer ${token}`
+         }, next: { revalidate: 0 } })
     ]);
+      console.log("res EN", resEn)
+      console.log("res AR", resAr)
 
     if (!resAr.ok || !resEn.ok) {
+      console.log("res AR", resAr.ok)
+      console.log("res EN", resEn.ok)
       throw new Error("Failed to fetch data from one or both locales");
     }
 
@@ -116,6 +133,8 @@ export async function getHubDataBySlugForManagement(slugOrId: string) {
 
     const dataAr = jsonAr.data;
     const dataEn = jsonEn.data;
+    console.log("dataAr", dataAr);
+    console.log("dataEn", dataEn);
 
     return {
       success: true,

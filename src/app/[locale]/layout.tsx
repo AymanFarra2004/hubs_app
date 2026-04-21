@@ -26,12 +26,15 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "Habbat - Connect to Essential Services in Gaza",
-  description: "Habbat connects people in Gaza to essential hubs providing internet, electricity, workspaces, and essential services.",
-  keywords: ["Gaza", "hubs", "internet", "electricity", "workspace", "Habbat", "Palestine"],
-  authors: [{ name: "Habbat Team" }],
+  title: "Qareeb - Connect to Essential Services in Gaza",
+  description: "Qareeb connects people in Gaza to essential hubs providing internet, electricity, workspaces, and essential services.",
+  keywords: ["Gaza", "hubs", "internet", "electricity", "workspace", "Qareeb", "Palestine"],
+  authors: [{ name: "Qareeb Team" }],
+  icons: {
+    icon: '/favicon.png',
+  },
   openGraph: {
-    title: "Habbat - Connect to Essential Services in Gaza",
+    title: "Qareeb - Connect to Essential Services in Gaza",
     description: "Find the nearest internet, electricity, and workspace hubs in Gaza through Habbat.",
     siteName: "Habbat",
     type: "website",

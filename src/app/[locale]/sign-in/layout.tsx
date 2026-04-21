@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Sign In | Habbat',
+  title: 'Sign In | Qareeb | قريب',
   description: 'Sign in to manage your hubs or save your favorite locations across Gaza.',
 };
 

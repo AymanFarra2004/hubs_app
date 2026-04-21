@@ -236,72 +236,68 @@ export default function HubsClient({ hubs }: HubsClientProps) {
               </div>
             ) : (
               <>
-                {/* Governorates */}
+                {/* Location Tree */}
                 <div className="space-y-1">
                   {governorates.map((gov) => (
-                    <button
-                      key={gov.id}
-                      onClick={() => selectGovernorate(gov.id)}
-                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
-                        selectedGovernorateId === gov.id
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "hover:bg-muted text-foreground"
-                      }`}
-                    >
-                      <span>{gov.name}</span>
-                      {selectedGovernorateId === gov.id && cities.length > 0 && (
-                        <ChevronRight className="h-3.5 w-3.5 opacity-70" />
-                      )}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Cities (shown when a governorate is selected) */}
-                {cities.length > 0 && (
-                  <div className="ps-4 border-s-2 border-primary/30 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
-                      {selectedGovName}
-                    </p>
-                    {cities.map((city) => (
+                    <div key={gov.id} className="space-y-1">
                       <button
-                        key={city.id}
-                        onClick={() => selectCity(city.id)}
-                        className={`w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-sm transition-all duration-150 ${
-                          selectedCityId === city.id
-                            ? "bg-primary/15 text-primary font-semibold"
+                        onClick={() => selectGovernorate(gov.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
+                          selectedGovernorateId === gov.id
+                            ? "bg-primary text-primary-foreground shadow-sm"
                             : "hover:bg-muted text-foreground"
                         }`}
                       >
-                        <span>{city.name}</span>
-                        {selectedCityId === city.id && areas.length > 0 && (
-                          <ChevronRight className="h-3.5 w-3.5 opacity-70" />
+                        <span>{gov.name}</span>
+                        {selectedGovernorateId === gov.id && cities.length > 0 && (
+                          <ChevronRight className="h-3.5 w-3.5 opacity-70 rotate-90 transition-transform" />
                         )}
                       </button>
-                    ))}
-                  </div>
-                )}
 
-                {/* Areas (shown when a city is selected) */}
-                {areas.length > 0 && (
-                  <div className="ps-8 border-s-2 border-primary/20 space-y-1 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <p className="text-xs text-muted-foreground font-medium uppercase tracking-wider mb-2">
-                      {selectedCityName}
-                    </p>
-                    {areas.map((area) => (
-                      <button
-                        key={area.id}
-                        onClick={() => selectArea(area.id)}
-                        className={`w-full flex items-center px-3 py-1.5 rounded-lg text-sm transition-all duration-150 ${
-                          selectedAreaId === area.id
-                            ? "bg-primary/10 text-primary font-semibold"
-                            : "hover:bg-muted text-foreground"
-                        }`}
-                      >
-                        {area.name}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                      {/* Cities (shown when this governorate is selected) */}
+                      {selectedGovernorateId === gov.id && cities.length > 0 && (
+                        <div className="ms-2 ps-2 border-s-2 border-primary/30 space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                          {cities.map((city) => (
+                            <div key={city.id} className="space-y-1">
+                              <button
+                                onClick={() => selectCity(city.id)}
+                                className={`w-full flex items-center justify-between px-3 py-1.5 mt-1 rounded-lg text-sm transition-all duration-150 ${
+                                  selectedCityId === city.id
+                                    ? "bg-primary/15 text-primary font-semibold"
+                                    : "hover:bg-muted text-foreground"
+                                }`}
+                              >
+                                <span>{city.name}</span>
+                                {selectedCityId === city.id && areas.length > 0 && (
+                                  <ChevronRight className="h-3.5 w-3.5 opacity-70 rotate-90 transition-transform" />
+                                )}
+                              </button>
+
+                              {/* Areas (shown when this city is selected) */}
+                              {selectedCityId === city.id && areas.length > 0 && (
+                                <div className="ms-2 ps-2 border-s-2 border-primary/20 space-y-1 animate-in fade-in slide-in-from-top-1 duration-200">
+                                  {areas.map((area) => (
+                                    <button
+                                      key={area.id}
+                                      onClick={() => selectArea(area.id)}
+                                      className={`w-full flex items-center px-3 py-1.5 mt-1 rounded-lg text-sm transition-all duration-150 ${
+                                        selectedAreaId === area.id
+                                          ? "bg-primary/10 text-primary font-semibold"
+                                          : "hover:bg-muted text-foreground"
+                                      }`}
+                                    >
+                                      {area.name}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
 
                 {/* Breadcrumb / active selection badge */}
                 {selectedGovernorateId && (

@@ -7,7 +7,7 @@ import { getAllHubs } from "@/src/actions/hubs"
 import { getLocale, getTranslations } from "next-intl/server"
 import { format24to12 } from "@/src/lib/utils"
 export const metadata: Metadata = {
-  title: "Browse Hubs | Habbat",
+  title: "Browse Hubs | Qareeb",
   description: "Explore available internet and electricity hubs across Gaza.",
 }
 

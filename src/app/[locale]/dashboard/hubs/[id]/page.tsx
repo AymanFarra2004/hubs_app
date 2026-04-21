@@ -12,7 +12,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import HubGalleryManager from "@/src/app/[locale]/components/dashboard/HubGalleryManager";
 import { useTranslations, useLocale } from "next-intl";
 import { TimePicker } from "@/src/app/[locale]/components/ui/time-picker";
-import { getHubBySlug } from "@/src/actions/hubs";
+// import { cookies } from "next/headers";
 
 // General Tab - shows real hub data
 function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
@@ -36,12 +36,16 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const [hubAddrAr, setHubAddrAr] = useState("");
   const [hubAddrEn, setHubAddrEn] = useState("");
 
+  
+
   useEffect(() => {
     async function fetchData() {
+     
       setIsLoadingData(true);
       const res = await getHubDataBySlugForManagement(hub.slug);
       if (res.success && res.data) {
         originalDataRef.current = res.data;
+        console.log("res.data", res.data)
         setHubNameAr(res.data.name.ar || "");
         setHubNameEn(res.data.name.en || "");
         setHubDescAr(res.data.description.ar || "");
@@ -53,6 +57,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
     }
     fetchData();
   }, [hub.slug]);
+  console.log("hub name: ", hubNameEn, hubNameAr)
 
   const [startTime, setStartTime] = useState(hub.working_hours?.start || "08:00");
   const [endTime, setEndTime] = useState(hub.working_hours?.end || "17:00");
@@ -397,7 +402,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
-            <span>{hub.location?  hub.location.breadcrumb[1].name + " - " + hub.location.breadcrumb[2].name : t("noAddress")}</span>
+            <span>{hub.location? hub.location.breadcrumb[1].name + " - " + hub.location.breadcrumb[2].name : t("noAddress")}</span>
             {hub.location && <span className="text-xs bg-muted px-2 py-0.5 rounded">({hub.location.name} - {hub.location.type})</span>}
           </div>
 

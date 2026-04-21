@@ -63,7 +63,7 @@ export function Header() {
           {/* Logo */}
           <div className="shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-105 active:scale-95">
-              <img src="/logo.png" alt="Qareeb Logo" className="h-10 w-auto object-contain drop-shadow-md" />
+              <img src="/logo.png" alt="Qareeb Logo" className="h-13 w-auto object-contain drop-shadow-md" />
               <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
                 Qareeb | قريب
               </span>

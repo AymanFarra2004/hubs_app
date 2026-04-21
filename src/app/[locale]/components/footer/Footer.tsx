@@ -14,7 +14,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="flex items-center gap-3 mb-4">
-              <img src="/logo.png" alt="Qareeb Logo" className="h-8 w-auto object-contain" />
+              <img src="/logo.png" alt="Qareeb Logo" className="h-11 w-auto object-contain" />
               <span className="font-bold text-xl tracking-tight text-foreground">
                 Qareeb | قريب
               </span>
