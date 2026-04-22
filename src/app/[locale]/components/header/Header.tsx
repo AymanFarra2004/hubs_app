@@ -118,7 +118,7 @@ export function Header() {
                 <Link href="/sign-in" className="px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors">
                   {t('auth.signIn')}
                 </Link>
-                <Link href="/sign-up" className="px-5 py-2.5 text-sm font-semibold rounded-full bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95">
+                <Link href="/sign-up" className="px-5 py-2.5 text-sm font-semibold rounded-full bg-primary text-primary-foreground hover:opacity-90 shadow-lg shadow-primary/30 transition-all hover:scale-105 active:scale-95 bg-gradient-to-l from-blue-600 to-purple-600">
                   {t('auth.signUp')}
                 </Link>
               </div>

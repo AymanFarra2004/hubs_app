@@ -69,7 +69,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               {t.rich('titleQareeb', {
                 br: () => <br />,
                 primary: (chunks: any) => (
-                  <span className="text-purple-600 dark:text-purple-400 bg-clip-text drop-shadow-sm">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 ">
                     {chunks}
                   </span>
                 )
@@ -123,7 +123,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
               className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group"
             >
-              <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="relative w-48 h-64 rounded-2xl overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+              <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                 <img 
                   src={carouselHubs[0].imageUrl} 
                   alt={carouselHubs[0].name} 
@@ -143,7 +143,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
               className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group"
             >
-              <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="relative w-40 h-40 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+              <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                 <img 
                   src={carouselHubs[1].imageUrl} 
                   alt={carouselHubs[1].name} 
@@ -163,7 +163,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
               className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 group"
             >
-              <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="relative w-56 h-40 rounded-2xl overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+              <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                 <img 
                   src={carouselHubs[2].imageUrl} 
                   alt={carouselHubs[2].name} 
@@ -183,7 +183,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
               className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 group"
             >
-              <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="relative w-48 h-48 rounded-[2rem] overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+              <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                 <img 
                   src={carouselHubs[3].imageUrl} 
                   alt={carouselHubs[3].name} 
@@ -199,8 +199,10 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
           </motion.div>
           
           {/* Center Overlay Element */}
-          <div className="absolute w-32 h-32 bg-background rounded-full flex flex-col items-center justify-center shadow-[0_0_40px_rgba(147,51,234,0.15)] border border-purple-500/20 z-10 backdrop-blur-md">
-             <span className="text-[#9333EA] font-extrabold text-2xl tracking-tight">Qareeb</span>
+          <div className="absolute w-32 h-32  rounded-full flex flex-col items-center justify-center  z-10">
+             <span className="text-[#9333EA] font-extrabold text-2xl tracking-tight">
+              <img src="/qareeb_logo.png" alt="Logo" className="w-[350px] h-[350px] object-cover" />
+             </span>
           </div>
           </div>
         </div>
