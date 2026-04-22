@@ -123,13 +123,21 @@
   },
   "SignUp": {
     "createAccount": "إنشاء حساب",
-    "subtitle": "انضم إلى هبط للتواصل مع المراكز في غزة.",
+    "subtitle": "انضم إلى قريب للتواصل مع مساحات العمل في غزة.",
     "nameLabel": "الاسم الكامل",
     "emailLabel": "البريد الإلكتروني",
     "passwordLabel": "كلمة المرور",
+    "confirmPasswordLabel": "تأكيد كلمة المرور",
     "signUp": "إنشاء حساب",
     "haveAccount": "لديك حساب بالفعل؟",
-    "signInInstead": "سجّل الدخول"
+    "signInInstead": "سجّل الدخول",
+    "namePlaceholder": "أدخل اسمك الكامل",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور",
+    "accountType": "نوع الحساب",
+    "regularUser": "مستخدم عادي",
+    "hubOwner": "مالك المركز"
   },
   "Admin": {
     "platformOverview": "نظرة عامة على المنصة",
@@ -693,5 +701,16 @@
         "generic": "حدث خطأ ما. يرجى المحاولة مجدداً."
       }
     }
-  }
+  },
+    "servicesIcons": {
+    "wifi": "Wi-Fi",
+    "electricity": "الكهرباء",
+    "workspace": "مساحة العمل",
+    "internet": "الإنترنت",
+    "printer": "الطابعة",
+    "coffee": "القهوة",
+    "parking": "الموقف",
+    "airConditioning": "التكييف",
+    "heating": "التدفئة"
+   }
 }

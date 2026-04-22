@@ -123,13 +123,21 @@
   },
   "SignUp": {
     "createAccount": "Create an account",
-    "subtitle": "Join Habbat to connect with hubs across Gaza.",
+    "subtitle": "Join Qareeb to connect with hubs across Gaza.",
     "nameLabel": "Full Name",
     "emailLabel": "Email address",
     "passwordLabel": "Password",
+    "confirmPasswordLabel": "Confirm Password",
     "signUp": "Create Account",
     "haveAccount": "Already have an account?",
-    "signInInstead": "Sign in instead"
+    "signInInstead": "Sign in instead",
+    "namePlaceholder": "Enter your full name",
+    "emailPlaceholder": "Enter your email address",
+    "passwordPlaceholder": "Enter your password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "accountType": "Account Type",
+    "regularUser": "Regular User",
+    "hubOwner": "Hub Owner"
   },
   "Admin": {
     "platformOverview": "Platform Overview",
@@ -693,5 +701,16 @@
         "generic": "Something went wrong. Please try again."
       }
     }
-  }
+  },
+   "servicesIcons": {
+    "wifi": "Wi-Fi",
+    "electricity": "Electricity",
+    "workspace": "Workspace",
+    "internet": "Internet",
+    "printer": "Printer",
+    "coffee": "Coffee",
+    "parking": "Parking",
+    "airConditioning": "Air Conditioning",
+    "heating": "Heating"
+   }
 }

@@ -69,7 +69,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               {t.rich('titleQareeb', {
                 br: () => <br />,
                 primary: (chunks: any) => (
-                  <span className="text-transparent bg-clip-text bg-gradient-to-l from-blue-500 to-purple-600 dark:from-blue-400 dark:to-purple-500 ">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-l from-purple-600 to-blue-500 dark:from-purple-500 dark:to-blue-400 ">
                     {chunks}
                   </span>
                 )

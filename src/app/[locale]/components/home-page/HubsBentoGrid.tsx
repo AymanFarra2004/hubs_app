@@ -67,7 +67,7 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground mb-2">
               {t("titleQareeb")}{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-500">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-500 dark:to-purple-400">
                 {t("titleHighlightQareeb")}
               </span>
             </h2>

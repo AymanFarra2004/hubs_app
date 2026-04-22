@@ -12,12 +12,7 @@ import HubReviews from "@/components/hubs/hub/HubReviews"
 import { getLocale, getTranslations } from "next-intl/server"
 import { format24to12 } from "@/src/lib/utils"
 
-const serviceIcons: Record<string, React.ReactNode> = {
-  Internet: <Wifi className="h-5 w-5" />,
-  Electricity: <Zap className="h-5 w-5" />,
-  Workspace: <Monitor className="h-5 w-5" />,
-  "Coffee/Tea": <Coffee className="h-5 w-5" />,
-}
+import { getServiceIcons } from "@/src/data/hubs"
 
 function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", pmLabel: string = "PM") {
   const mainImage = typeof apiHub.images?.main === 'string' ? apiHub.images.main : null;
@@ -76,9 +71,10 @@ export default async function HubDetails({
   const { id } = await params
   const locale = await getLocale()
 
-  const [hubRes, t] = await Promise.all([
+  const [hubRes, t, tService] = await Promise.all([
     getHubBySlug(id, locale),
     getTranslations("HubManagement.general"),
+    getTranslations("servicesIcons"),
   ])
 
   const rawHub = hubRes.success ? hubRes.data : null
@@ -94,6 +90,7 @@ export default async function HubDetails({
 
   const hub = mapApiHub(rawHub, locale, t("am"), t("pm"))
   const offers = offersRes.success ? offersRes.data : []
+  const serviceIcons = getServiceIcons(tService);
 
   // getHubReviews now extracts data.reviews correctly and parses average_rating as float
   const reviews: any[] = reviewsRes.data ?? []

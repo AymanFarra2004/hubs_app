@@ -22,6 +22,7 @@ import HubPreviewActions from "./HubPreviewActions";
 import HubGallery from "@/components/hubs/hub/HubGallery";
 import HubSocialAccounts from "@/components/hubs/hub/HubSocialAccounts";
 import { format24to12 } from "@/src/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface PageProps {
   params: Promise<{ slug: string; locale: string }>;
@@ -53,18 +54,16 @@ function buildFullAddress(hub: any, locale: string): string {
   return parts.join(" — ");
 }
 
-const serviceIcons: Record<string, React.ReactNode> = {
-  Internet: <Wifi className="h-5 w-5" />,
-  Electricity: <Zap className="h-5 w-5" />,
-  Workspace: <Monitor className="h-5 w-5" />,
-  "Coffee/Tea": <Coffee className="h-5 w-5" />,
-};
+
+import { getServiceIcons } from "@/src/data/hubs";
 
 export default async function AdminHubPreviewPage({ params }: PageProps) {
   const { slug } = await params;
   const t = await getTranslations("AdminHubPreview");
   const tGen = await getTranslations("HubManagement.general");
+  const tService = await getTranslations("servicesIcons");
   const currentLocale = await getLocale();
+  const serviceIcons = getServiceIcons(tService);
 
   // Authenticated fetch — works for pending/rejected hubs too
   const res = await getPrivateHubBySlug(slug, currentLocale);

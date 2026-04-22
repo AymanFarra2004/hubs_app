@@ -16,16 +16,19 @@ import {
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { LocationSelect } from "../components/location/LocationSelect";
+import { useTranslations } from "next-intl";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const t = useTranslations("SignUp");
+
   return (
     <button
       type="submit"
       disabled={pending}
       className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-l from-blue-600 to-purple-600 cursor-pointer hover:opacity-90"
     >
-      {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Sign up"}
+      {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : t("signUp")}
       {!pending && <ArrowRight className="h-4 w-4" />}
     </button>
   );
@@ -36,6 +39,8 @@ export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
+  const t = useTranslations("SignUp");
+  
   if (state?.error) console.log(state.error);
 
   useEffect(() => {
@@ -52,15 +57,15 @@ export default function SignUpPage() {
 
       <div className="flex-1 flex flex-col md:flex-row-reverse pt-20">
         {/* Right side - Form Container */}
-        <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-20 xl:px-24">
+        <div className="flex-1 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-20 xl:px-24 pb-20">
           <div className="w-full max-w-sm mt-10">
 
             <div className="mb-6">
               <h2 className="text-3xl font-extrabold text-foreground tracking-tight">
-                Create an account
+                {t("createAccount")}
               </h2>
               <p className="mt-2 text-sm text-muted-foreground">
-                Join Habbat to manage a hub or save locations.
+                {t("subtitle")}
               </p>
             </div>
 
@@ -72,7 +77,7 @@ export default function SignUpPage() {
               )}
               {state?.success && (
                 <div className="p-3 bg-green-100 border border-green-400 text-green-700 text-sm rounded-lg">
-                  {state.message} Redirecting...
+                  {state.message} {t("redirecting")}
                 </div>
               )}
               <div>
@@ -80,7 +85,7 @@ export default function SignUpPage() {
                   htmlFor="name"
                   className="block text-sm font-medium text-foreground"
                 >
-                  Full Name
+                  {t("nameLabel")}
                 </label>
                 <div className="mt-1 relative rounded-md">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -93,7 +98,7 @@ export default function SignUpPage() {
                     required
                     defaultValue={state?.fields?.name || ""}
                     className="appearance-none block w-full pl-10 pr-3 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
-                    placeholder="Ahmed Al-Masri"
+                    placeholder={t("namePlaceholder")}
                   />
                 </div>
               </div>
@@ -103,7 +108,7 @@ export default function SignUpPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-foreground"
                 >
-                  Email address
+                  {t("emailLabel")}
                 </label>
                 <div className="mt-1 relative rounded-md">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -116,7 +121,7 @@ export default function SignUpPage() {
                     required
                     defaultValue={state?.fields?.email || ""}
                     className="appearance-none block w-full pl-10 pr-3 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
-                    placeholder="you@example.com"
+                    placeholder={t("emailPlaceholder")}
                   />
                 </div>
               </div>
@@ -126,7 +131,7 @@ export default function SignUpPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-foreground"
                 >
-                  Password
+                  {t("passwordLabel")}
                 </label>
                 <div className="mt-1 relative rounded-md">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -138,7 +143,7 @@ export default function SignUpPage() {
                     type={showPassword ? "text" : "password"}
                     required
                     className="appearance-none block w-full pl-10 pr-10 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
-                    placeholder="••••••••"
+                    placeholder={t("passwordPlaceholder")}
                   />
                   <button
                     type="button"
@@ -158,7 +163,7 @@ export default function SignUpPage() {
                   htmlFor="confirmPassword"
                   className="block text-sm font-medium text-foreground"
                 >
-                  Confirm Password
+                  {t("confirmPasswordLabel")}
                 </label>
                 <div className="mt-1 relative rounded-md">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -170,7 +175,7 @@ export default function SignUpPage() {
                     type={showConfirmPassword ? "text" : "password"}
                     required
                     className="appearance-none block w-full pl-10 pr-10 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
-                    placeholder="••••••••"
+                    placeholder={t("confirmPasswordPlaceholder")}
                   />
                   <button
                     type="button"
@@ -190,7 +195,7 @@ export default function SignUpPage() {
 
               <div className="space-y-2">
                 <label className="block text-sm font-medium text-foreground">
-                  Account Type
+                  {t("accountType")}
                 </label>
                 <div className="grid grid-cols-2 gap-3">
                   <label className="flex items-center justify-center gap-2 p-3 border border-input rounded-xl cursor-pointer hover:bg-muted/30 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
@@ -203,7 +208,7 @@ export default function SignUpPage() {
                         !state?.fields?.role || state?.fields?.role === "user"
                       }
                     />
-                    <span className="text-sm font-medium">Regular User</span>
+                    <span className="text-sm font-medium">{t("regularUser")}</span>
                   </label>
                   <label className="flex items-center justify-center gap-2 p-3 border border-input rounded-xl cursor-pointer hover:bg-muted/30 transition-colors has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary">
                     <input
@@ -213,7 +218,7 @@ export default function SignUpPage() {
                       className="hidden"
                       defaultChecked={state?.fields?.role === "hub_owner"}
                     />
-                    <span className="text-sm font-medium">Hub Owner</span>
+                    <span className="text-sm font-medium">{t("hubOwner")}</span>
                   </label>
                 </div>
               </div>
@@ -225,12 +230,12 @@ export default function SignUpPage() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
+                {t("haveAccount")} {" "}
                 <Link
                   href="/sign-in"
                   className="font-medium text-primary hover:underline"
                 >
-                  Sign in
+                  {t("signInInstead")}
                 </Link>
               </p>
             </div>
