@@ -15,7 +15,7 @@ function SubmitButton({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+      className="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-md text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all disabled:opacity-70 disabled:cursor-not-allowed bg-gradient-to-l from-purple-600 to-blue-600 cursor-pointer hover:opacity-90"
     >
       {pending ? <Loader2 className="h-5 w-5 animate-spin" /> : label}
       {!pending && <ArrowRight className="h-4 w-4 rtl:rotate-180" />}
@@ -43,11 +43,8 @@ export default function SignInPage() {
       {/* Left side - Form */}
       <div className="flex-1 flex flex-col justify-center px-4 sm:px-6 lg:px-20 xl:px-24 bg-background">
         <div className="mx-auto w-full max-w-sm lg:w-96">
-          <Link href="/" className="flex items-center gap-2 mb-10">
-            <MapPin className="h-8 w-8 text-primary" />
-            <span className="font-bold text-2xl tracking-tight text-foreground">
-              Habbat
-            </span>
+          <Link href="/" className="flex items-center justify-center gap-2 mb-10">
+             <img src="/logo.png" alt="Qareeb Logo" className="h-52 w-auto object-contain drop-shadow-md" />
           </Link>
 
           <div>
@@ -168,12 +165,12 @@ export default function SignInPage() {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1500&auto=format&fit=crop')" }}
         />
-        <div className="absolute inset-0 bg-black/40 z-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-600 z-0" />
         <div className="absolute bottom-10 start-10 end-10 z-20 text-white">
-          <blockquote className="text-2xl font-bold leading-relaxed mb-4">
+          {/* <blockquote className="text-2xl font-bold leading-relaxed mb-4">
             &quot;Connecting communities when they need it most.&quot;
-          </blockquote>
-          <p className="text-white/80 font-medium">— Habbat Initiative</p>
+          </blockquote> */}
+          {/* <p className="text-white/80 font-medium">— Habbat Initiative</p> */}
         </div>
       </div>
     </div>
