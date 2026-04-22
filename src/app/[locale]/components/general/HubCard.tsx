@@ -66,12 +66,15 @@ export function HubCard({ hub }: IHubCardProps) {
             </div>
         )}
         <div className="absolute bottom-3 left-3 flex flex-wrap gap-2 z-10">
-          {(hub.services || []).slice(0, 3).map((service: string, index: number) => (
-             <Badge key={`${service}-${index}`} variant="secondary" className="bg-background/90 backdrop-blur-sm hover:bg-background shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center gap-1.5 py-1">
-               {getServiceIcon(service, "h-4 w-4")}
-               {service}
+          {(hub.services || []).slice(0, 3).map((service: any, index: number) => {
+             const serviceName = typeof service === 'string' ? service : service.name;
+             return (
+             <Badge key={`${serviceName}-${index}`} variant="secondary" className="bg-background/90 backdrop-blur-sm hover:bg-background shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center gap-1.5 py-1">
+               {getServiceIcon(serviceName, "h-4 w-4")}
+               {serviceName}
              </Badge>
-          ))}
+             )
+          })}
           {(hub.services || []).length > 3 && (
             <Badge variant="secondary" className="bg-background/90 backdrop-blur-sm hover:bg-background shadow-sm">
               +{hub.services.length - 3}

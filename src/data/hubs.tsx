@@ -20,7 +20,7 @@ export interface IHub {
     governorate: string;
     pricing: string;
     operatingHours: string;
-    services: string[];
+    services: any[];
     imageUrl: any;
     galleryUrls?: string[];
     verificationStatus: "Verified" | "Pending";

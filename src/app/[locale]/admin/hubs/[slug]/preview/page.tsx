@@ -132,9 +132,11 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
 
   // ── Services ───────────────────────────────────────────────────────────────
   const rawServices: any[] = hub.all_services || hub.services || [];
-  const serviceNames: string[] = rawServices.map((s: any) =>
-    s.name?.[currentLocale] || s.name?.en || s.name?.ar || s.name || ""
-  ).filter(Boolean);
+  const servicesData = rawServices.map((s: any) => {
+    const name = s.name?.[currentLocale] || s.name?.en || s.name?.ar || s.name || "";
+    const description = s.description?.[currentLocale] || s.description?.en || s.description?.ar || s.description || undefined;
+    return { name, description };
+  }).filter((s) => s.name);
 
   // ── Sidebar data ───────────────────────────────────────────────────────────
   const operatingHours = hub.working_hours
@@ -276,19 +278,22 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
           <hr className="border-border" />
 
           {/* Services */}
-          {serviceNames.length > 0 && (
+          {servicesData.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold mb-6">{t("services")}</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                {serviceNames.map((svc) => (
+                {servicesData.map((svc, index) => (
                   <div
-                    key={svc}
-                    className="flex flex-col items-center justify-center p-6 rounded-xl bg-muted/50 border border-border text-center transition-colors hover:bg-muted"
+                    key={`${svc.name}-${index}`}
+                    className="flex flex-col items-center p-6 rounded-xl bg-muted/50 border border-border text-center transition-colors hover:bg-muted h-full"
                   >
-                    <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
-                      {getServiceIcon(svc, "h-5 w-5")}
+                    <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3 shrink-0">
+                      {getServiceIcon(svc.name, "h-5 w-5")}
                     </div>
-                    <span className="font-medium">{svc}</span>
+                    <span className="font-medium">{svc.name}</span>
+                    {svc.description && (
+                      <p className="text-xs text-muted-foreground mt-2 line-clamp-3">{svc.description}</p>
+                    )}
                   </div>
                 ))}
               </div>

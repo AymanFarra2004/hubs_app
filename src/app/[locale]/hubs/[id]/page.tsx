@@ -37,7 +37,11 @@ function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", p
       ? `${format24to12(apiHub.working_hours.start, amLabel, pmLabel)} - ${format24to12(apiHub.working_hours.end, amLabel, pmLabel)}`
       : apiHub.operating_hours || "Contact for hours",
     services: Array.isArray((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services)
-      ? ((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services).map((s: any) => typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s))
+      ? ((apiHub.all_services && apiHub.all_services.length > 0) ? apiHub.all_services : apiHub.services).map((s: any) => {
+          const name = typeof s.name === 'string' ? s.name : (s.name?.[locale] || s.name?.en || s.name || s);
+          const description = s.description ? (typeof s.description === 'string' ? s.description : (s.description?.[locale] || s.description?.en || s.description)) : undefined;
+          return { name, description };
+        })
       : [],
     imageUrl: mainImage
       ? mainImage.startsWith("http")

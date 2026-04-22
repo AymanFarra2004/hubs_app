@@ -60,7 +60,6 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
   //     </div>
   //   );
   // };
-  const renderServiceIcon = (service: string, key: number) => getServiceIcon(service, "h-5 w-5")
 
   return (
     <section className="py-24 bg-background relative z-10 transition-colors duration-300" id="hubs">
