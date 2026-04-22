@@ -3,6 +3,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { MapPin, Zap, Clock, Coins, Wifi, Power, Users } from "lucide-react";
 import { format24to12 } from "@/src/lib/utils";
+import { getServiceIcon } from "@/src/data/hubs";
 
 export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
   const t = useTranslations("HubsGrid");
@@ -45,20 +46,21 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
   const bentoHubs = displayHubs.slice(0, 6);
 
   // Helper to map a service string to an icon (simple matching)
-  const renderServiceIcon = (service: string, key: number) => {
-    const s = service.toLowerCase();
-    let Icon = MapPin;
-    if (s.includes("internet") || s.includes("wifi") || s.includes("fiber")) Icon = Wifi;
-    else if (s.includes("power") || s.includes("electricity") || s.includes("solar")) Icon = Power;
-    else if (s.includes("space") || s.includes("room") || s.includes("desk")) Icon = Users;
+  // const renderServiceIcon = (service: string, key: number) => {
+  //   const s = service.toLowerCase();
+  //   let Icon = MapPin;
+  //   if (s.includes("internet") || s.includes("wifi") || s.includes("fiber")) Icon = Wifi;
+  //   else if (s.includes("power") || s.includes("electricity") || s.includes("solar")) Icon = Power;
+  //   else if (s.includes("space") || s.includes("room") || s.includes("desk")) Icon = Users;
     
-    return (
-      <div key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Icon className="text-purple-600 dark:text-purple-400 w-5 h-5" />
-        <span className="truncate max-w-[80px]">{service}</span>
-      </div>
-    );
-  };
+  //   return (
+  //     <div key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
+  //       <Icon className="text-purple-600 dark:text-purple-400 w-5 h-5" />
+  //       <span className="truncate max-w-[80px]">{service}</span>
+  //     </div>
+  //   );
+  // };
+  const renderServiceIcon = (service: string, key: number) => getServiceIcon(service, "h-5 w-5")
 
   return (
     <section className="py-24 bg-background relative z-10 transition-colors duration-300" id="hubs">
@@ -117,7 +119,7 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
 
                 {/* Utility Icons */}
                 <div className="flex flex-wrap gap-4 mb-6 mt-auto">
-                  {hub.services.slice(0, 3).map((service: string, idx: number) => renderServiceIcon(service, idx))}
+                  {hub.services.slice(0, 3).map((service: string, idx: number) => <div key={idx} className="text-foreground flex items-center gap-1 text-xs">{service} {getServiceIcon(service, "h-4 w-4")}</div>)}
                 </div>
 
                 <a 

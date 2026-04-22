@@ -5,7 +5,9 @@ import HubGallery from './HubGallery'
 import HubOffers from './HubOffers'
 import HubSocialAccounts from './HubSocialAccounts'
 
-export default function HubMainContent({hub, serviceIcons, offers = []}: {hub: IHub, serviceIcons: Record<string, React.ReactNode>, offers?: any[]}) {
+import { getServiceIcon } from '@/src/data/hubs'
+
+export default function HubMainContent({hub, offers = []}: {hub: IHub, offers?: any[]}) {
   return (
     <div className="lg:col-span-2 space-y-10">
               
@@ -17,7 +19,7 @@ export default function HubMainContent({hub, serviceIcons, offers = []}: {hub: I
                     <div key={service} className="flex flex-col items-center justify-center p-4 rounded-2xl bg-muted/30 border border-border/50 text-center transition-all duration-300 hover:bg-muted hover:shadow-md hover:-translate-y-1 aspect-square relative overflow-hidden group">
                       <div className="absolute inset-0 bg-linear-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                       <div className="h-14 w-14 rounded-2xl bg-background shadow-sm border border-border/50 text-primary flex items-center justify-center mb-4 transition-transform group-hover:scale-110">
-                        {serviceIcons[service] || <ShieldCheck className="h-6 w-6" />}
+                        {getServiceIcon(service, "h-6 w-6")}
                       </div>
                       <span className="font-medium text-sm sm:text-base">{service}</span>
                     </div>

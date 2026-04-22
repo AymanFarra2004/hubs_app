@@ -55,15 +55,13 @@ function buildFullAddress(hub: any, locale: string): string {
 }
 
 
-import { getServiceIcons } from "@/src/data/hubs";
+import { getServiceIcon } from "@/src/data/hubs";
 
 export default async function AdminHubPreviewPage({ params }: PageProps) {
   const { slug } = await params;
   const t = await getTranslations("AdminHubPreview");
   const tGen = await getTranslations("HubManagement.general");
-  const tService = await getTranslations("servicesIcons");
   const currentLocale = await getLocale();
-  const serviceIcons = getServiceIcons(tService);
 
   // Authenticated fetch — works for pending/rejected hubs too
   const res = await getPrivateHubBySlug(slug, currentLocale);
@@ -288,7 +286,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
                     className="flex flex-col items-center justify-center p-6 rounded-xl bg-muted/50 border border-border text-center transition-colors hover:bg-muted"
                   >
                     <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
-                      {serviceIcons[svc] || <ShieldCheck className="h-5 w-5" />}
+                      {getServiceIcon(svc, "h-5 w-5")}
                     </div>
                     <span className="font-medium">{svc}</span>
                   </div>

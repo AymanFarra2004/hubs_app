@@ -10,7 +10,7 @@ interface IHubCardProps {
   hub: IHub & { slug?: string; activeOffer?: any }
 }
 
-import { getServiceIcons } from "@/src/data/hubs"
+import { getServiceIcon } from "@/src/data/hubs"
 /** Resolve image src — handles both Next.js static imports and URL strings */
 function resolveImageSrc(imageUrl: any): string | undefined {
   if (!imageUrl) return undefined;
@@ -24,17 +24,6 @@ export function HubCard({ hub }: IHubCardProps) {
   const imageSrc = resolveImageSrc(hub.imageUrl);
   const locale = useLocale();
   const t = useTranslations("HubManagement.offers");
-  const tService = useTranslations("servicesIcons");
-  const serviceIcons = getServiceIcons(tService);
-  
-  function getServiceIcon(name: string): React.ReactNode {
-    const n = name.toLowerCase();
-    if (n.includes("internet") || n.includes("wifi") || n.includes("web") || n.includes("واي فاي") || n.includes("إنترنت")) return <Wifi className="h-4 w-4" />;
-    if (n.includes("electric") || n.includes("power") || n.includes("solar") || n.includes("كهرباء")) return <Zap className="h-4 w-4" />;
-    if (n.includes("workspace") || n.includes("desk") || n.includes("monitor") || n.includes("مساحة")) return <Monitor className="h-4 w-4" />;
-    if (n.includes("coffee") || n.includes("tea") || n.includes("قهوة")) return <Coffee className="h-4 w-4" />;
-    return serviceIcons[name] || null;
-  }
 
   // Use slug if available (API hubs), otherwise fall back to id
   const detailHref = `/hubs/${(hub as any).slug || hub.id}`;
@@ -79,7 +68,7 @@ export function HubCard({ hub }: IHubCardProps) {
         <div className="absolute bottom-3 left-3 flex flex-wrap gap-2 z-10">
           {(hub.services || []).slice(0, 3).map((service: string, index: number) => (
              <Badge key={`${service}-${index}`} variant="secondary" className="bg-background/90 backdrop-blur-sm hover:bg-background shadow-[0_2px_10px_rgba(0,0,0,0.1)] flex items-center gap-1.5 py-1">
-               {getServiceIcon(service)}
+               {getServiceIcon(service, "h-4 w-4")}
                {service}
              </Badge>
           ))}
