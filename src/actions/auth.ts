@@ -67,6 +67,32 @@ export async function logoutUser() {
   cookieStore.delete("user");
 }
 
+export async function handleGoogleCallback(token: string, userStr: string | null) {
+  const cookieStore = await cookies();
+  
+  if (token) {
+    cookieStore.set({
+      name: "token",
+      value: token,
+      httpOnly: true,
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+  }
+
+  if (userStr) {
+    cookieStore.set({
+      name: "user",
+      value: userStr,
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7,
+    });
+  }
+
+  return { success: true };
+}
 
 export async function registerUser(prevState: any, formData: FormData) {
   const name = formData.get("name") as string;

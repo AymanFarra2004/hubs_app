@@ -8,6 +8,7 @@ import { Header } from "@/components/header/Header"
 import { Footer } from "@/components/footer/Footer"
 import { loginUser } from "@/src/actions/auth"
 import { useTranslations } from "next-intl";
+import { GoogleLoginButton } from "../components/auth/GoogleLoginButton";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -145,6 +146,23 @@ export default function SignInPage() {
                 <SubmitButton label={t("signIn")} />
               </div>
             </form>
+
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-input"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-background text-muted-foreground">
+                    {t("or")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <GoogleLoginButton section="SignIn" />
+              </div>
+            </div>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">

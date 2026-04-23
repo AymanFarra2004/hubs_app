@@ -117,6 +117,8 @@
     "rememberMe": "Remember me",
     "forgotPassword": "Forgot your password?",
     "signIn": "Sign in",
+    "continueWithGoogle": "Continue with Google",
+    "or": "or",
     "noAccount": "Don't have an account?",
     "signUpInstead": "Sign up instead",
     "redirecting": "Redirecting..."
@@ -129,6 +131,8 @@
     "passwordLabel": "Password",
     "confirmPasswordLabel": "Confirm Password",
     "signUp": "Create Account",
+    "continueWithGoogle": "Continue with Google",
+    "or": "or",
     "haveAccount": "Already have an account?",
     "signInInstead": "Sign in instead",
     "namePlaceholder": "Enter your full name",

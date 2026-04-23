@@ -113,6 +113,7 @@
     font-family: var(--font-noto-arabic), sans-serif;
   }
 }
+
 /* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 5px;
@@ -130,4 +131,26 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--muted-foreground) / 0.3);
+}
+
+/* Styled Buttons - Fix for Tailwind v4 */
+@utility btn-pill {
+  @apply rounded-full px-8 py-3 font-bold transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer;
+}
+
+.btn-gradient {
+  @apply btn-pill text-white shadow-lg;
+  background: var(--primary-gradient);
+}
+
+.btn-gradient:hover {
+  @apply shadow-xl scale-[1.02] brightness-110 opacity-90;
+}
+
+.btn-outline {
+  @apply btn-pill bg-transparent border-2 border-primary text-primary;
+}
+
+.btn-outline:hover {
+  @apply bg-primary/10 shadow-md;
 }

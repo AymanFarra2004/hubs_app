@@ -117,6 +117,8 @@
     "rememberMe": "تذكرني",
     "forgotPassword": "نسيت كلمة المرور؟",
     "signIn": "تسجيل الدخول",
+    "continueWithGoogle": "المتابعة باستخدام Google",
+    "or": "أو",
     "noAccount": "ليس لديك حساب؟",
     "signUpInstead": "أنشئ حساباً",
     "redirecting": "جارٍ التحويل..."
@@ -129,6 +131,8 @@
     "passwordLabel": "كلمة المرور",
     "confirmPasswordLabel": "تأكيد كلمة المرور",
     "signUp": "إنشاء حساب",
+    "continueWithGoogle": "المتابعة باستخدام Google",
+    "or": "أو",
     "haveAccount": "لديك حساب بالفعل؟",
     "signInInstead": "سجّل الدخول",
     "namePlaceholder": "أدخل اسمك الكامل",

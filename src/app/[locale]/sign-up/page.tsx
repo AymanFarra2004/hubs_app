@@ -17,6 +17,7 @@ import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { LocationSelect } from "../components/location/LocationSelect";
 import { useTranslations } from "next-intl";
+import { GoogleLoginButton } from "../components/auth/GoogleLoginButton";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -227,6 +228,23 @@ export default function SignUpPage() {
                 <SubmitButton />
               </div>
             </form>
+
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-input"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-background text-muted-foreground">
+                    {t("or")}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <GoogleLoginButton section="SignUp" />
+              </div>
+            </div>
 
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
