@@ -62,8 +62,12 @@ export default async function RootLayout({
   let user = null;
   if (userCookie) {
     try {
-      user = JSON.parse(userCookie);
-    } catch(e) {}
+    const decodedUser = decodeURIComponent(userCookie);
+    user = JSON.parse(decodedUser);
+  } catch (e) {
+    console.error("Layout JSON Parse Error:", e);
+    try { user = JSON.parse(userCookie); } catch(e2) {}
+  }
   }
 
   const isRtl = locale === "ar";

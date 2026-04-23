@@ -45,7 +45,7 @@ function CallbackHandler() {
         await handleGoogleCallback(token, userStr);
 
         // 4. Redirect
-        router.push("/");
+        window.location.href = "/";
         router.refresh();
       } catch (e) {
         console.error("Failed to process auth callback", e);
