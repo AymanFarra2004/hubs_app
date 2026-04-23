@@ -55,11 +55,10 @@ function StarSelector({
           aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
         >
           <Star
-            className={`${dim} transition-colors duration-100 ${
-              star <= display
+            className={`${dim} transition-colors duration-100 ${star <= display
                 ? "fill-amber-400 text-amber-400 drop-shadow-sm"
                 : "fill-muted text-muted-foreground/20"
-            }`}
+              }`}
           />
         </button>
       ))}
@@ -87,11 +86,10 @@ function StarDisplay({
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
-          className={`${dim} transition-colors duration-100 ${
-            star <= value
+          className={`${dim} transition-colors duration-100 ${star <= value
               ? "fill-amber-400 text-amber-400"
               : "fill-muted text-muted-foreground/20"
-          } ${onClick ? "group-hover:text-amber-500 group-hover:fill-amber-500" : ""}`}
+            } ${onClick ? "group-hover:text-amber-500 group-hover:fill-amber-500" : ""}`}
         />
       ))}
     </div>
@@ -123,9 +121,9 @@ function ReviewCard({ review }: { review: Review }) {
   const locale = useLocale();
   const dateStr = review.created_at
     ? new Date(review.created_at).toLocaleDateString(
-        locale === "ar" ? "ar-PS" : "en-US",
-        { year: "numeric", month: "short", day: "numeric" }
-      )
+      locale === "ar" ? "ar-PS" : "en-US",
+      { year: "numeric", month: "short", day: "numeric" }
+    )
     : "";
 
   return (
@@ -313,11 +311,11 @@ export default function HubReviews({
               </div>
 
               {/* Layout Swap: Star display below buttons/text — click to edit */}
-              
-              
+
+
               <div className="pt-2">
-              
-              {hasExistingReview ? <StarDisplay
+
+                {hasExistingReview ? <StarDisplay
                   value={myReview!.rating}
                   size="lg"
                   onClick={() => {
@@ -325,7 +323,7 @@ export default function HubReviews({
                     setEditComment(myReview!.comment ?? "");
                     setIsEditing(true);
                   }}
-                />: <StarDisplay
+                /> : <StarDisplay
                   value={0}
                   onClick={() => {
                   }}
@@ -435,12 +433,12 @@ export default function HubReviews({
                 </h3>
                 {/* Click directly on stars to start */}
                 <div className="flex items-center gap-4">
-                   <StarSelector value={newRating} onChange={setNewRating} size="lg" />
-                   {newRating > 0 && (
-                      <span className="text-sm font-bold text-amber-600 animate-in fade-in zoom-in-75 duration-300">
-                        {newRating} / 5
-                      </span>
-                   )}
+                  <StarSelector value={newRating} onChange={setNewRating} size="lg" />
+                  {newRating > 0 && (
+                    <span className="text-sm font-bold text-amber-600 animate-in fade-in zoom-in-75 duration-300">
+                      {newRating} / 5
+                    </span>
+                  )}
                 </div>
                 {newRating === 0 && (
                   <p className="text-sm text-muted-foreground animate-pulse">
@@ -451,9 +449,8 @@ export default function HubReviews({
 
               {/* Expand comment + submit button once stars are picked */}
               <div
-                className={`grid transition-all duration-500 ease-in-out ${
-                  newRating > 0 ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"
-                }`}
+                className={`grid transition-all duration-500 ease-in-out ${newRating > 0 ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 pointer-events-none"
+                  }`}
               >
                 <div className="overflow-hidden">
                   <div className="space-y-4 pt-2">
@@ -485,7 +482,7 @@ export default function HubReviews({
           )}
         </div>
       ) : (
-        /* ── Login prompt ── */
+        /* ── Login ── */
         <div className="rounded-2xl border border-border bg-muted/20 p-8 text-center space-y-4">
           <LogIn className="h-10 w-10 text-muted-foreground/50 mx-auto" />
           <div className="space-y-1">
@@ -493,7 +490,7 @@ export default function HubReviews({
             <p className="text-sm text-muted-foreground">{t("loginDesc")}</p>
           </div>
           <Link
-            href={`/${locale}/signin`}
+            href={`/${locale}/sign-in`}
             className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
           >
             <LogIn className="h-4 w-4" />

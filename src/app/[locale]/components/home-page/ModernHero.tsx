@@ -24,16 +24,16 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
     if (approvedHubs.length > 0) {
       const shuffled = [...approvedHubs].sort(() => 0.5 - Math.random());
       const selectedHubs = shuffled.slice(0, 4);
-      
+
       const mappedHubs = selectedHubs.map(hub => ({
-         imageUrl: hub.images.main.startsWith('http') ? hub.images.main : `https://karam.idreis.net${hub.images.main.startsWith('/') ? '' : '/'}${hub.images.main}`,
-         name: typeof hub.name === 'string' ? hub.name : (hub.name?.[locale] || hub.name?.en || hub.name?.ar || "Unknown Hub"),
-         slug: hub.slug
+        imageUrl: hub.images.main.startsWith('http') ? hub.images.main : `https://karam.idreis.net${hub.images.main.startsWith('/') ? '' : '/'}${hub.images.main}`,
+        name: typeof hub.name === 'string' ? hub.name : (hub.name?.[locale] || hub.name?.en || hub.name?.ar || "Unknown Hub"),
+        slug: hub.slug
       }));
-      
+
       const padded = [...mappedHubs];
       while (padded.length < 4) {
-         padded.push(carouselHubs[padded.length]);
+        padded.push(carouselHubs[padded.length]);
       }
       setCarouselHubs(padded.slice(0, 4));
     }
@@ -59,7 +59,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
       <div className="max-w-7xl mx-auto px-6 py-20 lg:py-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full z-10 relative">
         {/* Left Side: Headline & Search */}
         <div className="space-y-10 z-10 relative">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
@@ -81,20 +81,20 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
           </motion.div>
 
           <motion.div
-             initial={{ opacity: 0, y: 30 }}
-             animate={{ opacity: 1, y: 0 }}
-             transition={{ duration: 0.8, delay: 0.2 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
           >
             {/* Search Module (Bento Style) */}
             <form onSubmit={handleSearch} className="bg-background/80 backdrop-blur-md shadow-[0_20px_40px_rgba(25,28,30,0.06)] dark:shadow-none rounded-2xl p-3 flex flex-col md:flex-row gap-3 items-center border border-border/50 relative overflow-hidden">
               <div className="flex items-center gap-3 px-4 py-3 bg-muted/30 rounded-xl flex-1 w-full">
                 <Search className="text-muted-foreground w-5 h-5 shrink-0" />
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t("searchByNamePlaceholder")} 
-                  className="bg-transparent border-none focus:ring-0 text-foreground w-full p-0 outline-none placeholder:text-muted-foreground" 
+                  placeholder={t("searchByNamePlaceholder")}
+                  className="bg-transparent border-none focus:ring-0 text-foreground w-full p-0 outline-none placeholder:text-muted-foreground"
                 />
               </div>
               <button type="submit" className="bg-[#9333EA] text-white p-4 rounded-xl hover:bg-[#7e22ce] transition-colors w-full md:w-auto flex justify-center items-center group shrink-0 shadow-md">
@@ -107,103 +107,103 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
         {/* Right Side: Circular Carousel */}
         <div className="relative h-[400px] md:h-[500px] lg:h-[600px] items-center justify-center flex w-full mt-10 lg:mt-0 pointer-events-auto">
           <div className="relative flex items-center justify-center scale-[0.6] sm:scale-75 md:scale-90 lg:scale-100 origin-center">
-          {/* Central Anchor point */}
-          <div className="absolute w-[400px] h-[400px] rounded-full border border-black/10 dark:border-white/10"></div>
-          <div className="absolute w-[550px] h-[550px] rounded-full border border-black/5 dark:border-white/5"></div>
-          
-          {/* Carousel Container */}
-          <motion.div 
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-            className="absolute w-[600px] h-[600px]"
-          >
-            {/* Image 1 */}
-            <motion.div 
-              animate={{ rotate: -360 }}
+            {/* Central Anchor point */}
+            <div className="absolute w-[400px] h-[400px] rounded-full border border-black/10 dark:border-white/10"></div>
+            <div className="absolute w-[550px] h-[550px] rounded-full border border-black/5 dark:border-white/5"></div>
+
+            {/* Carousel Container */}
+            <motion.div
+              animate={{ rotate: 360 }}
               transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-              className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group"
+              className="absolute w-[600px] h-[600px]"
             >
-              <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                <img 
-                  src={carouselHubs[0].imageUrl} 
-                  alt={carouselHubs[0].name} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
-                  <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                    {carouselHubs[0].name}
-                  </span>
-                </div>
-              </Link>
+              {/* Image 1 */}
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group"
+              >
+                <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={carouselHubs[0].imageUrl}
+                    alt={carouselHubs[0].name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
+                    <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
+                      {carouselHubs[0].name}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+
+              {/* Image 2 */}
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group"
+              >
+                <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={carouselHubs[1].imageUrl}
+                    alt={carouselHubs[1].name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-3 flex justify-center px-2">
+                    <span className="bg-background/90 backdrop-blur-md px-3 py-1 rounded-full border border-border/50 text-[10px] font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
+                      {carouselHubs[1].name}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+
+              {/* Image 3 */}
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+                className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 group"
+              >
+                <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={carouselHubs[2].imageUrl}
+                    alt={carouselHubs[2].name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
+                    <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
+                      {carouselHubs[2].name}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+
+              {/* Image 4 */}
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+                className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 group"
+              >
+                <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                  <img
+                    src={carouselHubs[3].imageUrl}
+                    alt={carouselHubs[3].name}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
+                    <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
+                      {carouselHubs[3].name}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
             </motion.div>
-            
-            {/* Image 2 */}
-            <motion.div 
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group"
-            >
-              <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                <img 
-                  src={carouselHubs[1].imageUrl} 
-                  alt={carouselHubs[1].name} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-3 flex justify-center px-2">
-                  <span className="bg-background/90 backdrop-blur-md px-3 py-1 rounded-full border border-border/50 text-[10px] font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                    {carouselHubs[1].name}
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
-            
-            {/* Image 3 */}
-            <motion.div 
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-              className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 group"
-            >
-              <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                <img 
-                  src={carouselHubs[2].imageUrl} 
-                  alt={carouselHubs[2].name} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
-                  <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                    {carouselHubs[2].name}
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
-            
-            {/* Image 4 */}
-            <motion.div 
-              animate={{ rotate: -360 }}
-              transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-              className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 group"
-            >
-              <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                <img 
-                  src={carouselHubs[3].imageUrl} 
-                  alt={carouselHubs[3].name} 
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
-                  <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                    {carouselHubs[3].name}
-                  </span>
-                </div>
-              </Link>
-            </motion.div>
-          </motion.div>
-          
-          {/* Center Overlay Element */}
-          <div className="absolute w-32 h-32  rounded-full flex flex-col items-center justify-center  z-10">
-             <span className="text-[#9333EA] font-extrabold text-2xl tracking-tight">
-              <img src="/qareeb_logo.png" alt="Logo" className="w-[350px] h-[350px] object-cover" />
-             </span>
-          </div>
+
+            {/* Center Overlay Element */}
+            <div className="absolute w-32 h-32  rounded-full flex flex-col items-center justify-center  z-10">
+              <span className="text-[#9333EA] font-extrabold text-2xl tracking-tight">
+                <img src="/qareeb_logo.png" alt="Logo" className="w-[350px] h-[350px] object-cover" />
+              </span>
+            </div>
           </div>
         </div>
       </div>

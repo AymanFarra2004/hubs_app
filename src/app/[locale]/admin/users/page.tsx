@@ -19,38 +19,7 @@ export default async function AdminUsersPage() {
         <p className="text-muted-foreground mt-1">{t("description")}</p>
       </div>
 
-      <UsersClient initialUsers={users} translations={{
-        addUser: t("addUser"),
-        editUser: t("editUser"),
-        deleteUser: t("deleteUser"),
-        name: t("name"),
-        email: t("email"),
-        phone: t("phone"),
-        role: t("role"),
-        specialization: t("specialization"),
-        password: t("password"),
-        passwordConfirm: t("passwordConfirm"),
-        actions: t("actions"),
-        save: t("save"),
-        cancel: t("cancel"),
-        confirmDelete: t("confirmDelete"),
-        noUsers: t("noUsers"),
-        loading: t("loading"),
-        failedToLoad: t("failedToLoad"),
-        created: t("created"),
-        updated: t("updated"),
-        deleted: t("deleted"),
-        failedToUpdate: t("failedToUpdate"),
-        failedToDelete: t("failedToDelete"),
-        failedToCreate: t("failedToCreate"),
-        allUsers: t("allUsers"),
-        regularUser: t("regularUser"),
-        hubOwner: t("hubOwner"),
-        confirmDeleteTitle: t("confirmDeleteTitle"),
-        confirmDeleteDesc: t("confirmDeleteDesc"),
-        confirmBtn: t("confirmBtn"),
-        cancelBtn: t("cancelBtn")
-      }} />
+      <UsersClient initialUsers={users} />
     </div>
   );
 }

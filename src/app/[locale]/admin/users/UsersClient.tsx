@@ -5,11 +5,13 @@ import { UsersTable } from "./UsersTable";
 import { UserModal } from "./UserModal";
 import { Plus } from "lucide-react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
 
-function UsersContent({ initialUsers, translations }: { initialUsers: any[], translations: any }) {
+function UsersContent({ initialUsers }: { initialUsers: any[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("AdminUsers");
   
   const currentRole = searchParams.get('role') || 'all';
 
@@ -55,19 +57,19 @@ function UsersContent({ initialUsers, translations }: { initialUsers: any[], tra
             onClick={() => handleTabChange('all')}
             className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'all' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            {translations.allUsers || "All"}
+            {t("allUsers") || "All"}
           </button>
           <button 
             onClick={() => handleTabChange('user')}
             className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'user' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            {translations.regularUser || "Regular"}
+            {t("regularUser") || "Regular"}
           </button>
           <button 
             onClick={() => handleTabChange('hub_owner')}
             className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'hub_owner' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
           >
-            {translations.hubOwner || "Hub Owners"}
+            {t("hubOwner") || "Hub Owners"}
           </button>
         </div>
 
@@ -76,31 +78,30 @@ function UsersContent({ initialUsers, translations }: { initialUsers: any[], tra
           className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto shrink-0"
         >
           <Plus className="h-4 w-4" />
-          {translations.addUser}
+          {t("addUser")}
         </button>
       </div>
       
       <UsersTable 
         users={filteredUsers} 
         onEdit={handleEdit} 
-        t={translations} 
       />
 
       {isModalOpen && (
         <UserModal 
           user={userToEdit} 
           onClose={handleClose} 
-          t={translations} 
         />
       )}
     </div>
   );
 }
 
-export function UsersClient({ initialUsers, translations }: { initialUsers: any[], translations: any }) {
+export function UsersClient({ initialUsers }: { initialUsers: any[] }) {
+  const t = useTranslations("AdminUsers");
   return (
-    <Suspense fallback={<div className="h-40 flex items-center justify-center animate-pulse rounded-2xl border border-border bg-background shadow-sm text-muted-foreground">{translations.loading || "Loading..."}</div>}>
-      <UsersContent initialUsers={initialUsers} translations={translations} />
+    <Suspense fallback={<div className="h-40 flex items-center justify-center animate-pulse rounded-2xl border border-border bg-background shadow-sm text-muted-foreground">{t("loading") || "Loading..."}</div>}>
+      <UsersContent initialUsers={initialUsers} />
     </Suspense>
   );
 }

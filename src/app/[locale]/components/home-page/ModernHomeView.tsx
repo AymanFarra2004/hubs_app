@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 
 export default function ModernHomeView({ initialHubs = [] }: { initialHubs?: any[] }) {
   return (
-    <div className="bg-gray-50 dark:bg-[#050505] text-foreground min-h-screen">
+    <div className="bg-gray-50 dark:bg-[#050505] text-foreground min-h-screen pt-12">
       <ModernHero hubs={initialHubs} />
       
       <motion.div

@@ -1,7 +1,6 @@
-"use client";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface DeleteConfirmationModalProps {
   isOpen: boolean;
@@ -9,7 +8,6 @@ interface DeleteConfirmationModalProps {
   onConfirm: () => void;
   userName: string;
   isDeleting: boolean;
-  t: any;
 }
 
 export function DeleteConfirmationModal({ 
@@ -17,9 +15,10 @@ export function DeleteConfirmationModal({
   onClose, 
   onConfirm, 
   userName,
-  isDeleting,
-  t 
+  isDeleting
 }: DeleteConfirmationModalProps) {
+  const t = useTranslations("AdminUsers");
+  
   return (
     <AnimatePresence>
       {isOpen && (
@@ -43,11 +42,11 @@ export function DeleteConfirmationModal({
             </div>
             
             <h2 className="text-xl font-bold text-foreground mb-2">
-              {t.confirmDeleteTitle}
+              {t("confirmDeleteTitle")}
             </h2>
             
             <p className="text-muted-foreground mb-6 text-sm">
-              {t.confirmDeleteDesc.replace("name", userName)}
+              {t("confirmDeleteDesc").replace("name", userName)}
             </p>
 
             <div className="flex gap-3">
@@ -56,14 +55,14 @@ export function DeleteConfirmationModal({
                 disabled={isDeleting}
                 className="flex-1 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
               >
-                {t.cancelBtn}
+                {t("cancelBtn")}
               </button>
               <button 
                 onClick={onConfirm}
                 disabled={isDeleting}
                 className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
               >
-                {isDeleting ? "..." : t.confirmBtn}
+                {isDeleting ? "..." : t("confirmBtn")}
               </button>
             </div>
           </motion.div>

@@ -1,12 +1,12 @@
-"use client";
-
 import { useState } from "react";
 import { X, Loader2 } from "lucide-react";
 import { createAdminUser, updateAdminUser } from "@/src/actions/users";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
-export function UserModal({ user, onClose, t }: { user: any, onClose: () => void, t: any }) {
+export function UserModal({ user, onClose }: { user: any, onClose: () => void }) {
   const isEditing = !!user;
+  const t = useTranslations("AdminUsers");
   
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -67,10 +67,10 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
     
     setLoading(false);
     if (res.success) {
-      toast.success(isEditing ? t.updated : t.created);
+      toast.success(isEditing ? t("updated") : t("created"));
       onClose();
     } else {
-      toast.error(res.error || (isEditing ? t.failedToUpdate : t.failedToCreate));
+      toast.error(res.error || (isEditing ? t("failedToUpdate") : t("failedToCreate")));
     }
   };
 
@@ -78,7 +78,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
     <div className="fixed inset-0 bg-black/40 z-[100] flex items-center justify-center p-4 backdrop-blur-sm">
       <div className="bg-background w-full max-w-md rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="p-6 border-b border-border flex items-center justify-between">
-          <h2 className="text-xl font-bold">{isEditing ? t.editUser : t.addUser}</h2>
+          <h2 className="text-xl font-bold">{isEditing ? t("editUser") : t("addUser")}</h2>
           <button onClick={onClose} className="p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors">
             <X className="h-5 w-5" />
           </button>
@@ -86,7 +86,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
         
         <form onSubmit={handleSubmit} className="p-6 space-y-4 max-h-[80vh] overflow-y-auto">
           <div>
-            <label className="block text-sm font-medium mb-1.5">{t.name} *</label>
+            <label className="block text-sm font-medium mb-1.5">{t("name")} *</label>
             <input 
               type="text" 
               value={formData.name} 
@@ -100,7 +100,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
 
           {!isEditing && (
             <div>
-              <label className="block text-sm font-medium mb-1.5">{t.email} *</label>
+              <label className="block text-sm font-medium mb-1.5">{t("email")} *</label>
               <input 
                 type="email" 
                 value={formData.email} 
@@ -114,7 +114,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
           )}
 
           <div>
-            <label className="block text-sm font-medium mb-1.5">{t.phone}</label>
+            <label className="block text-sm font-medium mb-1.5">{t("phone")}</label>
             <input 
               type="tel" 
               value={formData.phone} 
@@ -128,21 +128,21 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1.5">{t.role} *</label>
+            <label className="block text-sm font-medium mb-1.5">{t("role")} *</label>
             <select
               value={formData.role}
               onChange={e => setFormData({...formData, role: e.target.value})}
               className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none"
             >
-              <option value="user">{t.regularUser || "Regular User"}</option>
-              <option value="hub_owner">{t.hubOwner || "Hub Owner"}</option>
+              <option value="user">{t("regularUser") || "Regular User"}</option>
+              <option value="hub_owner">{t("hubOwner") || "Hub Owner"}</option>
             </select>
           </div>
 
           {!isEditing && (
             <>
               <div>
-                <label className="block text-sm font-medium mb-1.5">{t.password} *</label>
+                <label className="block text-sm font-medium mb-1.5">{t("password")} *</label>
                 <input 
                   type="password" 
                   value={formData.password} 
@@ -154,7 +154,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
                 {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">{t.passwordConfirm} *</label>
+                <label className="block text-sm font-medium mb-1.5">{t("passwordConfirm")} *</label>
                 <input 
                   type="password" 
                   value={formData.password_confirmation} 
@@ -175,7 +175,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
               disabled={loading}
               className="flex-1 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
             >
-              {t.cancel}
+              {t("cancel")}
             </button>
             <button 
               type="submit" 
@@ -183,7 +183,7 @@ export function UserModal({ user, onClose, t }: { user: any, onClose: () => void
               className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
-              {t.save}
+              {t("save")}
             </button>
           </div>
         </form>

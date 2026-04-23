@@ -529,7 +529,10 @@
     "confirmDeleteTitle": "Confirm Deletion",
     "confirmDeleteDesc": "Are you sure you want to delete name ? This action cannot be undone.",
     "confirmBtn": "Confirm Delete",
-    "cancelBtn": "Cancel"
+    "cancelBtn": "Cancel",
+    "showing": "Showing {count} of {total} results",
+    "previous": "Previous",
+    "next": "Next"
   },
   "HubReviews": {
     "title": "Reviews",

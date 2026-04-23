@@ -20,12 +20,12 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false);
   const { setTheme, theme } = useTheme();
-  
+
   const pathname = usePathname();
   const t = useTranslations("Header");
   const router = useRouter();
   const locale = useLocale();
-  
+
   // Redux Auth state
   const auth = useSelector((state: any) => state.auth);
   const dispatch = useDispatch();
@@ -59,7 +59,7 @@ export function Header() {
     <nav className="fixed top-0 w-full z-50 transition-all duration-300 border-b border-border/40 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          
+
           {/* Logo */}
           <div className="shrink-0 flex items-center">
             <Link href="/" className="flex items-center gap-3 transition-transform hover:scale-105 active:scale-95">
@@ -78,11 +78,10 @@ export function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    isActive 
-                      ? "bg-foreground/5 text-foreground" 
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${isActive
+                      ? "bg-foreground/5 text-foreground"
                       : "text-muted-foreground hover:bg-foreground/5 hover:text-foreground"
-                  }`}
+                    }`}
                 >
                   {t(`nav.${link.labelKey}`)}
                 </Link>
@@ -124,7 +123,7 @@ export function Header() {
               </div>
             ) : (
               <div className="relative border-s border-border/50 ps-3">
-                <button 
+                <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-2 p-2 rounded-full border border-border bg-background hover:bg-muted transition-all shadow-sm"
                 >
@@ -165,19 +164,18 @@ export function Header() {
                         <Link
                           href="/profile"
                           onClick={() => setIsUserMenuOpen(false)}
-                          className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
-                            pathname === '/profile'
+                          className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${pathname === '/profile'
                               ? 'bg-primary/10 text-primary font-semibold'
                               : 'text-foreground hover:bg-muted'
-                          }`}
+                            }`}
                         >
-                           <User className="h-4 w-4" />
-                           {t('userMenu.profile')}
+                          <User className="h-4 w-4" />
+                          {t('userMenu.profile')}
                         </Link>
                       </div>
 
                       <div className="border-t border-border/50 pt-2">
-                        <button 
+                        <button
                           onClick={handleLogout}
                           className="flex items-center gap-3 px-4 py-2 text-sm text-destructive hover:bg-destructive/10 w-full text-start transition-colors"
                         >
@@ -236,15 +234,14 @@ export function Header() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                      isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                    }`}
+                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                      }`}
                   >
                     {t(`nav.${link.labelKey}`)}
                   </Link>
                 );
               })}
-              
+
               <div className="pt-4 mt-4 border-t border-border">
                 {!isLoggedIn ? (
                   <div className="flex flex-col gap-3">
@@ -258,7 +255,7 @@ export function Header() {
                 ) : (
                   <div className="space-y-3">
                     <div className="px-4 py-2 mb-2 rounded-xl bg-muted/50 border border-border">
-                      <p className="text-sm flex items-center gap-2"><User className="w-4 h-4"/>{userName}</p>
+                      <p className="text-sm flex items-center gap-2"><User className="w-4 h-4" />{userName}</p>
                     </div>
                     {isHubOwner && (
                       <Link onClick={() => setIsMobileMenuOpen(false)} href="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-medium">
@@ -267,21 +264,20 @@ export function Header() {
                     )}
                     {isAdmin && (
                       <Link onClick={() => setIsMobileMenuOpen(false)} href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-xl bg-destructive/10 text-destructive font-medium">
-                         <Settings className="h-5 w-5" /> {t('userMenu.adminDashboard')}
+                        <Settings className="h-5 w-5" /> {t('userMenu.adminDashboard')}
                       </Link>
                     )}
                     <Link
                       onClick={() => setIsMobileMenuOpen(false)}
                       href="/profile"
-                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${
-                        pathname === '/profile'
+                      className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-colors ${pathname === '/profile'
                           ? 'bg-primary/10 text-primary'
                           : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                      }`}
+                        }`}
                     >
                       <User className="h-5 w-5" /> {t('userMenu.profile')}
                     </Link>
-                    <button 
+                    <button
                       onClick={handleLogout}
                       className="flex items-center gap-3 px-4 py-3 text-sm text-destructive hover:bg-destructive/10 rounded-xl w-full text-start transition-colors font-medium border border-transparent hover:border-destructive/20"
                     >

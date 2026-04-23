@@ -529,7 +529,10 @@
     "confirmDeleteTitle": "تأكيد الحذف",
     "confirmDeleteDesc": "هل أنت متأكد من رغبتك في حذف name ؟ لا يمكن التراجع عن هذا الإجراء.",
     "confirmBtn": "تأكيد الحذف",
-    "cancelBtn": "إلغاء"
+    "cancelBtn": "إلغاء",
+    "showing": "عرض {count} من {total} نتيجة",
+    "previous": "السابق",
+    "next": "التالي"
   },
   "HubReviews": {
     "title": "التقييمات",

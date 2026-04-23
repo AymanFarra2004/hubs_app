@@ -17,7 +17,7 @@ export async function getAdminUsers() {
   if (!authHeaders) return { error: "Unauthenticated", data: [] };
 
   try {
-    const res = await fetch(`${API_BASE_URL}/admin/users`, {
+    const res = await fetch(`${API_BASE_URL}/admin/users?per_page=1000`, {
       method: "GET",
       headers: { "Accept": "application/json", ...authHeaders },
       next: { tags: ["admin-users"], revalidate: 0 }

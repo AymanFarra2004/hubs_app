@@ -53,9 +53,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         flex flex-col
       `}>
         <div className="h-16 flex items-center justify-between px-6 border-b border-border">
-          <div className="flex items-center">
-            <Shield className="h-6 w-6 text-primary mr-2 rtl:ml-2 rtl:mr-0" />
-            <h1 className="text-xl font-bold text-foreground">Habbat {t("admin")}</h1>
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Qareeb Logo" className="h-12 w-auto object-contain" />
+            <h1 className="text-xl font-bold text-foreground tracking-tight">Qareeb | قريب</h1>
           </div>
           <button 
             onClick={() => setIsSidebarOpen(false)}
@@ -120,7 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <MapPin className="h-5 w-5 text-muted-foreground" />
             {t("locations")}
           </Link>
-
+          
           <Link 
             href="/admin/reviews" 
             onClick={() => setIsSidebarOpen(false)}

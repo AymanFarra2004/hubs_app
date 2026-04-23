@@ -41,7 +41,7 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const t = useTranslations("SignUp");
-  
+
   if (state?.error) console.log(state.error);
 
   useEffect(() => {
