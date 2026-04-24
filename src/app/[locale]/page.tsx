@@ -2,9 +2,40 @@ import { Header } from "@/components/header/Header";
 import ModernHomeView from "./components/home-page/ModernHomeView";
 import { Footer } from "@/components/footer/Footer";
 import { getAllHubs } from "@/src/actions/hubs";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Metadata } from "next";
 // import{APITest} from "@/API tests/APITest";
 
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'Index' });
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+
+  return {
+    title: t('meta.title'),
+    description: t('meta.description'),
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: {
+        en: `${baseUrl}/en`,
+        ar: `${baseUrl}/ar`,
+      },
+    },
+    openGraph: {
+      title: t('meta.title'),
+      description: t('meta.description'),
+      url: `${baseUrl}/${locale}`,
+      siteName: 'Qareeb',
+      type: 'website',
+      locale: locale === 'ar' ? 'ar_EG' : 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t('meta.title'),
+      description: t('meta.description'),
+    },
+  };
+}
 
 export default async function Home() {
   const locale = await getLocale();
