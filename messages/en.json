@@ -550,7 +550,9 @@
     "cancelBtn": "Cancel",
     "showing": "Showing {count} of {total} results",
     "previous": "Previous",
-    "next": "Next"
+    "next": "Next",
+    "search": "Search Users",
+    "searchPlaceholder": "Search by name, email or phone..."
   },
   "HubReviews": {
     "title": "Reviews",

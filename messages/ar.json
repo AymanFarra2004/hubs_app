@@ -550,7 +550,9 @@
     "cancelBtn": "إلغاء",
     "showing": "عرض {count} من {total} نتيجة",
     "previous": "السابق",
-    "next": "التالي"
+    "next": "التالي",
+    "search": "البحث عن مستخدمين",
+    "searchPlaceholder": "ابحث بالاسم، البريد أو الهاتف..."
   },
   "HubReviews": {
     "title": "التقييمات",
