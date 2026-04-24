@@ -17,6 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id, locale } = await params;
   const hubRes = await getHubBySlug(id, locale);
   const rawHub = hubRes.success ? hubRes.data : null;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
 
   if (!rawHub) {
     return {
@@ -26,21 +27,37 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
   const name = typeof rawHub.name === 'string' ? rawHub.name : (rawHub.name?.[locale] || rawHub.name?.en || rawHub.name?.ar || id);
   const description = typeof rawHub.description === 'string' ? rawHub.description : (rawHub.description?.[locale] || rawHub.description?.en || rawHub.description?.ar || "");
+  const descriptionTrimmed = description.substring(0, 160);
+
+  const mainImageRaw: string | null = typeof rawHub.images?.main === 'string' ? rawHub.images.main : null;
+  const imageUrl = mainImageRaw
+    ? (mainImageRaw.startsWith('http') ? mainImageRaw : `https://karam.idreis.net${mainImageRaw.startsWith('/') ? '' : '/'}${mainImageRaw}`)
+    : null;
 
   return {
     title: `${name} | Qareeb`,
-    description: description.substring(0, 160),
+    description: descriptionTrimmed,
     alternates: {
-      canonical: `/${locale}/hubs/${id}`,
+      canonical: `${baseUrl}/${locale}/hubs/${id}`,
       languages: {
-        en: `/en/hubs/${id}`,
-        ar: `/ar/hubs/${id}`,
+        en: `${baseUrl}/en/hubs/${id}`,
+        ar: `${baseUrl}/ar/hubs/${id}`,
       },
     },
     openGraph: {
       title: `${name} | Qareeb`,
-      description: description.substring(0, 160),
-      type: "website",
+      description: descriptionTrimmed,
+      url: `${baseUrl}/${locale}/hubs/${id}`,
+      siteName: 'Qareeb',
+      type: 'website',
+      locale: locale === 'ar' ? 'ar_EG' : 'en_US',
+      ...(imageUrl && { images: [{ url: imageUrl, alt: name }] }),
+    },
+    twitter: {
+      card: imageUrl ? 'summary_large_image' : 'summary',
+      title: `${name} | Qareeb`,
+      description: descriptionTrimmed,
+      ...(imageUrl && { images: [imageUrl] }),
     },
   };
 }

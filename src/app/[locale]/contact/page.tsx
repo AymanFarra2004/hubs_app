@@ -7,15 +7,30 @@ import { getTranslations } from "next-intl/server";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations("ContactUs");
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+
   return {
     title: `${t("meta.title")} | Qareeb`,
     description: t("meta.description"),
     alternates: {
-      canonical: `/${locale}/contact`,
+      canonical: `${baseUrl}/${locale}/contact`,
       languages: {
-        en: '/en/contact',
-        ar: '/ar/contact',
+        en: `${baseUrl}/en/contact`,
+        ar: `${baseUrl}/ar/contact`,
       },
+    },
+    openGraph: {
+      title: `${t("meta.title")} | Qareeb`,
+      description: t("meta.description"),
+      url: `${baseUrl}/${locale}/contact`,
+      siteName: 'Qareeb',
+      type: 'website',
+      locale: locale === 'ar' ? 'ar_EG' : 'en_US',
+    },
+    twitter: {
+      card: 'summary',
+      title: `${t("meta.title")} | Qareeb`,
+      description: t("meta.description"),
     },
   };
 }
