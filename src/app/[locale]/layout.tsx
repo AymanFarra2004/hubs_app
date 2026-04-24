@@ -63,7 +63,14 @@ export default async function RootLayout({
   if (userCookie) {
     try {
     const decodedUser = decodeURIComponent(userCookie);
-    user = JSON.parse(decodedUser);
+    if (decodedUser.startsWith('eyJ')) {
+      const base64ToString = Buffer.from(decodedUser, 'base64').toString('utf-8');
+      user = JSON.parse(base64ToString);
+    } else {
+      user = JSON.parse(decodedUser);
+    }
+    
+    console.log("✅ User parsed successfully:", user.name);
   } catch (e) {
     console.error("Layout JSON Parse Error:", e);
     try { user = JSON.parse(userCookie); } catch(e2) {}
@@ -77,15 +84,15 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${notoSansArabic.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <StoreProvider> 
-            {token && <AuthHydrator user={user} />}
-           <NextIntlClientProvider messages={messages} locale={locale}>
-             {children}
-           </NextIntlClientProvider>
-           <Toaster position="top-center" toastOptions={{ className: 'dark:bg-slate-800 dark:text-white rounded-xl' }} />
-          </StoreProvider>
-        </ThemeProvider>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <StoreProvider> 
+              {token && <AuthHydrator user={user} />}
+              {children}
+              <Toaster position="top-center" toastOptions={{ className: 'dark:bg-slate-800 dark:text-white rounded-xl' }} />
+            </StoreProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

@@ -4,18 +4,19 @@ import { useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "@/src/store/authSlice";
-import { handleGoogleCallback } from "@/src/actions/auth";
+import { getProfileByToken, handleGoogleCallback } from "@/src/actions/auth";
 import { Loader2 } from "lucide-react";
+import { useLocale } from "next-intl";
 
 function CallbackHandler() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
+  const locale = useLocale();
 
   useEffect(() => {
     const handleAuth = async () => {
       const token = searchParams.get("token");
-      const userStr = searchParams.get("user");
       const error = searchParams.get("error");
 
       if (error || !token) {
@@ -25,28 +26,26 @@ function CallbackHandler() {
       }
 
       try {
-        // 1. Save to localStorage (as requested)
+        // 1. Save to localStorage (optional, but kept as requested)
         localStorage.setItem("token", token);
         
         let userData = null;
-        if (userStr) {
-          localStorage.setItem("user", userStr);
-          
-          // 2. Update Redux
-          try {
-            userData = JSON.parse(decodeURIComponent(userStr));
-            dispatch(loginSuccess(userData));
-          } catch (e) {
-            console.error("Failed to parse user data", e);
-          }
+        
+        // 2. Fetch profile using the token instead of relying on URL params
+        const { data, error: profileError } = await getProfileByToken(token, locale);
+        if(data && !profileError) {
+          userData = data;
+          // Optionally update Redux state immediately
+          dispatch(loginSuccess(userData));
         }
 
         // 3. Set auth cookies via Server Action for SSR support
-        await handleGoogleCallback(token, userStr);
+        // We check userData to avoid passing "null" string to cookies
+        await handleGoogleCallback(token, userData ? JSON.stringify(userData) : null);
 
-        // 4. Redirect
-        window.location.href = "/";
-        router.refresh();
+        // 4. Redirect to localized home page
+        // Using window.location.href to ensure a full reload so that cookies are recognized by the server
+        window.location.href = `/${locale}`;
       } catch (e) {
         console.error("Failed to process auth callback", e);
         router.push("/sign-in?error=process_failed");
@@ -54,7 +53,7 @@ function CallbackHandler() {
     };
 
     handleAuth();
-  }, [searchParams, router, dispatch]);
+  }, [searchParams, router, dispatch, locale]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">

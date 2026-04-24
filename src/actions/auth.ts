@@ -177,3 +177,24 @@ export async function getUserProfile(locale: string = "ar") {
     return { error: "Network Error", data: null };
   }
 }
+
+export async function getProfileByToken(token: string, locale: string = "ar") {
+  try {
+    const res = await fetch(`https://karam.idreis.net/api/v1/profile?${getLangParam(locale)}`, {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      next: { revalidate: 0 }
+    });
+
+    const body = await res.json();
+    if (res.ok) {
+      return { success: true, data: body.data || body };
+    }
+    return { error: body.message || "Failed to fetch profile", data: null };
+  } catch (error) {
+    return { error: "Network Error", data: null };
+  }
+}
