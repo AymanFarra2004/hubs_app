@@ -178,6 +178,38 @@ export async function getUserProfile(locale: string = "ar") {
   }
 }
 
+export async function updateUserProfile(data: any) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+
+  if (!token) {
+    return { error: "Unauthenticated" };
+  }
+
+  try {
+    const res = await fetch("https://karam.idreis.net/api/v1/profile", {
+      method: "PUT",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(data),
+    });
+
+    const body = await res.json();
+
+    if (!res.ok) {
+      return { error: body.message || "Failed to update profile" };
+    }
+
+    return { success: true, data: body.data || body };
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+    return { error: "Network Error" };
+  }
+}
+
 export async function getProfileByToken(token: string, locale: string = "ar") {
   try {
     const res = await fetch(`https://karam.idreis.net/api/v1/profile?${getLangParam(locale)}`, {

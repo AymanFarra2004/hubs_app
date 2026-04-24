@@ -664,6 +664,11 @@
       "admin": "Administrator",
       "user": "Regular User"
     },
+    "editProfile": "Edit Profile",
+    "save": "Save Changes",
+    "cancel": "Cancel",
+    "updatedSuccess": "Profile updated successfully!",
+    "updatedError": "Failed to update profile.",
     "unauthenticated": "You must be signed in to view your profile.",
     "signIn": "Sign In",
     "errorTitle": "Could not load profile",
