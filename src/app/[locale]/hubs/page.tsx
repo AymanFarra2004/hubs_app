@@ -9,15 +9,30 @@ import { format24to12 } from "@/src/lib/utils"
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations("HubsPage");
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+
   return {
     title: t("meta.title"),
     description: t("meta.description"),
     alternates: {
-      canonical: `/${locale}/hubs`,
+      canonical: `${baseUrl}/${locale}/hubs`,
       languages: {
-        en: '/en/hubs',
-        ar: '/ar/hubs',
+        en: `${baseUrl}/en/hubs`,
+        ar: `${baseUrl}/ar/hubs`,
       },
+    },
+    openGraph: {
+      title: t("meta.title"),
+      description: t("meta.description"),
+      url: `${baseUrl}/${locale}/hubs`,
+      siteName: 'Qareeb',
+      type: 'website',
+      locale: locale === 'ar' ? 'ar_EG' : 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: t("meta.title"),
+      description: t("meta.description"),
     },
   };
 }
