@@ -197,7 +197,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
             {activeFilterCount > 0 && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1 text-xs text-muted-foreground hover:text-red-500 transition-colors"
+                className="cursor-pointer flex items-center gap-1 text-xs text-muted-foreground hover:text-red-500 transition-colors"
               >
                 <X className="h-3 w-3" />
                 {t("clearAll")} ({activeFilterCount})
@@ -242,7 +242,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                     <div key={gov.id} className="space-y-1">
                       <button
                         onClick={() => selectGovernorate(gov.id)}
-                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
+                        className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-all duration-150 ${
                           selectedGovernorateId === gov.id
                             ? "bg-primary text-primary-foreground shadow-sm"
                             : "hover:bg-muted text-foreground"
@@ -261,7 +261,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                             <div key={city.id} className="space-y-1">
                               <button
                                 onClick={() => selectCity(city.id)}
-                                className={`w-full flex items-center justify-between px-3 py-1.5 mt-1 rounded-lg text-sm transition-all duration-150 ${
+                                className={`cursor-pointer w-full flex items-center justify-between px-3 py-1.5 mt-1 rounded-lg text-sm transition-all duration-150 ${
                                   selectedCityId === city.id
                                     ? "bg-primary/15 text-primary font-semibold"
                                     : "hover:bg-muted text-foreground"
@@ -280,7 +280,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                                     <button
                                       key={area.id}
                                       onClick={() => selectArea(area.id)}
-                                      className={`w-full flex items-center px-3 py-1.5 mt-1 rounded-lg text-sm transition-all duration-150 ${
+                                      className={`cursor-pointer w-full flex items-center px-3 py-1.5 mt-1 rounded-lg text-sm transition-all duration-150 ${
                                         selectedAreaId === area.id
                                           ? "bg-primary/10 text-primary font-semibold"
                                           : "hover:bg-muted text-foreground"
@@ -309,7 +309,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                         .join(" › ")}
                       <button
                         onClick={clearFilters}
-                        className="ms-1 hover:text-red-500 transition-colors"
+                        className="cursor-pointer ms-1 hover:text-red-500 transition-colors"
                         aria-label="Clear location filter"
                       >
                         <X className="h-3 w-3" />
@@ -329,7 +329,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
           <p className="text-sm text-muted-foreground">
             {t("showing", { count: filteredHubs.length, total: hubs.length })}
           </p>
-          <select className="h-9 w-44 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+          <select className="cursor-pointer h-9 w-44 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
             <option>{t("mostRelevant")}</option>
             <option>{t("priceLow")}</option>
             <option>{t("recentlyAdded")}</option>
@@ -349,7 +349,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-4 py-2 border border-input bg-background rounded-md text-sm font-medium hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="cursor-pointer px-4 py-2 border border-input bg-background rounded-md text-sm font-medium hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {t("previous", { fallback: "Previous" })}
                 </button>
@@ -358,7 +358,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                     <button
                       key={i}
                       onClick={() => setCurrentPage(i + 1)}
-                      className={`w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${
+                      className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-md text-sm font-medium transition-colors ${
                         currentPage === i + 1
                           ? "bg-primary text-primary-foreground"
                           : "hover:bg-muted bg-background border border-input"
@@ -371,7 +371,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-4 py-2 border border-input bg-background rounded-md text-sm font-medium hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="cursor-pointer px-4 py-2 border border-input bg-background rounded-md text-sm font-medium hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
                   {t("next", { fallback: "Next" })}
                 </button>
@@ -387,7 +387,7 @@ export default function HubsClient({ hubs }: HubsClientProps) {
             <p className="text-muted-foreground text-sm mb-4">{t("noHubsTry")}</p>
             <button
               onClick={clearFilters}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+              className="cursor-pointer px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
             >
               {t("clearFilters")}
             </button>

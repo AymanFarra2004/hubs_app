@@ -77,7 +77,7 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
               {t("description")}
             </p>
           </div>
-          <a href="/hubs" className="hidden md:flex items-center gap-2 text-[#9333EA] font-medium hover:text-[#7e22ce] transition-colors">
+          <a href="/hubs" className="cursor-pointer hidden md:flex items-center gap-2 text-[#9333EA] font-medium hover:text-[#7e22ce] transition-colors">
             {t("viewAll")} <span className="transform rtl:rotate-180">&rarr;</span>
           </a>
         </div>
@@ -140,7 +140,7 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
 
                 <a 
                   href={`/hubs/${hub.slug}`} 
-                  className="w-full text-center py-3 rounded-xl bg-[#9333EA] hover:bg-[#7e22ce] text-white font-medium transition-colors block"
+                  className="cursor-pointer w-full text-center py-3 rounded-xl bg-[#9333EA] hover:bg-[#7e22ce] text-white font-medium transition-colors block"
                 >
                   {t("viewDetails")}
                 </a>

@@ -141,7 +141,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                   e.preventDefault();
                   setIsGalleryOpen(true);
                 }}
-                className="ms-auto px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
+                className="cursor-pointer ms-auto px-4 py-2 bg-secondary text-secondary-foreground text-sm rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
               >
                 {t("manageGallery")}
               </button>
@@ -170,7 +170,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
         </h4>
         <button 
           onClick={() => setIsEditing(true)}
-          className="flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground text-xs rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
+          className="cursor-pointer flex items-center gap-2 px-3 py-1.5 bg-secondary text-secondary-foreground text-xs rounded-lg font-medium hover:bg-secondary/80 transition-colors shadow-sm"
         >
           <Edit className="h-3.5 w-3.5" />
           {t("edit")}
@@ -253,7 +253,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
         </h4>
         <button 
           onClick={handleCancel}
-          className="flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 text-xs rounded-lg font-medium hover:bg-red-100 transition-colors shadow-sm"
+          className="cursor-pointer flex items-center gap-2 px-3 py-1.5 bg-red-50 text-red-600 text-xs rounded-lg font-medium hover:bg-red-100 transition-colors shadow-sm"
         >
           <X className="h-3.5 w-3.5" />
           {t("cancel")}
@@ -378,7 +378,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               <button 
                 onClick={handleSaveGeneralSettings}
                 disabled={isSavingName}
-                className="flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 active:scale-95"
+                className="cursor-pointer flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm rounded-xl font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 disabled:opacity-50 active:scale-95"
               >
                 {isSavingName ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
                 {t("save_btn")}
@@ -433,7 +433,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             <button 
               onClick={handleSaveHours}
               disabled={isSavingHours}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
+              className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm rounded-lg font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
               {isSavingHours ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               {t("save")}
@@ -443,7 +443,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
           <div className="pt-6 mt-6 border-t border-border">
             <button 
               onClick={() => setIsDeleteDialogOpen(true)}
-              className="px-4 py-2 bg-red-100 text-red-700 text-sm rounded-lg font-medium hover:bg-red-200 transition-colors"
+              className="cursor-pointer px-4 py-2 bg-red-100 text-red-700 text-sm rounded-lg font-medium hover:bg-red-200 transition-colors"
             >
               {t("deleteHub")}
             </button>
@@ -460,7 +460,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl border-border">{t("cancel")}</AlertDialogCancel>
+            <AlertDialogCancel className="cursor-pointer rounded-xl border-border">{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={async (e) => {
                 e.preventDefault();
@@ -475,7 +475,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                   setIsDeleteDialogOpen(false);
                 }
               }}
-              className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
+              className="cursor-pointer bg-red-600 hover:bg-red-700 text-white rounded-xl"
               disabled={isDeleting}
             >
               {isDeleting ? t("deleting") : t("confirmDelete")}
@@ -620,7 +620,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                        <button 
                          disabled={deletingId === s.id || savingLink === s.id}
                          onClick={() => isGlobal ? handleLinkGlobal(s.id, true) : handleDeleteCustom(s.id)}
-                         className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                         className="cursor-pointer p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                        >
                          {deletingId === s.id || savingLink === s.id ? (
                            <Loader2 className="h-4 w-4 animate-spin" />
@@ -659,7 +659,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                   <button
                     disabled={savingLink === gs.id}
                     onClick={() => handleLinkGlobal(gs.id, isLinked)}
-                    className={`px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
+                    className={`cursor-pointer px-3 py-1 rounded-lg text-xs font-semibold transition-colors ${
                       isLinked 
                         ? "bg-red-50 text-red-600 hover:bg-red-100" 
                         : "bg-primary/10 text-primary hover:bg-primary/20"
@@ -721,7 +721,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             <button 
               type="submit" 
               disabled={addingCustom || !customNameEN.trim()}
-              className="w-full px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="cursor-pointer w-full px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {addingCustom && <Loader2 className="h-4 w-4 animate-spin" />}
               {addingCustom ? t("adding") : t("addService")}
@@ -825,7 +825,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
           </div>
           <button
             onClick={() => setShowAddForm(v => !v)}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm rounded-xl font-medium hover:bg-primary/90 transition-colors shadow-sm"
+            className="cursor-pointer flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm rounded-xl font-medium hover:bg-primary/90 transition-colors shadow-sm"
           >
             <Plus className="h-4 w-4" />
             {t("add")}
@@ -848,7 +848,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                 <select
                   value={newPlatform}
                   onChange={e => setNewPlatform(e.target.value)}
-                  className="px-3 py-2 border border-input rounded-xl bg-background text-sm w-40 shrink-0"
+                  className="cursor-pointer px-3 py-2 border border-input rounded-xl bg-background text-sm w-40 shrink-0"
                 >
                   {PLATFORM_OPTIONS.map(o => (
                     <option key={o.value} value={o.value}>{o.label}</option>
@@ -864,7 +864,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                 />
                 <button
                   onClick={() => setShowAddForm(false)}
-                  className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                  className="cursor-pointer p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   <X className="h-4 w-4" />
                 </button>
@@ -891,7 +891,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                     <select
                       value={s.platform}
                       onChange={e => handleEditPlatform(idx, e.target.value)}
-                      className="px-3 py-1.5 border border-input rounded-lg bg-background text-sm w-36 shrink-0"
+                      className="cursor-pointer px-3 py-1.5 border border-input rounded-lg bg-background text-sm w-36 shrink-0"
                     >
                       {PLATFORM_OPTIONS.map(o => (
                         <option key={o.value} value={o.value}>{o.label}</option>
@@ -905,7 +905,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                     />
                     <button
                       onClick={() => setEditingIndex(null)}
-                      className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                      className="cursor-pointer p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
                     >
                       <Save className="h-4 w-4" />
                     </button>
@@ -933,7 +933,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                     </a>
                     <button
                       onClick={() => setEditingIndex(idx)}
-                      className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                      className="cursor-pointer p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                     >
                       <Edit className="h-4 w-4" />
                     </button>
@@ -941,7 +941,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
                 )}
                 <button
                   onClick={() => handleDelete(idx)}
-                  className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                  className="cursor-pointer p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -956,7 +956,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground text-sm rounded-xl font-bold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 disabled:opacity-50 active:scale-95"
+              className="cursor-pointer flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground text-sm rounded-xl font-bold hover:bg-primary/90 transition-all shadow-md shadow-primary/20 disabled:opacity-50 active:scale-95"
             >
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
               {t("save") || "Save Changes"}
@@ -1049,7 +1049,7 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
            <button onClick={() => {
             if (editingOffer) cancelEdit();
             else setShowForm(!showForm);
-          }} className="px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
+          }} className="cursor-pointer px-5 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors">
             {showForm ? t("cancel") : t("addOffer")}
           </button>
         </div>
@@ -1084,7 +1084,7 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-1">{t("type")}</label>
-                <select name="type" defaultValue={editingOffer?.type || "daily"} className="w-full px-4 py-2 border rounded-lg bg-background text-sm">
+                <select name="type" defaultValue={editingOffer?.type || "daily"} className="cursor-pointer w-full px-4 py-2 border rounded-lg bg-background text-sm">
                   <option value="daily">{t("types.daily")}</option>
                   <option value="weekly">{t("types.weekly")}</option>
                   <option value="monthly">{t("types.monthly")}</option>
@@ -1101,7 +1101,7 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-1">{t("status") || "Status"}</label>
-                <select name="status" defaultValue={editingOffer?.status || "active"} className="w-full px-4 py-2 border rounded-lg bg-background text-sm">
+                <select name="status" defaultValue={editingOffer?.status || "active"} className="cursor-pointer w-full px-4 py-2 border rounded-lg bg-background text-sm">
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
@@ -1121,11 +1121,11 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
 
             <div className="flex justify-end gap-3">
               {editingOffer && (
-                <button type="button" onClick={cancelEdit} className="px-6 py-2.5 border border-border text-sm rounded-xl font-medium hover:bg-muted transition-colors">
+                <button type="button" onClick={cancelEdit} className="cursor-pointer px-6 py-2.5 border border-border text-sm rounded-xl font-medium hover:bg-muted transition-colors">
                   {t("cancel")}
                 </button>
               )}
-              <button type="submit" disabled={isUpdating} className="px-8 py-2.5 bg-primary text-primary-foreground text-sm rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2">
+              <button type="submit" disabled={isUpdating} className="cursor-pointer px-8 py-2.5 bg-primary text-primary-foreground text-sm rounded-xl font-medium shadow-sm hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center gap-2">
                 {isUpdating && <Loader2 className="h-4 w-4 animate-spin" />}
                 {editingOffer ? "Update Offer" : t("saveOffer")}
               </button>
@@ -1175,14 +1175,14 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
                 <div className="flex items-center gap-2">
                   <button 
                     onClick={() => handleEdit(offer)}
-                    className="p-3 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
+                    className="cursor-pointer p-3 text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-xl transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100"
                   >
                     <Edit className="h-5 w-5" />
                   </button>
                   <button 
                     onClick={() => handleDelete(offer.id)}
                     disabled={deletingId === offer.id}
-                    className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 disabled:opacity-50"
+                    className="cursor-pointer p-3 text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 disabled:opacity-50"
                   >
                     {deletingId === offer.id ? <Loader2 className="h-5 w-5 animate-spin" /> : <Trash2 className="h-5 w-5" />}
                   </button>
@@ -1246,7 +1246,7 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
       <div className="max-w-lg mx-auto py-20 text-center">
         <div className="p-6 bg-red-50 border border-red-200 rounded-2xl">
           <p className="font-medium text-red-700">{error || t("hubNotFound")}</p>
-          <Link href="/dashboard" className="inline-block mt-4 text-primary hover:underline text-sm">{t("backToDashboard")}</Link>
+          <Link href="/dashboard" className="cursor-pointer inline-block mt-4 text-primary hover:underline text-sm">{t("backToDashboard")}</Link>
         </div>
       </div>
     );
@@ -1264,7 +1264,7 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
     <div className="space-y-6 max-w-5xl mx-auto">
       {/* Header Area */}
       <div>
-        <Link href="/dashboard" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
+        <Link href="/dashboard" className="cursor-pointer inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors mb-4">
           <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t("backToHubs")}
         </Link>
         <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
@@ -1295,7 +1295,7 @@ export default function HubManagementPage({ params }: { params: Promise<{ id: st
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium whitespace-nowrap ${
+                  className={`cursor-pointer flex items-center gap-3 px-4 py-3 rounded-xl transition-all text-sm font-medium whitespace-nowrap ${
                     isActive 
                       ? "bg-primary text-primary-foreground shadow-sm" 
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"

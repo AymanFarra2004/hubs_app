@@ -100,7 +100,7 @@ function StarDisplay({
       <button
         type="button"
         onClick={onClick}
-        className="group flex items-center gap-2 hover:opacity-80 transition-opacity"
+        className="cursor-pointer group flex items-center gap-2 hover:opacity-80 transition-opacity"
         aria-label={clickLabel ?? "Edit rating"}
       >
         {stars}
@@ -296,14 +296,14 @@ export default function HubReviews({
                     setEditComment(myReview!.comment ?? "");
                     setIsEditing(true);
                   }}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
+                  className="cursor-pointer flex items-center gap-1.5 text-xs font-semibold text-primary hover:text-primary/80 transition-colors"
                 >
                   <Edit2 className="h-3.5 w-3.5" />
                   {t("edit")}
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(true)}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-red-500 hover:text-red-400 transition-colors"
+                  className="cursor-pointer flex items-center gap-1.5 text-xs font-semibold text-red-500 hover:text-red-400 transition-colors"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                   {t("deleteReview")}
@@ -349,14 +349,14 @@ export default function HubReviews({
                     <button
                       onClick={() => setShowDeleteConfirm(false)}
                       disabled={isDeleting}
-                      className="px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
+                      className="cursor-pointer px-4 py-2 text-xs font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
                     >
                       {t("cancel")}
                     </button>
                     <button
                       onClick={handleDelete}
                       disabled={isDeleting}
-                      className="flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-sm"
+                      className="cursor-pointer flex items-center gap-2 px-5 py-2 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors shadow-sm"
                     >
                       {isDeleting ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -403,7 +403,7 @@ export default function HubReviews({
                 <button
                   onClick={handleCancelEdit}
                   disabled={isPending}
-                  className="flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-xl transition-colors"
+                  className="cursor-pointer flex items-center gap-1.5 px-5 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-xl transition-colors"
                 >
                   <X className="h-4 w-4" />
                   {t("cancel")}
@@ -411,7 +411,7 @@ export default function HubReviews({
                 <button
                   onClick={handleSaveEdit}
                   disabled={isPending || editRating === 0}
-                  className="flex items-center gap-2 px-7 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
+                  className="cursor-pointer flex items-center gap-2 px-7 py-2.5 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
                 >
                   {isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -465,7 +465,7 @@ export default function HubReviews({
                       <button
                         onClick={handleSubmitNew}
                         disabled={isPending || newRating === 0}
-                        className="flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/95 transition-all shadow-lg shadow-primary/20 disabled:opacity-50"
+                        className="cursor-pointer flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/95 transition-all shadow-lg shadow-primary/20 disabled:opacity-50"
                       >
                         {isPending ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
@@ -491,7 +491,7 @@ export default function HubReviews({
           </div>
           <Link
             href={`/${locale}/sign-in`}
-            className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
+            className="cursor-pointer inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground text-sm font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md shadow-primary/20"
           >
             <LogIn className="h-4 w-4" />
             {t("signIn")}

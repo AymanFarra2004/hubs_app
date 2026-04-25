@@ -6,7 +6,7 @@ export default function HubsList({hubsData}: {hubsData: any[]}) {
     <div className="flex-1">
               <div className="flex justify-between items-center mb-6">
                 <p className="text-sm text-muted-foreground">Showing {hubsData.length} results</p>
-                <select className="h-9 w-40 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                <select className="cursor-pointer h-9 w-40 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                   <option>Most Relevant</option>
                   <option>Price: Low to High</option>
                   <option>Recently Added</option>

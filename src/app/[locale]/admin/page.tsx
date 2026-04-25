@@ -38,7 +38,7 @@ export default async function AdminDashboardOverview() {
           <p className="text-sm font-medium text-muted-foreground mb-2">{t("pendingApprovals")}</p>
           <p className="text-4xl font-extrabold text-foreground">{pendingHubs}</p>
           <div className="mt-auto pt-6">
-            <Link href="/admin/hubs" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+            <Link href="/admin/hubs" className="cursor-pointer text-sm font-medium text-primary hover:underline flex items-center gap-1">
               {t("reviewHubs")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </Link>
           </div>
@@ -70,7 +70,7 @@ export default async function AdminDashboardOverview() {
             <p className="text-sm font-medium text-muted-foreground mb-2">{tUsers("totalUsers")}</p>
             <p className="text-4xl font-extrabold text-foreground">{totalUsers}</p>
             <div className="mt-auto pt-6">
-              <Link href="/admin/users" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+              <Link href="/admin/users" className="cursor-pointer text-sm font-medium text-primary hover:underline flex items-center gap-1">
                 {tUsers("title")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Link>
             </div>
@@ -81,7 +81,7 @@ export default async function AdminDashboardOverview() {
             <p className="text-sm font-medium text-muted-foreground mb-2">{tUsers("regUsers")}</p>
             <p className="text-4xl font-extrabold text-foreground">{regularUsers}</p>
             <div className="mt-auto pt-6">
-              <Link href="/admin/users?role=user" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+              <Link href="/admin/users?role=user" className="cursor-pointer text-sm font-medium text-primary hover:underline flex items-center gap-1">
                 {tUsers("viewAllReg")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Link>
             </div>
@@ -92,7 +92,7 @@ export default async function AdminDashboardOverview() {
             <p className="text-sm font-medium text-muted-foreground mb-2">{tUsers("hubOwners")}</p>
             <p className="text-4xl font-extrabold text-foreground">{hubOwners}</p>
             <div className="mt-auto pt-6">
-              <Link href="/admin/users?role=hub_owner" className="text-sm font-medium text-primary hover:underline flex items-center gap-1">
+              <Link href="/admin/users?role=hub_owner" className="cursor-pointer text-sm font-medium text-primary hover:underline flex items-center gap-1">
                 {tUsers("viewAllHub")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Link>
             </div>

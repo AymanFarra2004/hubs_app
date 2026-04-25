@@ -51,7 +51,7 @@ export default function FeaturedHubSection({filter, hubs = []}: {filter: {govern
                 <h2 className="text-3xl font-bold tracking-tight text-foreground">{t("title")}</h2>
                 <p className="mt-2 text-muted-foreground">{t("subtitle")}</p>
               </div>
-              <a href="/hubs" className="hidden sm:flex text-primary font-medium hover:underline items-center gap-1">
+              <a href="/hubs" className="cursor-pointer hidden sm:flex text-primary font-medium hover:underline items-center gap-1">
                 {t("viewAll")} <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
@@ -63,7 +63,7 @@ export default function FeaturedHubSection({filter, hubs = []}: {filter: {govern
             </div>
             
             <div className="mt-10 sm:hidden">
-              <a href="/hubs" className="block w-full bg-muted text-center py-3 rounded-lg text-foreground font-medium hover:bg-muted/80 transition-colors">
+              <a href="/hubs" className="cursor-pointer block w-full bg-muted text-center py-3 rounded-lg text-foreground font-medium hover:bg-muted/80 transition-colors">
                 {t("viewAll")}
               </a>
             </div>

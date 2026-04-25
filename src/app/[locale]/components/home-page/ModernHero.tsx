@@ -97,7 +97,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                   className="bg-transparent border-none focus:ring-0 text-foreground w-full p-0 outline-none placeholder:text-muted-foreground"
                 />
               </div>
-              <button type="submit" className="bg-[#9333EA] text-white p-4 rounded-xl hover:bg-[#7e22ce] transition-colors w-full md:w-auto flex justify-center items-center group shrink-0 shadow-md">
+              <button type="submit" className="cursor-pointer bg-[#9333EA] text-white p-4 rounded-xl hover:bg-[#7e22ce] transition-colors w-full md:w-auto flex justify-center items-center group shrink-0 shadow-md">
                 <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
               </button>
             </form>
@@ -123,7 +123,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
                 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group"
               >
-                <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={carouselHubs[0].imageUrl}
                     alt={carouselHubs[0].name}
@@ -143,7 +143,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group"
               >
-                <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={carouselHubs[1].imageUrl}
                     alt={carouselHubs[1].name}
@@ -163,7 +163,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
                 className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 group"
               >
-                <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={carouselHubs[2].imageUrl}
                     alt={carouselHubs[2].name}
@@ -183,7 +183,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
                 className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 group"
               >
-                <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
+                <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={carouselHubs[3].imageUrl}
                     alt={carouselHubs[3].name}

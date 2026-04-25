@@ -104,7 +104,7 @@ export default function LocationTreeView({
         >
           <button 
             onClick={() => hasChildren && toggleExpand(node.id)}
-            className={`p-1 rounded-md transition-colors ${hasChildren ? "hover:bg-muted text-muted-foreground" : "opacity-0 cursor-default"}`}
+            className={`cursor-pointer p-1 rounded-md transition-colors ${hasChildren ? "hover:bg-muted text-muted-foreground" : "opacity-0 cursor-default"}`}
           >
             {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4 rtl:rotate-180" />}
           </button>
@@ -135,20 +135,20 @@ export default function LocationTreeView({
               <button 
                 onClick={() => onAddChild(node)}
                 title={t("addLocation")}
-                className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
+                className="cursor-pointer p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
               >
                 <Plus className="h-4 w-4" />
               </button>
             )}
             <button 
               onClick={() => onEdit(node)}
-              className="p-1.5 text-muted-foreground hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+              className="cursor-pointer p-1.5 text-muted-foreground hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
             >
               <Edit2 className="h-4 w-4" />
             </button>
             <button 
               onClick={() => onDelete(node)}
-              className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+              className="cursor-pointer p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
             >
               <Trash2 className="h-4 w-4" />
             </button>

@@ -130,7 +130,7 @@ export function EditProfileModal({ profile, onClose }: { profile: any, onClose: 
             <User className="h-5 w-5 text-primary" />
             {t("editProfile")}
           </h2>
-          <button onClick={onClose} className="p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors">
+          <button onClick={onClose} className="cursor-pointer p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -242,7 +242,7 @@ export function EditProfileModal({ profile, onClose }: { profile: any, onClose: 
                     setCityId("");
                     setAreaId("");
                   }}
-                  className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                  className="cursor-pointer w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 >
                   <option value="">{tNewHub("selectGovernorate")}</option>
                   {governorates.map(gov => (
@@ -258,7 +258,7 @@ export function EditProfileModal({ profile, onClose }: { profile: any, onClose: 
                       setCityId(e.target.value);
                       setAreaId("");
                     }}
-                    className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm animate-in fade-in slide-in-from-top-1 duration-200"
+                    className="cursor-pointer w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm animate-in fade-in slide-in-from-top-1 duration-200"
                   >
                     <option value="">{tNewHub("selectCity")}</option>
                     {cities.map(city => (
@@ -272,7 +272,7 @@ export function EditProfileModal({ profile, onClose }: { profile: any, onClose: 
                   <select
                     value={areaId}
                     onChange={(e) => setAreaId(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm animate-in fade-in slide-in-from-top-1 duration-200"
+                    className="cursor-pointer w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm animate-in fade-in slide-in-from-top-1 duration-200"
                   >
                     <option value="">{tNewHub("selectArea")}</option>
                     {areas.map(area => (
@@ -289,14 +289,14 @@ export function EditProfileModal({ profile, onClose }: { profile: any, onClose: 
               type="button" 
               onClick={onClose}
               disabled={loading}
-              className="flex-1 px-4 py-3 border border-border rounded-2xl text-sm font-semibold hover:bg-muted transition-all active:scale-95 disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-3 border border-border rounded-2xl text-sm font-semibold hover:bg-muted transition-all active:scale-95 disabled:opacity-50"
             >
               {t("cancel")}
             </button>
             <button 
               type="submit" 
               disabled={loading}
-              className="flex-1 px-4 py-3 bg-primary text-primary-foreground rounded-2xl text-sm font-semibold hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-3 bg-primary text-primary-foreground rounded-2xl text-sm font-semibold hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/25 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               {t("save")}

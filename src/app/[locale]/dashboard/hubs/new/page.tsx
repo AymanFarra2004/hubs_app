@@ -151,14 +151,14 @@ export default function SubmitHub() {
           <div className="pt-4 border-t border-border flex justify-end gap-3 mt-8">
             <a
               href="/dashboard"
-              className="px-6 py-2 rounded-md border border-input text-foreground font-medium hover:bg-muted transition-colors text-center"
+              className="cursor-pointer px-6 py-2 rounded-md border border-input text-foreground font-medium hover:bg-muted transition-colors text-center"
             >
               {t("cancel")}
             </a>
             <button
               type="submit"
               disabled={isButtonDisabled}
-              className={`px-6 py-2 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors shadow-sm flex gap-2 items-center \${isButtonDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+              className={`cursor-pointer px-6 py-2 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors shadow-sm flex gap-2 items-center ${isButtonDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               {isButtonDisabled && <Loader2 className="h-4 w-4 animate-spin" />}
               {isUploading ? (t("pleaseWait") || "Uploading...") : t("submit")}

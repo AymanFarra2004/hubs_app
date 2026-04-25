@@ -111,7 +111,7 @@ export default function SignInView() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 end-0 pe-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none"
+                      className="cursor-pointer absolute inset-y-0 end-0 pe-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none"
                     >
                       {showPassword ? (
                         <EyeOff className="h-5 w-5" />
@@ -128,7 +128,7 @@ export default function SignInView() {
                       id="remember-me"
                       name="remember-me"
                       type="checkbox"
-                      className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+                      className="cursor-pointer h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                     />
                     <label htmlFor="remember-me" className="ms-2 block text-sm text-foreground">
                       {t("rememberMe")}
@@ -136,7 +136,7 @@ export default function SignInView() {
                   </div>
 
                   <div className="text-sm">
-                    <a href="#" className="font-medium text-primary hover:text-primary/80">
+                    <a href="#" className="cursor-pointer font-medium text-primary hover:text-primary/80">
                       {t("forgotPassword")}
                     </a>
                   </div>
@@ -167,7 +167,7 @@ export default function SignInView() {
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
                   {t("noAccount")}{" "}
-                  <Link href="/sign-up" className="font-medium text-primary hover:text-primary/80">
+                  <Link href="/sign-up" className="cursor-pointer font-medium text-primary hover:text-primary/80">
                     {t("signUpInstead")}
                   </Link>
                 </p>

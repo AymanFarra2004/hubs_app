@@ -215,14 +215,14 @@ export function ProfileView({ profile }: ProfileViewProps) {
               <button
                 type="button"
                 onClick={() => setShowEditModal(true)}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all active:scale-95"
+                className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 hover:shadow-lg hover:shadow-primary/25 hover:-translate-y-0.5 transition-all active:scale-95"
               >
                 <Edit3 className="h-4 w-4 shrink-0" />
                 {t("editProfile")}
               </button>
               <button
                 type="button"
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-border text-foreground font-medium text-sm hover:bg-muted hover:-translate-y-0.5 transition-all active:scale-95"
+                className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-border text-foreground font-medium text-sm hover:bg-muted hover:-translate-y-0.5 transition-all active:scale-95"
               >
                 <Lock className="h-4 w-4 shrink-0" />
                 {t("changePassword")}

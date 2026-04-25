@@ -105,7 +105,7 @@ export default function SettingsComingSoonPage() {
             >
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-2xl font-bold hover:scale-105 transition-all active:scale-95 shadow-xl shadow-foreground/10 group"
+                className="cursor-pointer inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-2xl font-bold hover:scale-105 transition-all active:scale-95 shadow-xl shadow-foreground/10 group"
               >
                 <ArrowLeft className="h-5 w-5 rtl:rotate-180 group-hover:-translate-x-1 transition-transform" />
                 {t("back")}

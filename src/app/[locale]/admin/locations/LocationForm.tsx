@@ -180,7 +180,7 @@ export default function LocationForm({
           </h2>
           <button 
             onClick={onClose}
-            className="p-2 text-muted-foreground hover:bg-muted rounded-xl transition-colors"
+            className="cursor-pointer p-2 text-muted-foreground hover:bg-muted rounded-xl transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -309,14 +309,14 @@ export default function LocationForm({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 border border-border text-foreground font-semibold rounded-2xl hover:bg-muted transition-colors"
+              className="cursor-pointer flex-1 px-6 py-3 border border-border text-foreground font-semibold rounded-2xl hover:bg-muted transition-colors"
             >
               {t("cancel")}
             </button>
             <button
               type="submit"
               disabled={isSubmitting || (type !== 'governorate' && !parentId)}
-              className="flex-1 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-2xl hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/20"
+              className="cursor-pointer flex-1 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-2xl hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/20"
             >
               {isSubmitting ? "..." : initialData ? t("save") : t("addLocation")}
             </button>

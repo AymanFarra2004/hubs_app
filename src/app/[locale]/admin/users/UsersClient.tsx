@@ -71,19 +71,19 @@ function UsersContent({ initialUsers }: { initialUsers: any[] }) {
           <div className="flex bg-muted/50 p-1 rounded-xl w-full sm:w-auto overflow-x-auto hide-scrollbar">
             <button 
               onClick={() => handleTabChange('all')}
-              className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'all' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`cursor-pointer flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'all' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {t("allUsers") || "All"}
             </button>
             <button 
               onClick={() => handleTabChange('user')}
-              className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'user' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`cursor-pointer flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'user' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {t("regularUser") || "Regular"}
             </button>
             <button 
               onClick={() => handleTabChange('hub_owner')}
-              className={`flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'hub_owner' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+              className={`cursor-pointer flex-1 sm:flex-none px-4 py-2 text-sm font-medium rounded-lg transition-all whitespace-nowrap ${currentRole === 'hub_owner' ? 'bg-background shadow text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
             >
               {t("hubOwner") || "Hub Owners"}
             </button>
@@ -104,7 +104,7 @@ function UsersContent({ initialUsers }: { initialUsers: any[] }) {
 
         <button 
           onClick={handleAdd}
-          className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto shrink-0"
+          className="cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2.5 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-sm w-full sm:w-auto shrink-0"
         >
           <Plus className="h-4 w-4" />
           {t("addUser")}

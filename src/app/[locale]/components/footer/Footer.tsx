@@ -39,7 +39,7 @@ export function Footer() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="col-span-1 md:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-4">
+            <Link href="/" className="cursor-pointer flex items-center gap-3 mb-4">
               <img
                 src="/logo.png"
                 alt="Qareeb Logo"
@@ -69,7 +69,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="cursor-pointer text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("home")}
                 </Link>
@@ -77,7 +77,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/hubs"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="cursor-pointer text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("findHubs")}
                 </Link>
@@ -85,7 +85,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/submit"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="cursor-pointer text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("submitHub")}
                 </Link>
@@ -99,7 +99,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="cursor-pointer text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("privacyPolicy")}
                 </Link>
@@ -107,7 +107,7 @@ export function Footer() {
               <li>
                 <Link
                   href="#"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="cursor-pointer text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("termsOfService")}
                 </Link>
@@ -115,7 +115,7 @@ export function Footer() {
               <li>
                 <Link
                   href="/sign-in"
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors"
+                  className="cursor-pointer text-sm text-muted-foreground hover:text-primary transition-colors"
                 >
                   {t("hubOwnerLogin")}
                 </Link>

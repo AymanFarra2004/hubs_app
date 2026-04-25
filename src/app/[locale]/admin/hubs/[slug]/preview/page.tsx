@@ -74,7 +74,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
           <h2 className="text-xl font-bold">{t("hubNotFound")}</h2>
           <Link
             href={`/${currentLocale}/admin/hubs`}
-            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+            className="cursor-pointer inline-flex items-center gap-2 text-sm text-primary hover:underline"
           >
             <ArrowLeft className="h-4 w-4" />
             {t("backToHubs")}
@@ -159,7 +159,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
         <div className="flex items-center gap-3">
           <Link
             href={`/${currentLocale}/admin/hubs`}
-            className="p-2 rounded-xl border border-border hover:bg-muted/40 transition-colors"
+            className="cursor-pointer p-2 rounded-xl border border-border hover:bg-muted/40 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
           </Link>
@@ -187,7 +187,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
           {isApproved && (
             <Link
               href={`/${currentLocale}/hubs/${slug}`}
-              className="flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-xl text-xs font-semibold hover:bg-muted/40 transition-colors"
+              className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 border border-border rounded-xl text-xs font-semibold hover:bg-muted/40 transition-colors"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               {t("viewLive")}

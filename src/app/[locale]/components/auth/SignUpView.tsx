@@ -148,7 +148,7 @@ export default function SignUpView() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none"
+                    className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -180,7 +180,7 @@ export default function SignUpView() {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none"
+                    className="cursor-pointer absolute inset-y-0 right-0 pr-3 flex items-center text-muted-foreground hover:text-foreground focus:outline-none"
                   >
                     {showConfirmPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -250,7 +250,7 @@ export default function SignUpView() {
                 {t("haveAccount")} {" "}
                 <Link
                   href="/sign-in"
-                  className="font-medium text-primary hover:underline"
+                  className="cursor-pointer font-medium text-primary hover:underline"
                 >
                   {t("signInInstead")}
                 </Link>

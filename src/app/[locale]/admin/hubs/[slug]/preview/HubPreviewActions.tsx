@@ -67,7 +67,7 @@ export default function HubPreviewActions({ hubId, slug, isApproved, isPending, 
           <button
             onClick={handleApprove}
             disabled={loading !== null}
-            className="flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white hover:bg-green-700 rounded-xl font-semibold text-sm transition-all shadow-sm disabled:opacity-50"
+            className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-green-600 text-white hover:bg-green-700 rounded-xl font-semibold text-sm transition-all shadow-sm disabled:opacity-50"
           >
             {loading === "approve" ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -82,7 +82,7 @@ export default function HubPreviewActions({ hubId, slug, isApproved, isPending, 
           <button
             onClick={() => setRejectOpen(true)}
             disabled={loading !== null}
-            className="flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded-xl font-semibold text-sm transition-all disabled:opacity-50"
+            className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded-xl font-semibold text-sm transition-all disabled:opacity-50"
           >
             <X className="h-4 w-4" />
             {tTable("reject")}
@@ -91,7 +91,7 @@ export default function HubPreviewActions({ hubId, slug, isApproved, isPending, 
           <button
             onClick={() => setRejectOpen(true)}
             disabled={loading !== null}
-            className="flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded-xl font-semibold text-sm transition-all disabled:opacity-50"
+            className="cursor-pointer flex items-center gap-2 px-5 py-2.5 bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 rounded-xl font-semibold text-sm transition-all disabled:opacity-50"
           >
             <X className="h-4 w-4" />
             {tTable("reject")}
@@ -120,14 +120,14 @@ export default function HubPreviewActions({ hubId, slug, isApproved, isPending, 
               <button
                 onClick={() => { setRejectOpen(false); setReason(""); }}
                 disabled={loading !== null}
-                className="px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
+                className="cursor-pointer px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
               >
                 {tTable("cancel")}
               </button>
               <button
                 onClick={handleReject}
                 disabled={loading !== null || !reason.trim()}
-                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading === "reject" ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
                 {tTable("confirmRejection")}

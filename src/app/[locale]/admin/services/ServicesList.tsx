@@ -88,7 +88,7 @@ export default function ServicesList({ initialServices }: { initialServices: any
               <textarea value={formData.description_ar} onChange={(e) => setFormData({...formData, description_ar: e.target.value})} className="w-full px-3 py-2 border rounded-xl bg-background" rows={2} dir="rtl" />
             </div>
           </div>
-          <button disabled={isAdding || !formData.name_en} className="bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium hover:bg-primary/90 flex items-center gap-2">
+          <button disabled={isAdding || !formData.name_en} className="cursor-pointer bg-primary text-primary-foreground px-4 py-2 rounded-xl font-medium hover:bg-primary/90 flex items-center gap-2">
             {isAdding && <Loader2 className="h-4 w-4 animate-spin" />}
             {t("createService")}
           </button>
@@ -125,7 +125,7 @@ export default function ServicesList({ initialServices }: { initialServices: any
                       <div className="flex justify-end">
                          <button 
                            onClick={() => setDeleteConfirmId(service.id)}
-                           className="flex items-center gap-1 p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors border border-transparent hover:border-red-200"
+                           className="cursor-pointer flex items-center gap-1 p-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors border border-transparent hover:border-red-200"
                            title="Delete Service"
                          >
                            <Trash2 className="h-4 w-4" />
@@ -156,10 +156,10 @@ export default function ServicesList({ initialServices }: { initialServices: any
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="rounded-xl border-border">{t("cancel")}</AlertDialogCancel>
+            <AlertDialogCancel className="cursor-pointer rounded-xl border-border">{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction 
               onClick={() => deleteConfirmId && handleDelete(deleteConfirmId)}
-              className="bg-red-600 hover:bg-red-700 text-white rounded-xl"
+              className="cursor-pointer bg-red-600 hover:bg-red-700 text-white rounded-xl"
             >
               {t("confirmDelete")}
             </AlertDialogAction>

@@ -90,7 +90,7 @@ export default function HubGallery({ hubName, galleryUrls }: { hubName: string, 
              </span>
              <button 
                 onClick={() => setSelectedIndex(null)}
-                className="text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"
+                className="cursor-pointer text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors"
                 title="Close (Esc)"
              >
                 <X className="h-6 w-6" />
@@ -103,7 +103,7 @@ export default function HubGallery({ hubName, galleryUrls }: { hubName: string, 
                e.stopPropagation();
                setSelectedIndex((prev) => (prev! > 0 ? prev! - 1 : galleryUrls.length - 1));
              }}
-             className="absolute left-4 md:left-10 z-50 text-white/50 hover:text-white bg-black/50 hover:bg-black/80 p-3 md:p-4 rounded-full transition-all hover:scale-110 hidden sm:block"
+             className="cursor-pointer absolute left-4 md:left-10 z-50 text-white/50 hover:text-white bg-black/50 hover:bg-black/80 p-3 md:p-4 rounded-full transition-all hover:scale-110 hidden sm:block"
              title="Previous (Arrow Left)"
           >
              <ChevronLeft className="h-8 w-8" />
@@ -138,7 +138,7 @@ export default function HubGallery({ hubName, galleryUrls }: { hubName: string, 
                e.stopPropagation();
                setSelectedIndex((prev) => (prev! < galleryUrls.length - 1 ? prev! + 1 : 0));
              }}
-             className="absolute right-4 md:right-10 z-50 text-white/50 hover:text-white bg-black/50 hover:bg-black/80 p-3 md:p-4 rounded-full transition-all hover:scale-110 hidden sm:block"
+             className="cursor-pointer absolute right-4 md:right-10 z-50 text-white/50 hover:text-white bg-black/50 hover:bg-black/80 p-3 md:p-4 rounded-full transition-all hover:scale-110 hidden sm:block"
              title="Next (Arrow Right)"
           >
              <ChevronRight className="h-8 w-8" />

@@ -161,13 +161,13 @@ export default function AdminLocationsPage() {
           <button 
             onClick={() => fetchLocations(true)}
             disabled={isRefreshing}
-            className="p-3 bg-muted hover:bg-muted/80 text-muted-foreground rounded-2xl transition-all active:scale-95 disabled:opacity-50"
+            className="cursor-pointer p-3 bg-muted hover:bg-muted/80 text-muted-foreground rounded-2xl transition-all active:scale-95 disabled:opacity-50"
           >
             <RefreshCw className={`h-5 w-5 ${isRefreshing ? "animate-spin" : ""}`} />
           </button>
           <button 
             onClick={handleAddLocation}
-            className="flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-2xl hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/20"
+            className="cursor-pointer flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-2xl hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/20"
           >
             <Plus className="h-5 w-5" />
             <span>{t("addLocation")}</span>

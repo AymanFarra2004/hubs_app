@@ -36,10 +36,10 @@ export default function ModernCta() {
             </p>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <a href="/sign-up" className="px-8 py-4 w-full sm:w-auto rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-lg transition-transform hover:scale-105 active:scale-95 shadow-lg dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-800 dark:hover:bg-gray-100">
+              <a href="/sign-up" className="cursor-pointer px-8 py-4 w-full sm:w-auto rounded-full bg-gray-900 dark:bg-white text-white dark:text-black font-bold text-lg transition-transform hover:scale-105 active:scale-95 shadow-lg dark:shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:bg-gray-800 dark:hover:bg-gray-100">
                 {t("getStarted")}
               </a>
-              <a href="/dashboard/hubs/new" className="px-8 py-4 w-full sm:w-auto rounded-full bg-transparent border border-gray-300 dark:border-white/20 text-gray-700 dark:text-white font-semibold text-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+              <a href="/dashboard/hubs/new" className="cursor-pointer px-8 py-4 w-full sm:w-auto rounded-full bg-transparent border border-gray-300 dark:border-white/20 text-gray-700 dark:text-white font-semibold text-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
                 {t("listHub")}
               </a>
             </div>

@@ -24,7 +24,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <p className="text-muted-foreground mb-8">
             {t("accessDeniedDesc")}
           </p>
-          <Link href="/" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-colors w-full">
+          <Link href="/" className="cursor-pointer inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground font-medium rounded-xl hover:bg-primary/90 transition-colors w-full">
             {t("returnHome")}
           </Link>
         </div>
@@ -59,7 +59,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
           <button 
             onClick={() => setIsSidebarOpen(false)}
-            className="md:hidden p-2 text-muted-foreground hover:bg-muted rounded-lg"
+            className="cursor-pointer md:hidden p-2 text-muted-foreground hover:bg-muted rounded-lg"
           >
             <X className="h-5 w-5" />
           </button>
@@ -71,7 +71,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
           >
             <LayoutDashboard className="h-5 w-5 text-muted-foreground" />
             {t("dashboard")}
@@ -80,7 +80,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin/hubs" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium flex-1"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium flex-1"
           >
             <CheckSquare className="h-5 w-5 text-muted-foreground" />
             {t("hubApprovals")}
@@ -89,7 +89,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin/services" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
           >
             <Server className="h-5 w-5 text-muted-foreground" />
             {t("globalServices")}
@@ -98,7 +98,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin/notifications" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
           >
             <Bell className="h-5 w-5 text-muted-foreground" />
             {t("notifications")}
@@ -106,7 +106,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin/users" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
           >
             <Users className="h-5 w-5 text-muted-foreground" />
             {t("userManagement")}
@@ -115,7 +115,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin/locations" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
           >
             <MapPin className="h-5 w-5 text-muted-foreground" />
             {t("locations")}
@@ -124,7 +124,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link 
             href="/admin/reviews" 
             onClick={() => setIsSidebarOpen(false)}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
+            className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-muted text-foreground font-medium"
           >
             <MessageSquare className="h-5 w-5 text-muted-foreground" />
             {t("reviewManagement")}
@@ -132,7 +132,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
         
         <div className="p-4 border-t border-border">
-          <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50 text-red-600 font-medium">
+          <Link href="/" className="cursor-pointer flex items-center gap-3 px-3 py-2.5 rounded-xl transition-colors hover:bg-red-50 text-red-600 font-medium">
             <LogOut className="h-5 w-5" />
             {t("exitAdmin")}
           </Link>

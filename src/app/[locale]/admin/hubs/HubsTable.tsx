@@ -123,7 +123,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
     return (
       <button
         onClick={() => setActiveTab(type)}
-        className={`flex items-center gap-2 px-6 py-4 border-b-2 transition-all font-semibold text-sm ${
+        className={`cursor-pointer flex items-center gap-2 px-6 py-4 border-b-2 transition-all font-semibold text-sm ${
           isActive 
             ? `border-${color}-500 text-${color}-600 bg-${color}-50/50` 
             : "border-transparent text-muted-foreground hover:text-foreground hover:bg-muted/30"
@@ -218,7 +218,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                                <Link
                                  href={`/${locale}/hubs/${hub.slug}`}
                                  title={t("view_live")}
-                                 className="flex items-center gap-1.5 px-3 py-2 border border-border text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-xl transition-all font-semibold text-xs"
+                                 className="cursor-pointer flex items-center gap-1.5 px-3 py-2 border border-border text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-xl transition-all font-semibold text-xs"
                                >
                                  <ExternalLink className="h-3.5 w-3.5" />
                                  {t("view_live")}
@@ -227,7 +227,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                                <Link
                                  href={`/${locale}/admin/hubs/${hub.slug}/preview`}
                                  title={t("view_preview")}
-                                 className="flex items-center gap-1.5 px-3 py-2 border border-border text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-xl transition-all font-semibold text-xs"
+                                 className="cursor-pointer flex items-center gap-1.5 px-3 py-2 border border-border text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-xl transition-all font-semibold text-xs"
                                >
                                  <Eye className="h-3.5 w-3.5" />
                                  {t("view_preview")}
@@ -238,7 +238,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                            {(isPending || isRejected) && (
                              <button 
                                 onClick={() => handleStatusChange(hub.id, hub.slug, 'approved')}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-xl transition-all shadow-sm font-semibold text-xs"
+                                className="cursor-pointer flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-xl transition-all shadow-sm font-semibold text-xs"
                              >
                                <Check className="h-3.5 w-3.5" /> {t("approve")}
                              </button>
@@ -246,7 +246,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                            {(isPending || isApproved) && (
                              <button 
                                 onClick={() => openRejectModal(hub.id, hub.slug)}
-                                className="flex items-center gap-1.5 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl transition-all border border-red-100 font-semibold text-xs"
+                                className="cursor-pointer flex items-center gap-1.5 px-4 py-2 bg-red-50 text-red-600 hover:bg-red-100 rounded-xl transition-all border border-red-100 font-semibold text-xs"
                              >
                                <X className="h-3.5 w-3.5" /> {t("reject")}
                              </button>
@@ -286,7 +286,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="cursor-pointer px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t("previous")}
                 </button>
@@ -298,7 +298,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
+                        className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
                           currentPage === pageNum
                             ? "bg-primary text-white shadow-sm"
                             : "hover:bg-muted text-muted-foreground border border-transparent"
@@ -313,7 +313,7 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="cursor-pointer px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t("next")}
                 </button>
@@ -358,14 +358,14 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                   setRejectionReason("");
                 }}
                 disabled={isRejecting}
-                className="px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
+                className="cursor-pointer px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
               >
                 {t("cancel")}
               </button>
               <button
                 onClick={handleConfirmReject}
                 disabled={isRejecting || !rejectionReason.trim()}
-                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isRejecting ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
                 {t("confirmRejection")}

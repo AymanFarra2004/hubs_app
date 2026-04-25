@@ -53,14 +53,14 @@ export function DeleteConfirmationModal({
               <button 
                 onClick={onClose}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
+                className="cursor-pointer flex-1 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
               >
                 {t("cancelBtn")}
               </button>
               <button 
                 onClick={onConfirm}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                className="cursor-pointer flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
               >
                 {isDeleting ? "..." : t("confirmBtn")}
               </button>

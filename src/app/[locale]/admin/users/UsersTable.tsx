@@ -80,7 +80,7 @@ export function UsersTable({ users, onEdit }: { users: any[], onEdit: (u: any) =
                   <td className="px-6 py-4 flex items-center justify-center gap-2">
                     <button 
                       onClick={() => onEdit(user)}
-                      className="p-2 text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg transition-colors"
+                      className="cursor-pointer p-2 text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg transition-colors"
                       title={t("editUser")}
                     >
                       <Edit2 className="h-4 w-4" />
@@ -88,7 +88,7 @@ export function UsersTable({ users, onEdit }: { users: any[], onEdit: (u: any) =
                     <button 
                       onClick={() => confirmDeleteAction(user)}
                       disabled={deletingId === user.id}
-                      className="p-2 text-muted-foreground hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors disabled:opacity-50"
+                      className="cursor-pointer p-2 text-muted-foreground hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors disabled:opacity-50"
                       title={t("deleteUser")}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -115,7 +115,7 @@ export function UsersTable({ users, onEdit }: { users: any[], onEdit: (u: any) =
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="cursor-pointer px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t("previous")}
                 </button>
@@ -127,7 +127,7 @@ export function UsersTable({ users, onEdit }: { users: any[], onEdit: (u: any) =
                       <button
                         key={pageNum}
                         onClick={() => setCurrentPage(pageNum)}
-                        className={`w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
+                        className={`cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg text-xs font-bold transition-all ${
                           currentPage === pageNum
                             ? "bg-primary text-white shadow-sm"
                             : "hover:bg-muted text-muted-foreground border border-transparent"
@@ -142,7 +142,7 @@ export function UsersTable({ users, onEdit }: { users: any[], onEdit: (u: any) =
                 <button
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="cursor-pointer px-3 py-1.5 border border-border bg-background rounded-lg text-xs font-semibold hover:bg-muted transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {t("next")}
                 </button>

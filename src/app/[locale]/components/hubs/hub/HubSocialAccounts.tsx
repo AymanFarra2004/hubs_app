@@ -96,7 +96,7 @@ export default function HubSocialAccounts({ socials, title = "Follow Us", titleC
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all duration-150 ${meta.colorClass} ${meta.bgClass}`}
+              className={`cursor-pointer inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl border text-sm font-semibold transition-all duration-150 ${meta.colorClass} ${meta.bgClass}`}
             >
               {meta.icon}
               <span className="capitalize">{meta.label}</span>

@@ -43,7 +43,7 @@ export default function NotificationsList({ initialNotifications }: { initialNot
         <button 
           onClick={handleMarkAll}
           disabled={isMarking || unreadCount === 0}
-          className="bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-xl font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
+          className="cursor-pointer bg-muted hover:bg-muted/80 text-foreground px-4 py-2 rounded-xl font-medium flex items-center gap-2 transition-colors disabled:opacity-50"
         >
           {isMarking ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
           {t("markAllRead")}

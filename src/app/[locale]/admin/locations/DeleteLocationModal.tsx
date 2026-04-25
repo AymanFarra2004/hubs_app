@@ -72,7 +72,7 @@ export default function DeleteLocationModal({
           </div>
           <button 
             onClick={onClose}
-            className="p-2 text-muted-foreground hover:bg-muted rounded-xl transition-colors"
+            className="cursor-pointer p-2 text-muted-foreground hover:bg-muted rounded-xl transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -103,7 +103,7 @@ export default function DeleteLocationModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-6 py-3 border border-border text-foreground font-semibold rounded-2xl hover:bg-muted transition-colors"
+              className="cursor-pointer flex-1 px-6 py-3 border border-border text-foreground font-semibold rounded-2xl hover:bg-muted transition-colors"
             >
               {t("cancel")}
             </button>
@@ -111,7 +111,7 @@ export default function DeleteLocationModal({
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 px-6 py-3 bg-destructive text-white font-semibold rounded-2xl hover:bg-destructive/90 transition-all disabled:opacity-50 shadow-lg shadow-destructive/20"
+                className="cursor-pointer flex-1 px-6 py-3 bg-destructive text-white font-semibold rounded-2xl hover:bg-destructive/90 transition-all disabled:opacity-50 shadow-lg shadow-destructive/20"
               >
                 {isDeleting ? "..." : t("deleteLocation")}
               </button>

@@ -44,7 +44,7 @@ const isAdmin = isLoggedIn && auth?.user?.role === "admin";
             <Link
               key={link.href}
               href={link.href}
-              className="..."
+              className="cursor-pointer ..."
             >
               {/* Translate the label using the key */}
               {t(`nav.${link.labelKey}`)} 
@@ -55,19 +55,19 @@ const isAdmin = isLoggedIn && auth?.user?.role === "admin";
         <div className="flex items-center space-x-4 border-l border-border pl-4">
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className="..."
+            className="cursor-pointer ..."
             aria-label={t('aria.toggleTheme')}
           >
             {/* Icons remain the same */}
           </button>
           
           {!isLoggedIn && (
-            <Link href="/sign-in" className="...">
+            <Link href="/sign-in" className="cursor-pointer ...">
               {t('auth.signIn')}
             </Link>
           )}
           {!isLoggedIn && (
-            <Link href="/sign-up" className="...">
+            <Link href="/sign-up" className="cursor-pointer ...">
               {t('auth.signUp')}
           </Link>)}
          {isLoggedIn && (
@@ -75,7 +75,7 @@ const isAdmin = isLoggedIn && auth?.user?.role === "admin";
               {isHubOwner && (
                 <Link 
                   href="/dashboard"
-                  className="px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl transition-colors font-medium text-sm"
+                  className="cursor-pointer px-4 py-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-xl transition-colors font-medium text-sm"
                 >
                   Dashboard
                 </Link>
@@ -83,7 +83,7 @@ const isAdmin = isLoggedIn && auth?.user?.role === "admin";
               {isAdmin && (
                 <Link 
                   href="/admin"
-                  className="px-4 py-2 bg-red-100/50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-xl transition-colors font-medium text-sm"
+                  className="cursor-pointer px-4 py-2 bg-red-100/50 text-red-600 hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 rounded-xl transition-colors font-medium text-sm"
                 >
                   Admin Dash
                 </Link>
@@ -93,7 +93,7 @@ const isAdmin = isLoggedIn && auth?.user?.role === "admin";
               </span>
               <button 
                 onClick={handleLogout}
-                className="text-red-500 hover:text-red-700"
+                className="cursor-pointer text-red-500 hover:text-red-700"
               >
                 Log out 
               </button>

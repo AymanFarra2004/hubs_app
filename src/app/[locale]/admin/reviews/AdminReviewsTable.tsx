@@ -72,7 +72,7 @@ function StarFilterButton({
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+      className={`cursor-pointer flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
         active
           ? "bg-amber-500 text-white border-amber-500 shadow-sm"
           : "bg-background text-muted-foreground border-border hover:border-amber-400 hover:text-amber-600"
@@ -198,7 +198,7 @@ export default function AdminReviewsTable({ initialReviews }: { initialReviews: 
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
-                className="flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:bg-muted/30 transition-all"
+                className="cursor-pointer flex items-center gap-1.5 px-3 py-2.5 text-xs font-medium text-muted-foreground hover:text-foreground border border-border rounded-xl hover:bg-muted/30 transition-all"
               >
                 <X className="h-3.5 w-3.5" />
                 {t("clearFilters")}
@@ -211,7 +211,7 @@ export default function AdminReviewsTable({ initialReviews }: { initialReviews: 
             <span className="text-xs font-semibold text-muted-foreground me-1">{t("rating")}:</span>
             <button
               onClick={() => setStarFilter(0)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
+              className={`cursor-pointer px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                 starFilter === 0
                   ? "bg-primary text-primary-foreground border-primary shadow-sm"
                   : "bg-background text-muted-foreground border-border hover:border-primary/50"
@@ -278,7 +278,7 @@ export default function AdminReviewsTable({ initialReviews }: { initialReviews: 
                         <button
                           id={`delete-review-${review.id}`}
                           onClick={() => setConfirmModalId(review.id)}
-                          className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 rounded-xl transition-all ms-auto"
+                          className="cursor-pointer flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-red-600 bg-red-50 hover:bg-red-100 border border-red-100 rounded-xl transition-all ms-auto"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                           {t("deleteReview")}
@@ -333,14 +333,14 @@ export default function AdminReviewsTable({ initialReviews }: { initialReviews: 
               <button
                 onClick={() => setConfirmModalId(null)}
                 disabled={deletingId !== null}
-                className="px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
+                className="cursor-pointer px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
               >
                 {t("cancel")}
               </button>
               <button
                 onClick={() => handleDelete(confirmModalId)}
                 disabled={deletingId !== null}
-                className="flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm disabled:opacity-50"
+                className="cursor-pointer flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors shadow-sm disabled:opacity-50"
               >
                 {deletingId !== null ? (
                   <Loader2 className="h-4 w-4 animate-spin" />

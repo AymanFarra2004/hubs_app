@@ -79,7 +79,7 @@ export function UserModal({ user, onClose }: { user: any, onClose: () => void })
       <div className="bg-background w-full max-w-md rounded-2xl shadow-xl overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="p-6 border-b border-border flex items-center justify-between">
           <h2 className="text-xl font-bold">{isEditing ? t("editUser") : t("addUser")}</h2>
-          <button onClick={onClose} className="p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors">
+          <button onClick={onClose} className="cursor-pointer p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -132,7 +132,7 @@ export function UserModal({ user, onClose }: { user: any, onClose: () => void })
             <select
               value={formData.role}
               onChange={e => setFormData({...formData, role: e.target.value})}
-              className="w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none"
+              className="cursor-pointer w-full px-4 py-2.5 border border-border rounded-xl bg-background text-sm outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all appearance-none"
             >
               <option value="user">{t("regularUser") || "Regular User"}</option>
               <option value="hub_owner">{t("hubOwner") || "Hub Owner"}</option>
@@ -173,14 +173,14 @@ export function UserModal({ user, onClose }: { user: any, onClose: () => void })
               type="button" 
               onClick={onClose}
               disabled={loading}
-              className="flex-1 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-muted transition-colors disabled:opacity-50"
             >
               {t("cancel")}
             </button>
             <button 
               type="submit" 
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className="cursor-pointer flex-1 px-4 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {loading && <Loader2 className="h-4 w-4 animate-spin" />}
               {t("save")}
