@@ -62,6 +62,7 @@
     "description": "Explore top-rated workspaces designed to help you stay productive, connected, and comfortable.",
     "viewAll": "View all locations",
     "verified": "Verified",
+    "verifiedPartner": "Verified Partner",
     "exploreSpace": "Explore Space",
     "price": "Price",
     "hour": "hr",
@@ -312,6 +313,8 @@
     "general": {
       "title": "Hub Information",
       "coverImage": "Cover Image & Gallery",
+      "services": "Our Services",
+      "backToHubs": "Back to Hubs",
       "manageGallery": "Manage Hub Gallery",
       "manageGalleryDesc": "Select main picture and upload gallery",
       "hubName": "Hub Name",
@@ -799,5 +802,13 @@
     "parking": "Parking",
     "airConditioning": "Air Conditioning",
     "heating": "Heating"
+   },
+   "Common": {
+     "unknown": "Unknown",
+     "noDescription": "No description",
+     "free": "Free",
+     "contactForHours": "Contact for hours",
+     "unknownHub": "Unknown Hub",
+     "gaza": "Gaza"
    }
 }

@@ -12,6 +12,7 @@ import HubReviews from "@/components/hubs/hub/HubReviews"
 import { getLocale, getTranslations } from "next-intl/server"
 import { format24to12 } from "@/src/lib/utils"
 import { Metadata } from "next"
+// import { useTranslations } from "next-intl"
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string, locale: string }> }): Promise<Metadata> {
   const { id, locale } = await params;
@@ -67,7 +68,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", pmLabel: string = "PM") {
   const mainImage = typeof apiHub.images?.main === 'string' ? apiHub.images.main : null;
-
+  // const t = useTranslations("HubManagement.general");
   return {
     id: String(apiHub.id),
     slug: apiHub.slug,
@@ -167,7 +168,8 @@ export default async function HubDetails({
             className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors"
           >
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Back to Hubs
+            العودة للمراكز
+            {/* {t("backToHubs")} */}
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

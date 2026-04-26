@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShieldCheck, MapPin, ImageOff, ChevronLeft, ChevronRight } from 'lucide-react';
 import { IHub } from '@/data/hubs';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTranslations } from 'next-intl';
 
 function resolveImageSrc(imageUrl: any): string | undefined {
   if (!imageUrl) return undefined;
@@ -17,6 +18,7 @@ function resolveImageSrc(imageUrl: any): string | undefined {
 export default function HubHeroImage({ hub }: { hub: IHub }) {
   const mainImage = resolveImageSrc(hub.imageUrl);
   const galleryImages = hub.galleryUrls || [];
+  const t = useTranslations("HubsGrid");
   
   // Combine all images
   const allImages = [mainImage, ...galleryImages].filter(Boolean) as string[];
@@ -113,7 +115,7 @@ export default function HubHeroImage({ hub }: { hub: IHub }) {
             {hub.verificationStatus === "Verified" && (
               <Badge className="bg-emerald-500/90 text-white border-0 shadow-sm flex items-center gap-1.5 py-1 px-3 text-sm">
                 <ShieldCheck className="h-4 w-4" />
-                Verified Partner
+                {t("verifiedPartner")}
               </Badge>
             )}
             {hub.governorate && (

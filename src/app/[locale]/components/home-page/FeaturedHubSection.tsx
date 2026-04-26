@@ -5,15 +5,16 @@ import { HubCard } from "@/src/app/[locale]/components/general/HubCard";
 
 export default function FeaturedHubSection({filter, hubs = []}: {filter: {governorate: string, service: string}, hubs?: any[]}){
     const t = useTranslations("FeaturedHubs");
+    const tCommon = useTranslations("Common");
 
     const mappedHubs = hubs.map(apiHub => ({
         id: String(apiHub.id),
         slug: apiHub.slug,
-        name: apiHub.name?.en || apiHub.name?.ar || apiHub.name || "Unknown Hub",
-        description: apiHub.description?.en || apiHub.description?.ar || apiHub.description || "No description",
-        location: apiHub.address_details?.en || apiHub.address_details?.ar || apiHub.address_details || "Unknown",
-        governorate: apiHub.location?.name || "Gaza",
-        pricing: apiHub.pricing || "Free",
+        name: apiHub.name?.en || apiHub.name?.ar || apiHub.name || tCommon("unknownHub"),
+        description: apiHub.description?.en || apiHub.description?.ar || apiHub.description || tCommon("noDescription"),
+        location: apiHub.address_details?.en || apiHub.address_details?.ar || apiHub.address_details || tCommon("unknown"),
+        governorate: apiHub.location?.name || tCommon("gaza"),
+        pricing: apiHub.pricing || tCommon("free"),
         operatingHours: "24/7",
         services: Array.isArray(apiHub.services) ? apiHub.services.map((s:any) => s.name?.en || s.name) : [],
         imageUrl: apiHub.images?.main ? 

@@ -23,7 +23,10 @@ function resolveImageSrc(imageUrl: any): string | undefined {
 export function HubCard({ hub }: IHubCardProps) {
   const imageSrc = resolveImageSrc(hub.imageUrl);
   const locale = useLocale();
-  const t = useTranslations("HubManagement.offers");
+  const tOffers = useTranslations("HubManagement.offers");
+  const tGrid = useTranslations("HubsGrid");
+  const tCommon = useTranslations("DashboardHubCard");
+  const tReviews = useTranslations("HubReviews");
 
   // Use slug if available (API hubs), otherwise fall back to id
   const detailHref = `/hubs/${(hub as any).slug || hub.id}`;
@@ -45,7 +48,7 @@ export function HubCard({ hub }: IHubCardProps) {
            />
         ) : (
            <div className="w-full h-full bg-muted flex items-center justify-center text-muted-foreground text-xs">
-             No image
+             {tCommon("noImage")}
            </div>
         )}
         <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent pointer-events-none" />
@@ -53,7 +56,7 @@ export function HubCard({ hub }: IHubCardProps) {
            <div className="absolute top-3 right-3 z-10">
              <Badge className="bg-emerald-500/90 hover:bg-emerald-500 text-white shadow-sm flex items-center gap-1 backdrop-blur-sm">
                <ShieldCheck className="h-3 w-3" />
-               Verified
+               {tGrid("verified")}
              </Badge>
            </div>
         )}
@@ -61,7 +64,7 @@ export function HubCard({ hub }: IHubCardProps) {
             <div className="absolute top-3 left-3 z-10">
               <Badge className="bg-primary/90 hover:bg-primary text-primary-foreground shadow-sm flex items-center gap-1 backdrop-blur-sm font-bold animate-pulse">
                 <Tag className="h-3 w-3" />
-                {t("specialOffer")}
+                {tOffers("specialOffer")}
               </Badge>
             </div>
         )}
@@ -102,7 +105,7 @@ export function HubCard({ hub }: IHubCardProps) {
                </>
              ) : (
                <span className="text-xs text-muted-foreground whitespace-nowrap">
-                 {locale === "ar" ? "لا يوجد تقييمات بعد" : "no reviews yet"}
+                 {tReviews("noReviews")}
                </span>
              )}
           </div>
@@ -122,7 +125,7 @@ export function HubCard({ hub }: IHubCardProps) {
               ) : (
                 <>
                   <span className="text-primary font-bold mr-1">₪{hub.pricing}</span>
-                  <span className="text-muted-foreground font-normal">/hour</span>
+                  <span className="text-muted-foreground font-normal">/ {tGrid("hour")}</span>
                 </>
               )}
             </div>
@@ -137,7 +140,7 @@ export function HubCard({ hub }: IHubCardProps) {
           {offer && (
             <div className="mt-2 p-2 rounded-lg bg-primary/5 border border-primary/10 flex items-center gap-2">
               <div className="flex-1 min-w-0">
-                <p className="text-[11px] font-bold text-primary uppercase tracking-wider">{t("specialOffer")}</p>
+                <p className="text-[11px] font-bold text-primary uppercase tracking-wider">{tOffers("specialOffer")}</p>
                 <p className="text-xs font-semibold text-foreground truncate">{offerTitle}</p>
               </div>
               <div className="text-primary font-bold text-sm bg-primary/10 px-1.5 py-0.5 rounded">
@@ -153,7 +156,7 @@ export function HubCard({ hub }: IHubCardProps) {
           href={detailHref}
           className="cursor-pointer w-full inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground h-10 px-4 py-2"
         >
-          View Details
+          {tGrid("viewDetails")}
         </Link>
       </CardFooter>
     </Card>

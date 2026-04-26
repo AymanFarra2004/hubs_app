@@ -6,14 +6,16 @@ import HubOffers from './HubOffers'
 import HubSocialAccounts from './HubSocialAccounts'
 
 import { getServiceIcon } from '@/src/data/hubs'
+import { useTranslations } from 'next-intl'
 
 export default function HubMainContent({hub, offers = []}: {hub: IHub, offers?: any[]}) {
+  const t = useTranslations("HubManagement.general");
   return (
     <div className="lg:col-span-2 space-y-10">
               
               {/* Services */}
               <section>
-                <h2 className="text-2xl font-bold mb-6">Available Services</h2>
+                <h2 className="text-2xl font-bold mb-6">{t("services")}</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {hub.services.map((service, index) => {
                     const serviceName = typeof service === 'string' ? service : service.name;

@@ -19,7 +19,7 @@ export default function HhubSideBar({hub}: {hub: IHub}) {
                 </div>
                 {priceUnit && (
                   <div className="text-muted-foreground">
-                      {t("per") || "per"} {priceUnit}
+                      {t("per") || "per"} {t("hour")}
                   </div>
                 )}
             </div>

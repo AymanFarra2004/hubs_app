@@ -7,14 +7,16 @@ import { getServiceIcon } from "@/src/data/hubs";
 
 export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
   const t = useTranslations("HubsGrid");
+  const tCommon = useTranslations("Common");
+  const tReviews = useTranslations("HubReviews");
   const locale = useLocale();
 
   const mappedHubs = hubs.map(apiHub => ({
     id: String(apiHub.id),
     slug: apiHub.slug,
-    name: typeof apiHub.name === 'string' ? apiHub.name : (apiHub.name?.[locale] || apiHub.name?.en || apiHub.name?.ar || "Unknown Hub"),
-    description: typeof apiHub.description === 'string' ? apiHub.description : (apiHub.description?.[locale] || apiHub.description?.en || apiHub.description?.ar || "No description"),
-    location: typeof apiHub.address_details === 'string' ? apiHub.address_details : (apiHub.address_details?.[locale] || apiHub.address_details?.en || apiHub.address_details?.ar || "Unknown"),
+    name: typeof apiHub.name === 'string' ? apiHub.name : (apiHub.name?.[locale] || apiHub.name?.en || apiHub.name?.ar || tCommon("unknownHub")),
+    description: typeof apiHub.description === 'string' ? apiHub.description : (apiHub.description?.[locale] || apiHub.description?.en || apiHub.description?.ar || tCommon("noDescription")),
+    location: typeof apiHub.address_details === 'string' ? apiHub.address_details : (apiHub.address_details?.[locale] || apiHub.address_details?.en || apiHub.address_details?.ar || tCommon("unknown")),
     locationId: apiHub.location?.id || apiHub.location_id,
     city: (() => {
       const breadcrumb = apiHub.location?.breadcrumb || [];
@@ -28,7 +30,7 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
     hourlyPrice: apiHub.hourly_price,
     operatingHours: apiHub.working_hours
       ? `${format24to12(apiHub.working_hours.start, t("am"), t("pm"))} - ${format24to12(apiHub.working_hours.end, t("am"), t("pm"))}`
-      : apiHub.operating_hours || "Contact for hours",
+      : apiHub.operating_hours || tCommon("contactForHours"),
     services: [
       ...Array.isArray(apiHub.all_services || apiHub.services)
         ? (apiHub.all_services || apiHub.services).map((s: any) =>
@@ -114,7 +116,7 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
                       </>
                     ) : (
                       <span className="text-xs text-muted-foreground whitespace-nowrap">
-                        {locale === "ar" ? "لا يوجد تقييمات بعد" : "no reviews yet"}
+                        {tReviews("noReviews")}
                       </span>
                     )}
                   </div>

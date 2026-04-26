@@ -61,6 +61,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
   const { slug } = await params;
   const t = await getTranslations("AdminHubPreview");
   const tGen = await getTranslations("HubManagement.general");
+  const tGrid = await getTranslations("HubsGrid");
   const currentLocale = await getLocale();
 
   // Authenticated fetch — works for pending/rejected hubs too
@@ -236,7 +237,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
             {isApproved && (
               <span className="inline-flex items-center gap-1.5 bg-emerald-500/90 text-white text-sm font-semibold px-3 py-1 rounded-full shadow-sm">
                 <ShieldCheck className="h-4 w-4" />
-                Verified Partner
+                {tGrid("verifiedPartner")}
               </span>
             )}
             {!isApproved && (
@@ -355,7 +356,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
               <div className="pb-6 border-b border-border">
                 <div className="flex items-baseline gap-1">
                   <span className="text-primary font-bold text-2xl">₪{hub.hourly_price}</span>
-                  <span className="text-muted-foreground text-sm">/ {tGen("hour") || "hr"}</span>
+                  <span className="text-muted-foreground text-sm">/ {tGrid("hour")}</span>
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
                   <Tag className="h-3.5 w-3.5 inline mr-1" />
@@ -406,7 +407,7 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
             {hub.owner && (
               <div className="pt-4 border-t border-border">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider font-semibold mb-2">
-                  Hub Owner
+                  {tGen("hubOwner") || "Hub Owner"}
                 </p>
                 <p className="text-sm font-medium">{hub.owner.name || "—"}</p>
                 {hub.owner.email && (

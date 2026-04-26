@@ -62,6 +62,7 @@
     "description": "استكشف أفضل مساحات العمل المصممة لمساعدتك على البقاء منتجاً، متصلاً، ومرتاحاً.",
     "viewAll": "عرض جميع المواقع",
     "verified": "موثق",
+    "verifiedPartner": "شريك موثق",
     "exploreSpace": "استكشف المكان",
     "price": "السعر",
     "hour": "ساعة",
@@ -131,7 +132,7 @@
     "rememberMe": "تذكرني",
     "forgotPassword": "نسيت كلمة المرور؟",
     "signIn": "تسجيل الدخول",
-    "continueWithGoogle": "المتابعة باستخدام Google",
+    "continueWithGoogle": "المتابعة باستخدام جوجل",
     "or": "أو",
     "noAccount": "ليس لديك حساب؟",
     "signUpInstead": "أنشئ حساباً",
@@ -149,7 +150,7 @@
     "passwordLabel": "كلمة المرور",
     "confirmPasswordLabel": "تأكيد كلمة المرور",
     "signUp": "إنشاء حساب",
-    "continueWithGoogle": "المتابعة باستخدام Google",
+    "continueWithGoogle": "المتابعة باستخدام جوجل",
     "or": "أو",
     "haveAccount": "لديك حساب بالفعل؟",
     "signInInstead": "سجّل الدخول",
@@ -311,6 +312,8 @@
     },
     "general": {
       "title": "معلومات المركز",
+      "services": "خدماتنا المميزة",
+      "backToHubs": "العودة لصفحة مساحات العمل",
       "coverImage": "الصورة الرئيسية والمعرض",
       "manageGallery": "إدارة معرض الصور",
       "manageGalleryDesc": "اختر الصورة الرئيسية وارفع صور المعرض",
@@ -439,7 +442,7 @@
     "basicInfo": "1. المعلومات الأساسية",
     "hubNameEn": "اسم المركز (بالإنجليزية)",
     "hubNameAr": "اسم المركز (بالعربية)",
-    "hubNamePlaceholderEn": "مثال: Al-Bahr Connection",
+    "hubNamePlaceholderEn": "مثال: مركز البحر",
     "hubNamePlaceholderAr": "مثال: مركز البحر",
     "locationSelection": "اختيار الموقع",
     "detailedAddressEn": "العنوان بالتفصيل (بالإنجليزية)",
@@ -466,7 +469,7 @@
     "customServiceNameAr": "اسم الخدمة (AR)",
     "customServiceDescEn": "الوصف (EN)",
     "customServiceDescAr": "الوصف (AR)",
-    "customNamePlaceholderEn": "مثال: Free Coffee",
+    "customNamePlaceholderEn": "مثال: قهوة مجانية",
     "customNamePlaceholderAr": "مثال: قهوة مجانية",
     "photos": "3. الصور",
     "mainImageNote": "تظهر الصورة الرئيسية على بطاقة المركز · تذهب البقية إلى المعرض",
@@ -790,7 +793,7 @@
     }
   },
    "servicesIcons": {
-    "wifi": "Wi-Fi",
+    "wifi": "واي فاي",
     "electricity": "الكهرباء",
     "workspace": "مساحة العمل",
     "internet": "الإنترنت",
@@ -798,6 +801,14 @@
     "coffee": "القهوة",
     "parking": "الموقف",
     "airConditioning": "التكييف",
-    "heating": "التدفئة"
+    "heating": "تدفئة"
+   },
+   "Common": {
+     "unknown": "غير معروف",
+     "noDescription": "لا يوجد وصف",
+     "free": "مجاني",
+     "contactForHours": "تواصل لمعرفة الساعات",
+     "unknownHub": "مركز غير معروف",
+     "gaza": "غزة"
    }
 }
