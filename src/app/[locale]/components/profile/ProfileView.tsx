@@ -222,14 +222,16 @@ export function ProfileView({ profile }: ProfileViewProps) {
                 <Edit3 className="h-4 w-4 shrink-0" />
                 {t("editProfile")}
               </button>
-              <button
-                type="button"
-                onClick={() => setShowPasswordModal(true)}
-                className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-border text-foreground font-medium text-sm hover:bg-muted hover:-translate-y-0.5 transition-all active:scale-95"
-              >
-                <Lock className="h-4 w-4 shrink-0" />
-                {t("changePassword")}
-              </button>
+              {!profile.google_id && (
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordModal(true)}
+                  className="cursor-pointer w-full flex items-center gap-3 px-4 py-3 rounded-xl border border-border text-foreground font-medium text-sm hover:bg-muted hover:-translate-y-0.5 transition-all active:scale-95"
+                >
+                  <Lock className="h-4 w-4 shrink-0" />
+                  {t("changePassword")}
+                </button>
+              )}
             </div>
 
             {/* Stats Strip */}
@@ -251,6 +253,10 @@ export function ProfileView({ profile }: ProfileViewProps) {
         <EditProfileModal
           profile={profile}
           onClose={() => setShowEditModal(false)}
+          onOpenPasswordModal={() => {
+            setShowEditModal(false);
+            setShowPasswordModal(true);
+          }}
         />
       )}
 

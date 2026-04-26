@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Loader2, User, Mail, Phone, MapPin, Shield } from "lucide-react";
+import { X, Loader2, User, Mail, Phone, MapPin, Shield, Lock } from "lucide-react";
 import { updateUserProfile } from "@/src/actions/auth";
 import toast from "react-hot-toast";
 import { useTranslations, useLocale } from "next-intl";
@@ -15,7 +15,15 @@ interface Location {
   type: string;
 }
 
-export function EditProfileModal({ profile, onClose }: { profile: any, onClose: () => void }) {
+export function EditProfileModal({ 
+  profile, 
+  onClose,
+  onOpenPasswordModal 
+}: { 
+  profile: any, 
+  onClose: () => void,
+  onOpenPasswordModal?: () => void
+}) {
   const t = useTranslations("Profile");
   const tNewHub = useTranslations("NewHub");
   const locale = useLocale();
@@ -283,7 +291,20 @@ export function EditProfileModal({ profile, onClose }: { profile: any, onClose: 
               </div>
             )}
           </div>
-
+          
+          {/* Change Password Link */}
+          {!profile?.google_id && onOpenPasswordModal && (
+            <div className="flex justify-center pt-2">
+              <button
+                type="button"
+                onClick={onOpenPasswordModal}
+                className="cursor-pointer text-sm font-semibold text-primary hover:text-primary/80 flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-primary/5 transition-all"
+              >
+                <Lock className="h-4 w-4" />
+                {t("changePassword")}
+              </button>
+            </div>
+          )}
           <div className="pt-4 flex gap-3">
             <button 
               type="button" 
