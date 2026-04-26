@@ -167,9 +167,8 @@ export default async function HubDetails({
             href="/hubs"
             className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground mb-6 transition-colors"
           >
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            العودة للمراكز
-            {/* {t("backToHubs")} */}
+            <ChevronLeft className="h-4 w-4 mr-1 rtl:rotate-180" />
+            {t("backToHubs")}
           </Link>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

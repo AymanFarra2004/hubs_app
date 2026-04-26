@@ -15,11 +15,11 @@ export default function HhubSideBar({hub}: {hub: IHub}) {
         <div className="sticky top-24 rounded-2xl border border-border bg-card p-6 shadow-xl">        
             <div className="mb-6 pb-6 border-b border-border">
                 <div className="flex items-center text-primary font-bold text-2xl mb-1">
-                    {priceMain}
+                    ₪{priceMain}
                 </div>
                 {priceUnit && (
                   <div className="text-muted-foreground">
-                      {t("per") || "per"} {t("hour")}
+                      {t("per")} {t("hour")}
                   </div>
                 )}
             </div>

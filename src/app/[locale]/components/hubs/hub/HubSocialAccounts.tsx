@@ -3,6 +3,7 @@
 import React from "react";
 import { ExternalLink } from "lucide-react";
 import { SocialAccount } from "@/data/hubs";
+import { useTranslations } from "next-intl";
 
 /** SVG brand icons as React components */
 const FacebookIcon = () => (
@@ -80,13 +81,13 @@ interface HubSocialAccountsProps {
   titleClassName?: string;
 }
 
-export default function HubSocialAccounts({ socials, title = "Follow Us", titleClassName = "text-2xl font-bold mb-6" }: HubSocialAccountsProps) {
-  
+export default function HubSocialAccounts({ socials,  titleClassName = "text-2xl font-bold mb-6" }: HubSocialAccountsProps) {
+  const t = useTranslations("HubManagement.socials")
   if (!socials || socials.length === 0) return null;
 
   return (
     <section>
-      <h2 className={titleClassName}>{title}</h2>
+      <h2 className={titleClassName}>{t("title")}</h2>
       <div className="flex flex-wrap gap-3">
         {socials.map((s, i) => {
           const meta = getSocialMeta(s.platform);

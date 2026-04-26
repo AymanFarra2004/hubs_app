@@ -105,7 +105,7 @@ export function Header() {
             {/* Language Switcher */}
             <button
               onClick={handleLocaleSwitch}
-              className="cursor-pointer p-2.5 rounded-full bg-foreground/5 text-foreground hover:bg-foreground/10 transition-colors flex items-center gap-1.5 text-sm font-semibold"
+              className="cursor-pointer p-2.5 rounded-full bg-foreground/5 text-foreground hover:bg-foreground/10 transition-colors flex items-center gap-1.5 text-sm font-semibold ml-3"
               aria-label={t('aria.switchLanguage')}
             >
               <Languages className="h-4 w-4" />
