@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Index' });
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
 
   return {
     metadataBase: new URL(baseUrl),
@@ -43,8 +43,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
-        en: `${baseUrl}/en`,
-        ar: `${baseUrl}/ar`,
+        'ar': `${baseUrl}/ar`,
+        'en': `${baseUrl}/en`,
+        'x-default': `${baseUrl}/ar`,
       },
     },
     openGraph: {

@@ -10,7 +10,7 @@ import { filterBentoHubs } from "@/src/lib/filterBentoHubs";
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Index' });
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
 
   return {
     title: t('meta.title'),
@@ -18,8 +18,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
-        en: `${baseUrl}/en`,
-        ar: `${baseUrl}/ar`,
+        'ar': `${baseUrl}/ar`,
+        'en': `${baseUrl}/en`,
+        'x-default': `${baseUrl}/ar`,
       },
     },
     openGraph: {

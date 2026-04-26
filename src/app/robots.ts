@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
 
 export default function robots(): MetadataRoute.Robots {
   return {

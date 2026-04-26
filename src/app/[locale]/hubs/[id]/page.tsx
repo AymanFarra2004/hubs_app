@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id, locale } = await params;
   const hubRes = await getHubBySlug(id, locale);
   const rawHub = hubRes.success ? hubRes.data : null;
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
 
   if (!rawHub) {
     return {
@@ -40,8 +40,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     alternates: {
       canonical: `${baseUrl}/${locale}/hubs/${id}`,
       languages: {
-        en: `${baseUrl}/en/hubs/${id}`,
-        ar: `${baseUrl}/ar/hubs/${id}`,
+        'ar': `${baseUrl}/ar/hubs/${id}`,
+        'en': `${baseUrl}/en/hubs/${id}`,
+        'x-default': `${baseUrl}/ar/hubs/${id}`,
       },
     },
     openGraph: {

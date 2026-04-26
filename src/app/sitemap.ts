@@ -1,18 +1,20 @@
 import { MetadataRoute } from 'next';
 import { getAllHubs } from '@/src/actions/hubs';
 
-const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
-const locales = ['en', 'ar'];
+const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
+// Arabic listed first to signal higher importance to Arabic search engines
+const locales = ['ar', 'en'];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  // Static public pages
+  // Static public pages — Arabic URLs come first for search engine prioritization
   const staticPages: Array<{ path: string; changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency']; priority: number }> = [
     { path: '', changeFrequency: 'daily', priority: 1.0 },
     { path: '/hubs', changeFrequency: 'daily', priority: 0.9 },
     { path: '/about', changeFrequency: 'monthly', priority: 0.7 },
     { path: '/contact', changeFrequency: 'monthly', priority: 0.6 },
+    { path: '/submit', changeFrequency: 'monthly', priority: 0.5 },
   ];
 
   const staticRoutes: MetadataRoute.Sitemap = staticPages.flatMap(({ path, changeFrequency, priority }) =>

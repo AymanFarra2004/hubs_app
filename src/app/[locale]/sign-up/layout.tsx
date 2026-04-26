@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'SignUp' });
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
 
   return {
     title: t('meta.title'),
@@ -12,8 +12,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical: `${baseUrl}/${locale}/sign-up`,
       languages: {
-        en: `${baseUrl}/en/sign-up`,
-        ar: `${baseUrl}/ar/sign-up`,
+        'ar': `${baseUrl}/ar/sign-up`,
+        'en': `${baseUrl}/en/sign-up`,
+        'x-default': `${baseUrl}/ar/sign-up`,
       },
     },
     openGraph: {

@@ -9,7 +9,7 @@ import { format24to12 } from "@/src/lib/utils"
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations("HubsPage");
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.ps';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://qareeb.cc';
 
   return {
     title: t("meta.title"),
@@ -17,8 +17,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     alternates: {
       canonical: `${baseUrl}/${locale}/hubs`,
       languages: {
-        en: `${baseUrl}/en/hubs`,
-        ar: `${baseUrl}/ar/hubs`,
+        'ar': `${baseUrl}/ar/hubs`,
+        'en': `${baseUrl}/en/hubs`,
+        'x-default': `${baseUrl}/ar/hubs`,
       },
     },
     openGraph: {
