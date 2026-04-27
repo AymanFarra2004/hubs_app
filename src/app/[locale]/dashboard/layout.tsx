@@ -14,8 +14,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale, namespace: 'Dashboard' });
  
   return {
-    title: `${t('dashboard')} | Habbat Owner`,
-    description: t('myHubsDesc'),
+    title: t('meta.title'),
+    description: t('meta.description'),
+    robots: { index: false, follow: false },
+    alternates: {
+      canonical: `/${locale}/dashboard`,
+      languages: {
+        en: '/en/dashboard',
+        ar: '/ar/dashboard',
+      },
+    },
   };
 }
 

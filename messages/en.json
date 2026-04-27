@@ -272,6 +272,10 @@
     "cancel": "Cancel"
   },
   "Dashboard": {
+    "meta": {
+      "title": "Dashboard | Qareeb",
+      "description": "Manage your hubs and monitor your activity on Qareeb."
+    },
     "myHubs": "My Hubs",
     "myHubsDesc": "Manage and monitor all your resilient networks",
     "createNewHub": "Create New Hub",
@@ -300,6 +304,10 @@
     "manageHub": "Manage Hub"
   },
   "HubManagement": {
+    "meta": {
+      "title": "Manage Hub | Qareeb",
+      "description": "Update your hub settings, services, and offers."
+    },
     "backToHubs": "Back to Hubs",
     "loading": "Loading hub details...",
     "hubNotFound": "Hub not found",
@@ -434,6 +442,10 @@
     }
   },
   "NewHub": {
+    "meta": {
+      "title": "List Your Hub | Qareeb",
+      "description": "Add your internet or electricity hub to our network and help your community."
+    },
     "title": "List Your Hub",
     "description": "Help your community stay connected. Add your internet or electricity hub to our network.",
     "disclaimer": "By submitting this form, you agree that our team will review the information. Approved listings receive a \"Verified Partner\" badge.",
