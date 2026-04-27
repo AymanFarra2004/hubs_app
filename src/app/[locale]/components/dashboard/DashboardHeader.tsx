@@ -48,6 +48,7 @@ export function DashboardHeader() {
           <Menu className="h-5 w-5" />
         </button>
         <div className="flex items-center gap-1 sm:gap-2">
+          
           <Link 
             href="/" 
             className="flex items-center gap-2 px-2 sm:px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-xl transition-all"
@@ -56,13 +57,13 @@ export function DashboardHeader() {
             <Home className="h-4 w-4" />
             <span className="hidden sm:inline-block">{t("home")}</span>
           </Link>
-          <div className="h-4 w-px bg-border mx-0.5 sm:mx-1"></div>
-          <div className="flex items-center gap-2 px-2">
+          
+          {/* <div className="flex items-center gap-2 px-2">
             <img src="/logo.png" alt="Qareeb Logo" className="h-8 w-auto object-contain" />
             <h1 className="text-base sm:text-lg font-bold text-foreground truncate max-w-[120px] sm:max-w-none">
               Qareeb | قريب
             </h1>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -70,7 +71,7 @@ export function DashboardHeader() {
         {/* Theme Toggle */}
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          className="p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+          className="cursor-pointer p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
           title={t("toggleTheme")}
         >
           <Sun className="h-5 w-5 hidden dark:block" />
@@ -80,14 +81,14 @@ export function DashboardHeader() {
         {/* Language Switcher */}
         <button
           onClick={handleLocaleSwitch}
-          className="p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors flex items-center gap-1.5 text-xs sm:text-sm font-bold"
+          className="cursor-pointer p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors flex items-center gap-1.5 text-xs sm:text-sm font-bold"
           title={t("switchLanguage")}
         >
           <Languages className="h-5 w-5" />
           <span className="hidden xs:inline-block">{locale === "en" ? "عربي" : "EN"}</span>
         </button>
 
-        <button className="p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors relative">
+        <button className="cursor-pointer p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors relative">
           <Bell className="h-5 w-5" />
           <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-red-500 border-2 border-background"></span>
         </button>
@@ -95,7 +96,7 @@ export function DashboardHeader() {
         <div className="relative">
           <button 
             onClick={() => setShowMenu(!showMenu)}
-            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-xl hover:bg-muted transition-colors"
+            className="cursor-pointer flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 rounded-xl hover:bg-muted transition-colors"
           >
             <div className="h-8 w-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0">
               <User className="h-4 w-4" />
@@ -108,7 +109,7 @@ export function DashboardHeader() {
             <div className="absolute right-0 rtl:left-0 rtl:right-auto mt-2 w-48 bg-background border border-border rounded-xl shadow-lg py-1 z-50">
               <button 
                 onClick={handleSignOut}
-                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
+                className="cursor-pointer w-full flex items-center gap-2 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors"
               >
                 <LogOut className="h-4 w-4" />
                 {t("signOut")}

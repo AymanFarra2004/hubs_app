@@ -24,10 +24,12 @@ export function DashboardSidebar() {
   return (
     <aside className="w-64 bg-background border-r border-border flex-col hidden md:flex sticky top-0 h-screen">
       <div className="h-16 flex items-center justify-between px-6 border-b border-border">
+        <Link href="/">
         <div className="flex items-center gap-2">
           <img src="/logo.png" alt="Qareeb Logo" className="h-12 w-auto object-contain" />
           <h1 className="text-xl font-bold text-foreground tracking-tight">Qareeb | قريب</h1>
         </div>
+        </Link>
       </div>
 
       <nav className="flex-1 px-4 space-y-2 mt-4">
