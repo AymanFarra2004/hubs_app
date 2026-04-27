@@ -1224,8 +1224,17 @@ export async function deleteMyHubReview(hubSlug: string) {
 export async function downloadImageServer(url: string) {
   try {
     // Security mechanism: Only allow fetching from our backend
-    if (!url.startsWith(API_BASE_URL.replace('/v1', '')) && !url.startsWith("https://karam.idreis.net")) {
-      return { error: "Unauthorized image domain" };
+    try {
+      const parsedUrl = new URL(url);
+      // Ensure the hostname is related to the API to prevent SSRF
+      const isAllowed = parsedUrl.hostname.includes("karam.idreis.net") || 
+                        parsedUrl.hostname.includes("pub-a1221038980d454e849a65bacb03f448.r2.dev");
+      
+      if (!isAllowed) {
+        return { error: "Unauthorized image domain" };
+      }
+    } catch {
+      return { error: "Invalid URL" };
     }
 
     const res = await fetch(url);

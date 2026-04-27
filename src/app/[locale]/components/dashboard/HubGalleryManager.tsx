@@ -44,7 +44,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
       const gallery = hub.images?.gallery || [];
       
       const parsedOld: OldPhoto[] = [];
-      const resolveUrl = (url: string) => url.startsWith('http') ? url : `https://karam.idreis.net${url.startsWith('/') ? '' : '/'}${url}`;
+      const resolveUrl = (url: string) => url.startsWith('http') ? url : `https://pub-a1221038980d454e849a65bacb03f448.r2.dev${url.startsWith('/') ? '' : '/'}${url}`;
 
       let mainResolvedStr = null;
 
@@ -189,9 +189,12 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
       const formData = new FormData();
       let finalMainFile: File | null = null;
       const matchedNew = newFiles.find(f => f.preview === mainPhotoId);
+      const originalMainImg = oldPhotos.find(p => p.isMain)?.url;
+
       if (matchedNew) {
          finalMainFile = matchedNew;
-      } else {
+      } else if (mainPhotoId !== originalMainImg) {
+         // Only download and re-upload if the user selected a DIFFERENT old image as main
          finalMainFile = await fetchUrlAsFile(mainPhotoId);
       }
 
