@@ -316,21 +316,6 @@ export async function createHub(prevState: any, formData: FormData) {
     const customNameAr = formData.get("custom_service_ar") as string;
     const customDescEn = formData.get("custom_service_description_en") as string;
     const customDescAr = formData.get("custom_service_description_ar") as string;
-    
-    // Instead of creating a separate service, embed it in the hub payload if backend supports it
-    // Aligning with the custom_service[name][en] pattern used in updateHub
-    if (customNameEn && customNameEn.trim() !== '') {
-      payload.custom_service = {
-        name: {
-          en: customNameEn.trim(),
-          ar: customNameAr?.trim() || customNameEn.trim(),
-        },
-        description: {
-          en: customDescEn?.trim() || "",
-          ar: customDescAr?.trim() || "",
-        }
-      };
-    }
 
     if (service_ids.length > 0) {
       payload.service_ids = service_ids;
@@ -455,6 +440,35 @@ export async function createHub(prevState: any, formData: FormData) {
       } catch (_) {
         // Images failed — hub was still created, not fatal
         console.warn("Image upload failed after hub creation; hub still created.");
+      }
+    }
+
+    // ─── Step 3: Create custom service if provided ──────────────────────────
+    if (hubSlug && customNameEn && customNameEn.trim() !== '') {
+      try {
+        const customServicePayload = {
+          name: {
+            en: customNameEn.trim(),
+            ar: customNameAr?.trim() || customNameEn.trim(),
+          },
+          description: {
+            en: customDescEn?.trim() || "",
+            ar: customDescAr?.trim() || "",
+          },
+          is_active: true
+        };
+
+        await fetch(`${API_BASE_URL}/hubs/${hubSlug}/custom-services`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${token}`,
+          },
+          body: JSON.stringify(customServicePayload),
+        });
+      } catch (customServiceError) {
+        console.error("Custom service creation failed after hub creation:", customServiceError);
       }
     }
 
@@ -935,19 +949,6 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     const customNameAr = formData.get("custom_service_ar") as string;
     const customDescEn = formData.get("custom_service_description_en") as string;
     const customDescAr = formData.get("custom_service_description_ar") as string;
-    
-    if (customNameEn && customNameEn.trim() !== '') {
-      payload.custom_service = {
-        name: {
-          en: customNameEn.trim(),
-          ar: customNameAr?.trim() || customNameEn.trim(),
-        },
-        description: {
-          en: customDescEn?.trim() || "",
-          ar: customDescAr?.trim() || "",
-        }
-      };
-    }
 
     // --- Step 1: Send JSON data ---
     const langParam = getLangParam();
@@ -1006,6 +1007,35 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
         }
       } catch (_) {
         console.warn("Network error during image upload, but text update succeeded.");
+      }
+    }
+
+    // --- Step 3: Handle custom service if provided ---
+    if (slug && customNameEn && customNameEn.trim() !== '') {
+      try {
+        const customServicePayload = {
+          name: {
+            en: customNameEn.trim(),
+            ar: customNameAr?.trim() || customNameEn.trim(),
+          },
+          description: {
+            en: customDescEn?.trim() || "",
+            ar: customDescAr?.trim() || "",
+          },
+          is_active: true
+        };
+
+        await fetch(`${API_BASE_URL}/hubs/${slug}/custom-services`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify(customServicePayload)
+        });
+      } catch (customServiceError) {
+        console.warn("Custom service update failed, but hub text update succeeded.");
       }
     }
 
