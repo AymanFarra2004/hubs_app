@@ -26,8 +26,10 @@ const ServicesPricing = () => {
   return (
     <section className="space-y-6">
       <h2 className="text-xl font-semibold border-b border-border pb-2">{t("servicesPricing")}</h2>
-
+    
+    {/* contactNumber and pricing */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/** contactNumber */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-1">{t("contactNumber")}</label>
           <input
@@ -39,6 +41,8 @@ const ServicesPricing = () => {
             placeholder={t("contactPlaceholder")}
           />
         </div>
+
+        {/* pricing */}
         <div>
           <label className="block text-sm font-medium text-foreground mb-1">
             {t("hourlyPrice")} <span className="text-muted-foreground font-normal">{t("hourlyPriceNote")}</span>
@@ -55,6 +59,7 @@ const ServicesPricing = () => {
         </div>
       </div>
 
+      {/** social media accounts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-foreground mb-1">{t("facebookUrl")}</label>
@@ -76,6 +81,7 @@ const ServicesPricing = () => {
         </div>
       </div>
 
+      {/** Services */}
       <div>
         <label className="block text-sm font-medium text-foreground mb-2">{t("availableServices")}</label>
         

@@ -1,9 +1,9 @@
 "use client";
 
 import { MapPin, Info, Loader2 } from "lucide-react";
-import BasicInfo from "../../../components/submit/BasicInfo";
-import ServicesPricing from "../../../components/submit/ServicesPricing";
-import UploadPhoto from "../../../components/submit/UploadPhoto";
+import BasicInfo from "@/components/submit/BasicInfo";
+import ServicesPricing from "@/components/submit/ServicesPricing";
+import UploadPhoto from "@/components/submit/UploadPhoto";
 import { useState } from "react";
 import { useRouter } from "@/src/i18n/routing";
 import { createHub } from "@/src/actions/hubs";
