@@ -92,9 +92,11 @@ export function HubCard({ hub }: IHubCardProps) {
             <h3 className="font-bold text-lg leading-tight line-clamp-1 group-hover:text-primary transition-colors">
               {hub.name}
             </h3>
-            <div className="flex items-center text-sm text-muted-foreground mt-1.5 line-clamp-1">
-              <MapPin className="h-3.5 w-3.5 mr-1 shrink-0" />
-              {hub.governorate}{hub.location ? ` • ${hub.location}` : ""}
+            <div className="flex items-start text-sm text-muted-foreground mt-1.5">
+              <MapPin className="h-3.5 w-3.5 mr-1.5 mt-0.5 shrink-0" />
+              <span className="line-clamp-2">
+                {hub.governorate}{hub.location ? ` • ${hub.location}` : ""}
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-1 shrink-0 bg-secondary/50 px-2 py-1 rounded-md text-sm font-medium">
