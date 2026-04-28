@@ -178,7 +178,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
 
   const handleSubmit = async () => {
     if (!mainPhotoId) {
-      toast.error("Please select a main image!");
+      toast.error(t("mainImageRequired"));
       return;
     }
 
@@ -217,7 +217,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
         setUploadProgress(progress);
       });
 
-      toast.success("Gallery updated successfully!");
+      toast.success(t("updateSuccess"));
       
       // Permanently update local state before re-validating
       setOldPhotos(prev => prev.filter(img => !deleteGalleryIds.includes(img.id)));
@@ -230,7 +230,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
 
     } catch(err) {
       console.error(err);
-      toast.error("An error occurred during upload. Please try again.");
+      toast.error(t("uploadError"));
       // Restore Optimistic UI on failure
       setDeleteGalleryIds([]);
     } finally {

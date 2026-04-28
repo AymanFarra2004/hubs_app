@@ -66,7 +66,9 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 
 
-function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", pmLabel: string = "PM") {
+function mapApiHub(apiHub: any, locale: string = "ar", t: any) {
+  const amLabel = t("am");
+  const pmLabel = t("pm");
   const mainImage = typeof apiHub.images?.main === 'string' ? apiHub.images.main : null;
   // const t = useTranslations("HubManagement.general");
   return {
@@ -76,15 +78,15 @@ function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", p
     description:
       typeof apiHub.description === 'string'
         ? apiHub.description
-        : (apiHub.description?.[locale] || apiHub.description?.en || apiHub.description?.ar || "No description"),
+        : (apiHub.description?.[locale] || apiHub.description?.en || apiHub.description?.ar || t("noDescription")),
     location:
       typeof apiHub.address_details === 'string'
         ? apiHub.address_details
         : (apiHub.address_details?.[locale] || apiHub.address_details?.en || apiHub.address_details?.ar || "Unknown"),
     governorate: apiHub.location?.name || "Gaza",
     pricing: apiHub.hourly_price
-      ? `${apiHub.hourly_price} / hour`
-      : apiHub.pricing || "Contact for pricing",
+      ? `${apiHub.hourly_price} / ${t("hour")}`
+      : apiHub.pricing || t("contactForPricing"),
     operatingHours: apiHub.working_hours
       ? `${format24to12(apiHub.working_hours.start, amLabel, pmLabel)} - ${format24to12(apiHub.working_hours.end, amLabel, pmLabel)}`
       : apiHub.operating_hours || "Contact for hours",
@@ -107,7 +109,7 @@ function mapApiHub(apiHub: any, locale: string = "ar", amLabel: string = "AM", p
           return url.startsWith("http") ? url : `https://karam.idreis.net${url.startsWith("/") ? "" : "/"}${url}`;
         }).filter(Boolean)
       : [],
-    verificationStatus: (apiHub.status === "approved" ? "Verified" : "Pending") as "Verified" | "Pending",
+    verificationStatus: (apiHub.status === "approved" ? t("verified") : t("pending")) as "Verified" | "Pending",
     contact: {
       contactNumber: apiHub.contact || "",
       email: apiHub.email || "",
@@ -143,7 +145,7 @@ export default async function HubDetails({
     getMyHubReview(slug),
   ])
 
-  const hub = mapApiHub(rawHub, locale, t("am"), t("pm"))
+  const hub = mapApiHub(rawHub, locale, t)
   const offers = offersRes.success ? offersRes.data : []
 
 

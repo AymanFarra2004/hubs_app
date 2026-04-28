@@ -46,8 +46,8 @@ export default function SubmitHub() {
       
       if (!result?.success || !result.hub?.slug) {
         console.error("Hub Creation failed:", result);
-        toast.error(result?.error ?? "Something went wrong.");
-        setError(result?.error ?? "Something went wrong. Please try again.");
+        toast.error(result?.error ?? t("creationError"));
+        setError(result?.error ?? t("creationError"));
         setIsLoading(false);
         return;
       }
@@ -71,21 +71,21 @@ export default function SubmitHub() {
           });
         } catch (uploadError) {
           console.error("Image upload failed:", uploadError);
-          toast.error("Hub created, but images failed to upload. You can update them later.");
+          toast.error(t("uploadError"));
         } finally {
           setIsUploading(false);
         }
       }
 
-      toast.success("Hub created successfully!");
+      toast.success(t("successMessage"));
       setTimeout(() => {
         router.push('/dashboard');
       }, 1500);
 
     } catch (e) {
       console.error("Network error during submission:", e);
-      toast.error("Network error. Please try again.");
-      setError("Network error. Please try again.");
+      toast.error(t("networkError"));
+      setError(t("networkError"));
       setIsLoading(false);
       setIsUploading(false);
     }

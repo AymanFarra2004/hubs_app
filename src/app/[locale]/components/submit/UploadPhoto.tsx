@@ -15,6 +15,8 @@ const UploadPhoto = () => {
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [mainIndex, setMainIndex] = useState<number>(0);
   const [rejectedNames, setRejectedNames] = useState<string[]>([]);
+  const [isTooMany, setIsTooMany] = useState(false);
+  const MAX_IMAGES = 10;
   const t = useTranslations("NewHub");
 
   const mainInputRef = useRef<HTMLInputElement>(null);
@@ -62,11 +64,19 @@ const UploadPhoto = () => {
       }
     });
 
-    if (acceptedBatch.length > 0) {
-      setFiles((prev) => [...prev, ...acceptedBatch]);
-    }
     setRejectedNames(rejectedBatch);
-  }, []);
+    setIsTooMany(false);
+
+    setFiles((prev) => {
+      const totalPotential = prev.length + acceptedBatch.length;
+      if (totalPotential > MAX_IMAGES) {
+        setIsTooMany(true);
+        const allowCount = MAX_IMAGES - prev.length;
+        return [...prev, ...acceptedBatch.slice(0, Math.max(0, allowCount))];
+      }
+      return [...prev, ...acceptedBatch];
+    });
+  }, [files.length]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop: processFiles,
@@ -139,7 +149,9 @@ const UploadPhoto = () => {
           <p className="text-sm font-medium text-foreground">
             {isDragActive ? t("dropzoneActive") : t("dropzoneInactive")}
           </p>
-          <p className="text-xs text-muted-foreground">{t("dropzoneNote")}</p>
+          <p className="text-xs text-muted-foreground">
+            {t("dropzoneNote")} • <span className="text-primary font-semibold">{t("maxImagesNote", { count: MAX_IMAGES })}</span>
+          </p>
         </div>
       </div>
 
@@ -245,6 +257,12 @@ const UploadPhoto = () => {
       {rejectedNames.length > 0 && (
         <p className="text-xs text-red-500 font-medium animate-in fade-in slide-in-from-top-1">
           {t("skippedOverSize", { names: rejectedNames.join(', ') })}
+        </p>
+      )}
+
+      {isTooMany && (
+        <p className="text-xs text-amber-600 font-medium animate-in fade-in slide-in-from-top-1">
+          {t("tooManyImages", { count: MAX_IMAGES })}
         </p>
       )}
     </section>

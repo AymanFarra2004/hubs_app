@@ -360,6 +360,12 @@
       "contactUs": "Contact Us",
       "per": "per",
       "contact": "Contact",
+      "contactForPricing": "Contact for pricing",
+      "noDescription": "No description provided",
+      "unknownHub": "Unknown Hub",
+      "unknown": "Unknown",
+      "verified": "Verified",
+      "pending": "Pending",
       "followUs": "Follow Us"
     },
     "services": {
@@ -442,7 +448,10 @@
       "cancel": "Cancel",
       "remove": "Remove",
       "mainImageProtected": "The main image cannot be deleted; another image must be set as main before deleting this one",
-      "mainImageWarning": "Note: The main image cannot be deleted. Please set another image as main to enable deletion for this one."
+      "mainImageWarning": "Note: The main image cannot be deleted. Please set another image as main to enable deletion for this one.",
+      "updateSuccess": "Gallery updated successfully!",
+      "uploadError": "An error occurred during upload. Please try again.",
+      "mainImageRequired": "Please select a main image!"
     }
   },
   "NewHub": {
@@ -500,6 +509,8 @@
     "galleryLegend": "Gallery",
     "galleryLegendDesc": "shown in hub detail page",
     "skippedOverSize": "Skipped (over 5MB): {names}",
+    "maxImagesNote": "Maximum {count} images allowed",
+    "tooManyImages": "You can only upload up to {count} images. Some files were skipped.",
     "loadingLocations": "Loading locations...",
     "governorate": "Governorate",
     "selectGovernorate": "Select Governorate",
@@ -509,6 +520,9 @@
     "selectArea": "Select Area",
     "loadingData": "Loading hub details...",
     "successMessage": "Hub created successfully!",
+    "creationError": "Something went wrong. Please try again.",
+    "uploadError": "Hub created, but images failed to upload. You can update them later.",
+    "networkError": "Network error. Please try again.",
     "workingHours": "Operating Hours",
     "openingTime": "Opening Time",
     "closingTime": "Closing Time",
