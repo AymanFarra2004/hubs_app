@@ -181,6 +181,10 @@ export async function getHubDataBySlugForManagement(slugOrId: string) {
           ar: dataAr.address_details || "",
           en: dataEn.address_details || ""
         },
+        offers: {
+          ar: dataAr.offers || [],
+          en: dataEn.offers || []
+        }
       }
     };
   } catch (error) {

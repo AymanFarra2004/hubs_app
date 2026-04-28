@@ -1043,8 +1043,21 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
 
   const loadOffers = async () => {
     setLoading(true);
-    const res = await getHubOffers(hubSlug, locale);
-    if (res.success) setOffers(res.data);
+    const res = await getHubDataBySlugForManagement(hubSlug);
+    if (res.success && res.data) {
+      const offersEn = res.data.offers?.en || [];
+      const offersAr = res.data.offers?.ar || [];
+      const merged = (locale === 'ar' ? offersAr : offersEn).map((baseOffer: any) => {
+        const enOffer = offersEn.find((o: any) => o.id === baseOffer.id) || baseOffer;
+        const arOffer = offersAr.find((o: any) => o.id === baseOffer.id) || baseOffer;
+        return {
+          ...baseOffer,
+          title: { en: enOffer.title, ar: arOffer.title },
+          description: { en: enOffer.description, ar: arOffer.description }
+        };
+      });
+      setOffers(merged);
+    }
     setLoading(false);
   };
 
@@ -1110,52 +1123,52 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">{t("offerAdded")}</div>}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">{t("titleEn")}</label>
-                <input name="title_en" onBlur={titleEn.onBlur} defaultValue={state?.data?.title_en ?? (editingOffer?.title?.en || (typeof editingOffer?.title === 'string' ? '' : ''))} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("titleEn")}</label>
+                <input name="title_en" onBlur={titleEn.onBlur} defaultValue={state?.data?.title_en ?? (editingOffer?.title?.en || (typeof editingOffer?.title === 'string' ? '' : ''))} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
                 {titleEn.error && <p className="mt-1 text-xs text-red-500">{titleEn.error}</p>}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-end">{t("titleAr")}</label>
-                <input name="title_ar" onBlur={titleAr.onBlur} defaultValue={state?.data?.title_ar ?? (editingOffer?.title?.ar || (typeof editingOffer?.title === 'string' ? editingOffer.title : ''))} required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background text-right text-sm" />
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground text-right">{t("titleAr")}</label>
+                <input name="title_ar" onBlur={titleAr.onBlur} defaultValue={state?.data?.title_ar ?? (editingOffer?.title?.ar || (typeof editingOffer?.title === 'string' ? editingOffer.title : ''))} required dir="rtl" className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all font-arabic" />
                 {titleAr.error && <p className="mt-1 text-xs text-red-500 text-right">{titleAr.error}</p>}
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">{t("descEn")}</label>
-                <textarea name="description_en" onBlur={descEn.onBlur} defaultValue={state?.data?.description_en ?? (editingOffer?.description?.en || '')} required className="w-full px-4 py-2 border rounded-lg bg-background resize-none text-sm" rows={2}></textarea>
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("descEn")}</label>
+                <textarea name="description_en" onBlur={descEn.onBlur} defaultValue={state?.data?.description_en ?? (editingOffer?.description?.en || '')} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-sm focus:ring-2 focus:ring-primary/20 transition-all" rows={2}></textarea>
                 {descEn.error && <p className="mt-1 text-xs text-red-500">{descEn.error}</p>}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1 text-end">{t("descAr")}</label>
-                <textarea name="description_ar" onBlur={descAr.onBlur} defaultValue={state?.data?.description_ar ?? (editingOffer?.description?.ar || (typeof editingOffer?.description === 'string' ? editingOffer.description : ''))} required dir="rtl" className="w-full px-4 py-2 border rounded-lg bg-background resize-none text-right text-sm" rows={2}></textarea>
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground text-right">{t("descAr")}</label>
+                <textarea name="description_ar" onBlur={descAr.onBlur} defaultValue={state?.data?.description_ar ?? (editingOffer?.description?.ar || (typeof editingOffer?.description === 'string' ? editingOffer.description : ''))} required dir="rtl" className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all font-arabic" rows={2}></textarea>
                 {descAr.error && <p className="mt-1 text-xs text-red-500 text-right">{descAr.error}</p>}
               </div>
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">{t("type")}</label>
-                <select name="type" defaultValue={state?.data?.type ?? (editingOffer?.type || "daily")} className="cursor-pointer w-full px-4 py-2 border rounded-lg bg-background text-sm">
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("type")}</label>
+                <select name="type" defaultValue={state?.data?.type ?? (editingOffer?.type || "daily")} className="cursor-pointer w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all">
                   <option value="daily">{t("types.daily")}</option>
                   <option value="weekly">{t("types.weekly")}</option>
                   <option value="monthly">{t("types.monthly")}</option>
                   <option value="once">{t("types.once")}</option>
                 </select>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{t("price")}</label>
-                <input name="price" type="number" defaultValue={state?.data?.price ?? editingOffer?.price} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("price")}</label>
+                <input name="price" type="number" defaultValue={state?.data?.price ?? editingOffer?.price} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{t("duration")}</label>
-                <input name="duration" type="number" defaultValue={state?.data?.duration ?? editingOffer?.duration} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("duration")}</label>
+                <input name="duration" type="number" defaultValue={state?.data?.duration ?? editingOffer?.duration} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">{t("status") || "Status"}</label>
-                <select name="status" defaultValue={state?.data?.status ?? (editingOffer?.status || "active")} className="cursor-pointer w-full px-4 py-2 border rounded-lg bg-background text-sm">
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("status") || "Status"}</label>
+                <select name="status" defaultValue={state?.data?.status ?? (editingOffer?.status || "active")} className="cursor-pointer w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all">
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
@@ -1163,8 +1176,8 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="col-span-1 md:col-span-2">
-                <label className="block text-sm font-medium mb-2">{t("offerTimeType") || "Offer Period"}</label>
+              <div className="col-span-1 md:col-span-2 relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("offerTimeType") || "Offer Period"}</label>
                 <div className="flex items-center gap-4">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input 
@@ -1194,13 +1207,13 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
 
             {offerTimeType === "limited" && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">{t("startsAt") || "Starts At"}</label>
-                  <input name="starts_at" type="date" defaultValue={state?.data?.starts_at ?? (editingOffer?.starts_at ? editingOffer.starts_at.split(' ')[0] : '')} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+                <div className="relative">
+                  <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("startsAt") || "Starts At"}</label>
+                  <input name="starts_at" type="date" defaultValue={state?.data?.starts_at ?? (editingOffer?.starts_at ? editingOffer.starts_at.split(' ')[0] : '')} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1 text-end">{t("endsAt") || "Ends At"}</label>
-                  <input name="ends_at" type="date" defaultValue={state?.data?.ends_at ?? (editingOffer?.ends_at ? editingOffer.ends_at.split(' ')[0] : '')} required className="w-full px-4 py-2 border rounded-lg bg-background text-sm" />
+                <div className="relative">
+                  <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground text-right">{t("endsAt") || "Ends At"}</label>
+                  <input name="ends_at" type="date" defaultValue={state?.data?.ends_at ?? (editingOffer?.ends_at ? editingOffer.ends_at.split(' ')[0] : '')} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
                 </div>
               </div>
             )}
