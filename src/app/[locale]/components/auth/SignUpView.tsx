@@ -142,6 +142,7 @@ export default function SignUpView() {
                     name="password"
                     type={showPassword ? "text" : "password"}
                     required
+                    dir="ltr"
                     className="appearance-none block w-full pl-10 pr-10 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
                     placeholder={t("passwordPlaceholder")}
                   />
@@ -174,6 +175,7 @@ export default function SignUpView() {
                     name="password_confirmation"
                     type={showConfirmPassword ? "text" : "password"}
                     required
+                    dir="ltr"
                     className="appearance-none block w-full pl-10 pr-10 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm transition-colors"
                     placeholder={t("confirmPasswordPlaceholder")}
                   />

@@ -144,7 +144,7 @@ function SearchableSelect({
   );
 }
 
-export function LocationSelect({ initialValue }: { initialValue?: string | number }) {
+export function LocationSelect({ initialValue, onChange }: { initialValue?: string | number, onChange?: (val: string) => void }) {
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const t = useTranslations("NewHub");
@@ -153,6 +153,14 @@ export function LocationSelect({ initialValue }: { initialValue?: string | numbe
   const [governorateId, setGovernorateId] = useState<string>("");
   const [cityId, setCityId] = useState<string>("");
   const [areaId, setAreaId] = useState<string>("");
+
+  // Track changes and notify parent
+  useEffect(() => {
+    const finalId = areaId || cityId || governorateId || "";
+    if (onChange) {
+      onChange(finalId);
+    }
+  }, [areaId, cityId, governorateId, onChange]);
 
   useEffect(() => {
     setIsLoading(true);

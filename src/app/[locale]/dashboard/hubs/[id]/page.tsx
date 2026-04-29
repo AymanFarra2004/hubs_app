@@ -14,6 +14,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { TimePicker } from "@/src/app/[locale]/components/ui/time-picker";
 import { useInputValidation } from "@/src/hooks/useInputValidation";
 import { CONFIG } from "@/src/config";
+import { LocationSelect } from "@/src/app/[locale]/components/location/LocationSelect";
 // import { cookies } from "next/headers";
 
 
@@ -47,6 +48,8 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const [hubDescEn, setHubDescEn] = useState("");
   const [hubAddrAr, setHubAddrAr] = useState("");
   const [hubAddrEn, setHubAddrEn] = useState("");
+  const [hubContact, setHubContact] = useState("");
+  const [hubLocationId, setHubLocationId] = useState<string | number>("");
 
   
 
@@ -63,6 +66,8 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
         setHubDescEn(res.data.description.en || "");
         setHubAddrAr(res.data.address_details.ar || "");
         setHubAddrEn(res.data.address_details.en || "");
+        setHubContact(res.data.contact || "");
+        setHubLocationId(res.data.location_id || "");
       }
       setIsLoadingData(false);
     }
@@ -101,6 +106,8 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
     formData.append("description[en]", hubDescEn.trim());
     formData.append("address_details[ar]", hubAddrAr.trim());
     formData.append("address_details[en]", hubAddrEn.trim());
+    formData.append("contact", hubContact.trim());
+    formData.append("location_id", String(hubLocationId));
 
     const res = await updateHub(hub.slug, null, formData);
     if (res.success) {
@@ -121,6 +128,8 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
       setHubDescEn(originalDataRef.current.description.en || "");
       setHubAddrAr(originalDataRef.current.address_details.ar || "");
       setHubAddrEn(originalDataRef.current.address_details.en || "");
+      setHubContact(originalDataRef.current.contact || "");
+      setHubLocationId(originalDataRef.current.location_id || "");
     }
     setIsEditing(false);
   };
@@ -413,6 +422,35 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                   <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
                 )}
               </div> */}
+            </div>
+
+            {/* Contact & Location Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {tNH("contactNumber") || "Contact Number"}
+                </label>
+                <div className="relative">
+                  <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <input 
+                    type="text" 
+                    dir="ltr"
+                    className="w-full pl-10 pr-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                    value={hubContact}
+                    onChange={(e) => setHubContact(e.target.value)}
+                    placeholder="e.g. 0599000000"
+                  />
+                </div>
+              </div>
+              <div className="relative">
+                 <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground">
+                  {tNH("locationSelection") || "Hub Location"}
+                </label>
+                <LocationSelect 
+                  initialValue={hubLocationId} 
+                  onChange={(val) => setHubLocationId(val)} 
+                />
+              </div>
             </div>
 
             <div className="flex justify-end pt-4">

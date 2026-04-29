@@ -105,6 +105,7 @@ export default function SignInView() {
                       type={showPassword ? "text" : "password"}
                       autoComplete="current-password"
                       required
+                      dir="ltr"
                       className="appearance-none block w-full ps-10 pe-10 py-3 border border-input rounded-xl bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary sm:text-sm transition-colors"
                       placeholder="••••••••"
                     />
