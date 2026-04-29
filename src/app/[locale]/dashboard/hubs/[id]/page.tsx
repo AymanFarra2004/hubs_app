@@ -18,6 +18,7 @@ import { useInputValidation } from "@/src/hooks/useInputValidation";
 // General Tab - shows real hub data
 function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const t = useTranslations("HubManagement.general");
+  const tNH = useTranslations("NewHub");
   const locale = useLocale();
 
   // Per-field language validation
@@ -86,8 +87,8 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   };
 
   const handleSaveGeneralSettings = async () => {
-    if (!hubNameAr.trim() || !hubNameEn.trim()) {
-      toast.error("Both Arabic and English names are required");
+    if (!hubNameAr.trim()) {
+      toast.error("الاسم العربي مطلوب");
       return;
     }
     setIsSavingName(true);
@@ -101,11 +102,11 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 
     const res = await updateHub(hub.slug, null, formData);
     if (res.success) {
-      toast.success(t("hub_name_updated") || "Settings updated successfully");
+      toast.success(t("hub_name_updated") || "تم تحديث الإعدادات");
       setIsEditing(false);
       onUpdate();
     } else {
-      toast.error(res.error || "Failed to update hub settings");
+      toast.error(res.error || "فشل تحديث إعدادات المركز");
     }
     setIsSavingName(false);
   };
@@ -129,6 +130,11 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
     <div className="space-y-6 animate-in fade-in duration-500">
       <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
         <h3 className="text-lg font-bold mb-4">{t("title")}</h3>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex gap-3 text-sm text-blue-700 mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <p>{t("englishOptionalNotice")}</p>
+        </div>
         
         <div className="space-y-4 max-w-xl">
           <div>
@@ -294,20 +300,6 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="relative">
                 <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
-                  {t("hub_name_en")}
-                </label>
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
-                  value={hubNameEn}
-                  onChange={(e) => setHubNameEn(e.target.value)}
-                  onBlur={nameEn.onBlur}
-                  placeholder="e.g. Al-Bahr Connection"
-                />
-                {nameEn.error && <p className="mt-1 text-xs text-red-500">{nameEn.error}</p>}
-              </div>
-              <div className="relative">
-                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
                   {t("hub_name_ar")}
                 </label>
                 <input 
@@ -321,6 +313,24 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 />
                 {nameAr.error && <p className="mt-1 text-xs text-red-500 text-right">{nameAr.error}</p>}
               </div>
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {t("hub_name_en")}
+                </label>
+                <input 
+                  type="text" 
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" 
+                  value={hubNameEn}
+                  onChange={(e) => setHubNameEn(e.target.value)}
+                  onBlur={nameEn.onBlur}
+                  placeholder="e.g. Al-Bahr Connection"
+                />
+                {nameEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{nameEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -330,19 +340,6 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               <Settings className="h-4 w-4" /> {t("description")}
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
-                  {t("description_en")}
-                </label>
-                <textarea 
-                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20 transition-all" 
-                  value={hubDescEn}
-                  onChange={(e) => setHubDescEn(e.target.value)}
-                  onBlur={descEn.onBlur}
-                  placeholder="Describe your hub in English..."
-                />
-                {descEn.error && <p className="mt-1 text-xs text-red-500">{descEn.error}</p>}
-              </div>
               <div>
                 <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
                   {t("description_ar")}
@@ -357,6 +354,23 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 />
                 {descAr.error && <p className="mt-1 text-xs text-red-500 text-right">{descAr.error}</p>}
               </div>
+              <div>
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {t("description_en")}
+                </label>
+                <textarea 
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm min-h-[100px] resize-none focus:ring-2 focus:ring-primary/20 transition-all" 
+                  value={hubDescEn}
+                  onChange={(e) => setHubDescEn(e.target.value)}
+                  onBlur={descEn.onBlur}
+                  placeholder="Describe your hub in English..."
+                />
+                {descEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{descEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -366,19 +380,6 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
               <MapPin className="h-4 w-4" /> {t("address_en")?.split(' ')[0]}
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
-                  {t("address_en")}
-                </label>
-                <textarea 
-                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm min-h-[80px] resize-none focus:ring-2 focus:ring-primary/20 transition-all" 
-                  value={hubAddrEn}
-                  onChange={(e) => setHubAddrEn(e.target.value)}
-                  onBlur={addrEn.onBlur}
-                  placeholder="Full English address details..."
-                />
-                {addrEn.error && <p className="mt-1 text-xs text-red-500">{addrEn.error}</p>}
-              </div>
               <div>
                 <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
                   {t("address_ar")}
@@ -392,6 +393,23 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                   placeholder="تفاصيل العنوان بالعربية..."
                 />
                 {addrAr.error && <p className="mt-1 text-xs text-red-500 text-right">{addrAr.error}</p>}
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold mb-1 uppercase tracking-widest text-muted-foreground flex items-center justify-between">
+                  {t("address_en")}
+                </label>
+                <textarea 
+                  className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm min-h-[80px] resize-none focus:ring-2 focus:ring-primary/20 transition-all" 
+                  value={hubAddrEn}
+                  onChange={(e) => setHubAddrEn(e.target.value)}
+                  onBlur={addrEn.onBlur}
+                  placeholder="Full English address details..."
+                />
+                {addrEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{addrEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
               </div>
             </div>
 
@@ -522,6 +540,7 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const [customDescEN, setCustomDescEN] = useState("");
   const [customDescAR, setCustomDescAR] = useState("");
   const t = useTranslations("HubManagement.services");
+  const tNH = useTranslations("NewHub");
   const locale = useLocale();
 
   // Per-field language validation for custom service form
@@ -703,23 +722,18 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
         {/* Add Custom Service */}
         <div className="bg-background rounded-2xl border border-border p-6 shadow-sm">
           <h3 className="text-lg font-bold mb-4">{t("addCustom")}</h3>
+          
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex gap-3 text-xs text-blue-700 mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+            <p>{t("englishOptionalNotice")}</p>
+          </div>
+
           <form onSubmit={handleAddCustom} className="space-y-4">
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">{t("serviceNameEn")}</label>
-                <input 
-                  required
-                  value={customNameEN}
-                  onChange={(e) => setCustomNameEN(e.target.value)}
-                  onBlur={svcNameEn.onBlur}
-                  className="w-full px-3 py-2 border border-border rounded-xl bg-background text-sm" 
-                  placeholder="e.g. Dedicated Desk"
-                />
-                {svcNameEn.error && <p className="mt-1 text-xs text-red-500">{svcNameEn.error}</p>}
-              </div>
-              <div>
                 <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground text-end">{t("serviceNameAr")}</label>
                 <input 
+                  required
                   value={customNameAR}
                   onChange={(e) => setCustomNameAR(e.target.value)}
                   onBlur={svcNameAr.onBlur}
@@ -730,15 +744,19 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 {svcNameAr.error && <p className="mt-1 text-xs text-red-500 text-right">{svcNameAr.error}</p>}
               </div>
               <div>
-                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">{t("descEn")}</label>
-                <textarea
-                  value={customDescEN}
-                  onChange={(e) => setCustomDescEN(e.target.value)}
-                  onBlur={svcDescEn.onBlur}
-                  className="w-full px-3 py-2 border border-border rounded-xl bg-background text-sm resize-none"
-                  rows={2}
+                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">{t("serviceNameEn")}</label>
+                <input 
+                  value={customNameEN}
+                  onChange={(e) => setCustomNameEN(e.target.value)}
+                  onBlur={svcNameEn.onBlur}
+                  className="w-full px-3 py-2 border border-border rounded-xl bg-background text-sm" 
+                  placeholder="e.g. Dedicated Desk"
                 />
-                {svcDescEn.error && <p className="mt-1 text-xs text-red-500">{svcDescEn.error}</p>}
+                {svcNameEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{svcNameEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
               </div>
               <div>
                 <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground text-end">{t("descAr")}</label>
@@ -752,10 +770,25 @@ function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 />
                 {svcDescAr.error && <p className="mt-1 text-xs text-red-500 text-right">{svcDescAr.error}</p>}
               </div>
+              <div>
+                <label className="block text-xs font-medium mb-1 uppercase tracking-wider text-muted-foreground">{t("descEn")}</label>
+                <textarea
+                  value={customDescEN}
+                  onChange={(e) => setCustomDescEN(e.target.value)}
+                  onBlur={svcDescEn.onBlur}
+                  className="w-full px-3 py-2 border border-border rounded-xl bg-background text-sm resize-none"
+                  rows={2}
+                />
+                {svcDescEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{svcDescEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
+              </div>
             </div>
             <button 
               type="submit" 
-              disabled={addingCustom || !customNameEN.trim()}
+              disabled={addingCustom || !customNameAR.trim()}
               className="cursor-pointer w-full px-6 py-2.5 bg-primary text-primary-foreground rounded-xl text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {addingCustom && <Loader2 className="h-4 w-4 animate-spin" />}
@@ -1014,6 +1047,7 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
   const [offerTimeType, setOfferTimeType] = useState<"limited" | "unlimited">("limited");
   const locale = useLocale();
   const t = useTranslations("HubManagement.offers");
+  const tNH = useTranslations("NewHub");
 
   const titleEn = useInputValidation("en");
   const titleAr = useInputValidation("ar");
@@ -1122,29 +1156,42 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             {state?.error && <div className="text-red-500 text-sm bg-red-50 p-2 rounded">{state.error}</div>}
             {state?.success && <div className="text-green-600 text-sm bg-green-50 p-2 rounded">{t("offerAdded")}</div>}
             
+            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex gap-3 text-xs text-blue-700 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="flex-shrink-0"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+              <p>{t("englishOptionalNotice")}</p>
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="relative">
-                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("titleEn")}</label>
-                <input name="title_en" onBlur={titleEn.onBlur} defaultValue={state?.data?.title_en ?? (editingOffer?.title?.en || (typeof editingOffer?.title === 'string' ? '' : ''))} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
-                {titleEn.error && <p className="mt-1 text-xs text-red-500">{titleEn.error}</p>}
-              </div>
               <div className="relative">
                 <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground text-right">{t("titleAr")}</label>
                 <input name="title_ar" onBlur={titleAr.onBlur} defaultValue={state?.data?.title_ar ?? (editingOffer?.title?.ar || (typeof editingOffer?.title === 'string' ? editingOffer.title : ''))} required dir="rtl" className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all font-arabic" />
                 {titleAr.error && <p className="mt-1 text-xs text-red-500 text-right">{titleAr.error}</p>}
               </div>
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("titleEn")}</label>
+                <input name="title_en" onBlur={titleEn.onBlur} defaultValue={state?.data?.title_en ?? (editingOffer?.title?.en || (typeof editingOffer?.title === 'string' ? '' : ''))} className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-primary/20 transition-all" />
+                {titleEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{titleEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="relative">
-                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("descEn")}</label>
-                <textarea name="description_en" onBlur={descEn.onBlur} defaultValue={state?.data?.description_en ?? (editingOffer?.description?.en || '')} required className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-sm focus:ring-2 focus:ring-primary/20 transition-all" rows={2}></textarea>
-                {descEn.error && <p className="mt-1 text-xs text-red-500">{descEn.error}</p>}
-              </div>
-              <div className="relative">
                 <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground text-right">{t("descAr")}</label>
                 <textarea name="description_ar" onBlur={descAr.onBlur} defaultValue={state?.data?.description_ar ?? (editingOffer?.description?.ar || (typeof editingOffer?.description === 'string' ? editingOffer.description : ''))} required dir="rtl" className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all font-arabic" rows={2}></textarea>
                 {descAr.error && <p className="mt-1 text-xs text-red-500 text-right">{descAr.error}</p>}
+              </div>
+              <div className="relative">
+                <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground">{t("descEn")}</label>
+                <textarea name="description_en" onBlur={descEn.onBlur} defaultValue={state?.data?.description_en ?? (editingOffer?.description?.en || '')} className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-sm focus:ring-2 focus:ring-primary/20 transition-all" rows={2}></textarea>
+                {descEn.error ? (
+                  <p className="mt-1 text-xs text-red-500">{descEn.error}</p>
+                ) : (
+                  <p className="mt-1 text-[10px] text-muted-foreground opacity-70 italic">{tNH("englishOptionalWarning")}</p>
+                )}
               </div>
             </div>
 

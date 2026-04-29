@@ -250,9 +250,9 @@ export async function createHub(prevState: any, formData: FormData) {
     const location_id_raw = formData.get("location_id");
     const location_id = location_id_raw ? Number(location_id_raw) : 0;
 
-    if (!name_en) return { error: "Hub name (EN) is required" };
+    if (!name_ar) return { error: "اسم المركز (بالعربية) مطلوب" };
     if (!location_id || isNaN(location_id) || location_id <= 0) {
-      return { error: "Please select a specific location (Governorate, City, or Area)" };
+      return { error: "يرجى اختيار موقع محدد (محافظة، مدينة، أو منطقة)" };
     }
 
     const hourly_price_raw = formData.get("hourly_price");
@@ -260,8 +260,8 @@ export async function createHub(prevState: any, formData: FormData) {
 
     const payload: any = {
       name: {
-        en: name_en,
-        ar: name_ar || name_en,
+        en: name_en || "",
+        ar: name_ar,
       },
       working_hours: {} as any, // Initialize
       description: {
@@ -402,7 +402,7 @@ export async function createHub(prevState: any, formData: FormData) {
     }
 
     if (!result || (!resOk && result.status !== 'success')) {
-      return { error: result?.message || `Failed to create hub (Status ${resStatus || 'Timeout/Network Error'})` };
+      return { error: result?.message || `فشل إنشاء المركز (الحالة ${resStatus || 'خطأ في الشبكة'})` };
     }
 
     const hub = result.data || result;
@@ -448,12 +448,12 @@ export async function createHub(prevState: any, formData: FormData) {
     }
 
     // ─── Step 3: Create custom service if provided ──────────────────────────
-    if (hubSlug && customNameEn && customNameEn.trim() !== '') {
+    if (hubSlug && (customNameAr?.trim() || customNameEn?.trim())) {
       try {
         const customServicePayload = {
           name: {
-            en: customNameEn.trim(),
-            ar: customNameAr?.trim() || customNameEn.trim(),
+            en: customNameEn?.trim() || "",
+            ar: customNameAr?.trim() || customNameEn?.trim(),
           },
           description: {
             en: customDescEn?.trim() || "",
@@ -485,7 +485,7 @@ export async function createHub(prevState: any, formData: FormData) {
 
     return {
       success: true,
-      message: result.message || "Hub created successfully",
+      message: result.message || "تم إنشاء المركز بنجاح",
       hub,
     };
   } catch (error) {
@@ -583,10 +583,15 @@ export async function addCustomService(hubSlug: string, prevState: any, formData
   if (!token) return { error: "Unauthenticated" };
 
   try {
+    const nameEn = formData.get("name_en") as string;
+    const nameAr = formData.get("name_ar") as string;
+    
+    if (!nameAr && !nameEn) return { error: "اسم الخدمة مطلوب" };
+
     const payload = {
       name: {
-        en: formData.get("name_en") as string,
-        ar: formData.get("name_ar") as string || formData.get("name_en") as string,
+        en: nameEn || "",
+        ar: nameAr || nameEn,
       },
       description: {
         en: formData.get("description_en") as string || "",
@@ -609,9 +614,9 @@ export async function addCustomService(hubSlug: string, prevState: any, formData
     if (res.ok) {
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
       revalidateTag(`hub-services-${hubSlug}`, 'page');
-      return { success: true, data: result.data, message: "Custom service added successfully" };
+      return { success: true, data: result.data, message: "تمت إضافة الخدمة بنجاح" };
     }
-    return { error: result.message || "Failed to add custom service" };
+    return { error: result.message || "فشل إضافة الخدمة" };
   } catch (error) {
     return { error: "Network Error" };
   }
@@ -718,9 +723,9 @@ export async function addHubOffer(hubSlug: string, prevState: any, formData: For
     if (res.ok && result.status === 'success') {
       revalidatePath(`/hubs/${hubSlug}`);
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
-      return { success: true, message: "Added" };
+      return { success: true, message: "تمت إضافة العرض بنجاح" };
     }
-    return { error: result.message || "Failed", data: formValues };
+    return { error: result.message || "فشل إضافة العرض", data: formValues };
   } catch (e) {
     return { error: "Network Error", data: formValues };
   }
@@ -760,9 +765,9 @@ export async function updateHubOffer(hubSlug: string, offerId: number, prevState
     if (res.ok && result.status === 'success') {
       revalidatePath(`/hubs/${hubSlug}`);
       revalidatePath(`/dashboard/hubs/${hubSlug}`);
-      return { success: true, message: "Updated" };
+      return { success: true, message: "تم تحديث العرض بنجاح" };
     }
-    return { error: result.message || "Failed", data: formValues };
+    return { error: result.message || "فشل تحديث العرض", data: formValues };
   } catch (e) {
     return { error: "Network Error", data: formValues };
   }
@@ -972,7 +977,7 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
 
     const jsonResult = await jsonRes.json();
     if (!jsonRes.ok && jsonResult.status !== 'success') {
-      return { error: jsonResult.message || "Failed to update hub details" };
+      return { error: jsonResult.message || "فشل تحديث بيانات المركز" };
     }
 
     // --- Step 2: Upload images if provided ---
@@ -1019,12 +1024,12 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     }
 
     // --- Step 3: Handle custom service if provided ---
-    if (slug && customNameEn && customNameEn.trim() !== '') {
+    if (slug && (customNameAr?.trim() || customNameEn?.trim())) {
       try {
         const customServicePayload = {
           name: {
-            en: customNameEn.trim(),
-            ar: customNameAr?.trim() || customNameEn.trim(),
+            en: customNameEn?.trim() || "",
+            ar: customNameAr?.trim() || customNameEn?.trim(),
           },
           description: {
             en: customDescEn?.trim() || "",
@@ -1052,7 +1057,7 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     revalidatePath(`/hubs/${slug}`);
     revalidatePath('/', 'layout');
     revalidateTag('all-hubs', 'layout');
-    return { success: true, message: jsonResult.message || "Updated" };
+    return { success: true, message: jsonResult.message || "تم التحديث بنجاح" };
   } catch (e) {
     return { error: "Network Error" };
   }
