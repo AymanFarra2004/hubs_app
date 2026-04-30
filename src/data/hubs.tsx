@@ -1,4 +1,4 @@
-import { Wifi, Zap, Monitor, Coffee, Printer, Car, Snowflake, Flame, ShieldCheck } from "lucide-react";
+import { Wifi, Zap, Monitor, Coffee, Printer, Car, Snowflake, Flame, ShieldCheck, Presentation, Bath, UserRound, CreditCard, Utensils, Users, User } from "lucide-react";
 import React from "react";
 
 export interface SocialAccount {
@@ -35,14 +35,32 @@ export function getServiceIcon(serviceName: string, className: string = "h-5 w-5
     
     const n = serviceName.toLowerCase();
     
-    if (n.includes("internet") || n.includes("wifi") || n.includes("web") || n.includes("واي فاي") || n.includes("إنترنت") || n.includes("انترنت")) return <Wifi className={className} />;
-    if (n.includes("electric") || n.includes("power") || n.includes("solar") || n.includes("كهرباء") || n.includes("طاقة")) return <Zap className={className} />;
-    if (n.includes("workspace") || n.includes("desk") || n.includes("monitor") || n.includes("مساحة") || n.includes("عمل")) return <Monitor className={className} />;
-    if (n.includes("coffee") || n.includes("tea") || n.includes("قهوة") || n.includes("مشروبات")) return <Coffee className={className} />;
-    if (n.includes("print") || n.includes("طابع") || n.includes("طابعة")) return <Printer className={className} />;
-    if (n.includes("park") || n.includes("موقف") || n.includes("سيار")) return <Car className={className} />;
-    if (n.includes("air condition") || n.includes("ac") || n.includes("تكييف") || n.includes("مكيف")) return <Snowflake className={className} />;
-    if (n.includes("heat") || n.includes("تدفئة") || n.includes("دفاية")) return <Flame className={className} />;
+    // Internet & Connectivity
+    if (n.includes("إنترنت") || n.includes("انترنت") || n.includes("واي فاي")) return <Wifi className={className} />;
+    
+    // Electricity
+    if (n.includes("كهرباء") || n.includes("طاقة")) return <Zap className={className} />;
+    
+    // Workspace & Offices
+    if (n.includes("قاعات تدريب")) return <Presentation className={className} />;
+    if (n.includes("غرف اجتماعات") || n.includes("قاعات منفصلة")) return <Users className={className} />;
+    if (n.includes("مكاتب فردية") || n.includes("مكتب فردي")) return <User className={className} />;
+    if (n.includes("مساحة") || n.includes("عمل")) return <Monitor className={className} />;
+    
+    // Special Categories
+    if (n.includes("سيدات")) return <UserRound className={className} />;
+    
+    // Amenities
+    if (n.includes("قهوة") || n.includes("مشروبات") || n.includes("شاي")) return <Coffee className={className} />;
+    if (n.includes("مطعم") || n.includes("كافيه")) return <Utensils className={className} />;
+    if (n.includes("دفع") || n.includes("بنكي") || n.includes("نقدي")) return <CreditCard className={className} />;
+    if (n.includes("طباعة") || n.includes("طابعة") || n.includes("طابع")) return <Printer className={className} />;
+    if (n.includes("دورات مياه") || n.includes("حمام")) return <Bath className={className} />;
+    
+    // Environment
+    if (n.includes("تكييف") || n.includes("مكيف")) return <Snowflake className={className} />;
+    if (n.includes("تدفئة") || n.includes("دفاية")) return <Flame className={className} />;
+    if (n.includes("موقف") || n.includes("سيار")) return <Car className={className} />;
     
     return <ShieldCheck className={className} />;
 }
