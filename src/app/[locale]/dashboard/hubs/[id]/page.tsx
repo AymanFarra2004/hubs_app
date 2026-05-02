@@ -1221,7 +1221,7 @@ function OffersTab({ hubSlug }: { hubSlug: string }) {
             <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
               <div className="relative">
                 <label className="block text-[10px] font-bold mb-1.5 uppercase tracking-widest text-muted-foreground text-right">{t("descAr")}</label>
-                <textarea name="description_ar" onBlur={descAr.onBlur} defaultValue={state?.data?.description_ar ?? (editingOffer?.description?.ar || (typeof editingOffer?.description === 'string' ? editingOffer.description : ''))} required dir="rtl" className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all font-arabic" rows={2}></textarea>
+                <textarea name="description_ar" onBlur={descAr.onBlur} defaultValue={state?.data?.description_ar ?? (editingOffer?.description?.ar || (typeof editingOffer?.description === 'string' ? editingOffer.description : ''))} dir="rtl" className="w-full px-4 py-2.5 border border-input rounded-xl bg-background resize-none text-right text-sm focus:ring-2 focus:ring-primary/20 transition-all font-arabic" rows={2}></textarea>
                 {descAr.error && <p className="mt-1 text-xs text-red-500 text-right">{descAr.error}</p>}
               </div>
               {/* <div className="relative">
