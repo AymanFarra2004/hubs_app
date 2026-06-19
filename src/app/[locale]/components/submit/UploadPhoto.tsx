@@ -56,9 +56,10 @@ const UploadPhoto = () => {
     const rejectedBatch: string[] = [];
 
     const options = {
-      maxSizeMB: 1,
+      maxSizeMB: 0.2,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
+      fileType: 'image/webp',
     };
 
     const compressedResults = await Promise.all(

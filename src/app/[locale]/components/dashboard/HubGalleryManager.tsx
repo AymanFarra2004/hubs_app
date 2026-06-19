@@ -88,9 +88,10 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
     const batch: FileWithPreview[] = [];
     
     const options = {
-      maxSizeMB: 1,
+      maxSizeMB: 0.2,
       maxWidthOrHeight: 1920,
       useWebWorker: true,
+      fileType: 'image/webp',
     };
 
     const compressedResults = await Promise.all(
