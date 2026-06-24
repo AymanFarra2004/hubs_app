@@ -19,7 +19,7 @@ import { LocationSelect } from "@/src/app/[locale]/components/location/LocationS
 
 
 // General Tab - shows real hub data
-function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
+export function GeneralTab({ hub, onUpdate, redirectOnDelete = "/dashboard" }: { hub: any; onUpdate: () => void; redirectOnDelete?: string }) {
   const t = useTranslations("HubManagement.general");
   const tNH = useTranslations("NewHub");
   const locale = useLocale();
@@ -591,7 +591,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
                 const res = await deleteHub(hub.slug);
                 if (res.success) {
                   toast.success("Hub deleted successfully");
-                  window.location.href = "/dashboard";
+                  window.location.href = redirectOnDelete;
                 } else {
                   toast.error(res.error || "Failed to delete hub");
                   setIsDeleting(false);
@@ -611,7 +611,7 @@ function GeneralTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
 }
 
 // Services Tab - Updated for Current Services Table and Dedicated Custom Endpoints
-function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
+export function ServicesTab({ hub, onUpdate }: { hub: any; onUpdate: () => void }) {
   const [globalServices, setGlobalServices] = useState<any[]>([]);
   const [activeServices, setActiveServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -896,7 +896,7 @@ const PLATFORM_OPTIONS = [
   { value: "other",     label: "Other" },
 ];
 
-function SocialsTab({ hubSlug }: { hubSlug: string }) {
+export function SocialsTab({ hubSlug }: { hubSlug: string }) {
   const t = useTranslations("HubManagement.socials");
 
   const [socials, setSocials]             = useState<SocialAccount[]>([]);
@@ -1121,7 +1121,7 @@ function SocialsTab({ hubSlug }: { hubSlug: string }) {
 }
 
 // Offers Tab - functional form
-function OffersTab({ hubSlug }: { hubSlug: string }) {
+export function OffersTab({ hubSlug }: { hubSlug: string }) {
   const [showForm, setShowForm] = useState(false);
   const [editingOffer, setEditingOffer] = useState<any | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);

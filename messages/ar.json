@@ -253,6 +253,14 @@
     "rejectedSuccess": "تم رفض المركز.",
     "actionFailed": "فشل الإجراء. يرجى المحاولة مجدداً."
   },
+  "AdminHubEdit": {
+    "editHub": "تعديل إداري",
+    "backToHubs": "العودة إلى إدارة المراكز",
+    "backToPreview": "العودة إلى المعاينة",
+    "adminMode": "تعديل إداري",
+    "updateSuccess": "تم تحديث المركز بنجاح!",
+    "updateFailed": "فشل تحديث المركز."
+  },
   "AdminServices": {
     "addNewService": "إضافة خدمة جديدة",
     "nameEn": "اسم الخدمة بالانجليزية (EN) 🇬🇧",

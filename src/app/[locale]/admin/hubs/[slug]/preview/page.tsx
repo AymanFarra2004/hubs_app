@@ -173,6 +173,15 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* Edit hub button */}
+          <Link
+            href={`/${currentLocale}/admin/hubs/${slug}/edit`}
+            className="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 bg-primary text-primary-foreground rounded-xl text-xs font-semibold hover:bg-primary/90 transition-colors shadow-sm"
+          >
+            <ExternalLink className="h-3.5 w-3.5" />
+            Edit Hub
+          </Link>
+
           {/* Status badge */}
           <span
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${
