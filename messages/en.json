@@ -253,6 +253,14 @@
     "rejectedSuccess": "Hub rejected.",
     "actionFailed": "Action failed. Please try again."
   },
+  "AdminHubEdit": {
+    "editHub": "Admin Edit",
+    "backToHubs": "Back to Hub Management",
+    "backToPreview": "Back to Preview",
+    "adminMode": "Admin Editing",
+    "updateSuccess": "Hub updated successfully!",
+    "updateFailed": "Failed to update hub."
+  },
   "AdminServices": {
     "addNewService": "Add New Service",
     "nameEn": "Service Name English 🇬🇧",

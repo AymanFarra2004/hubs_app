@@ -9,6 +9,7 @@ import HubHeroImage from "@/components/hubs/hub/HubHeroImage"
 import HubMainContent from "@/components/hubs/hub/HubMainContent"
 import HhubSideBar from "@/components/hubs/hub/HhubSideBar"
 import HubReviews from "@/components/hubs/hub/HubReviews"
+import AdminEditHubButton from "@/components/hubs/hub/AdminEditHubButton"
 import { getLocale, getTranslations } from "next-intl/server"
 import { format24to12 } from "@/src/lib/utils"
 import { Metadata } from "next"
@@ -153,13 +154,14 @@ export default async function HubDetails({
 
   // getHubReviews now extracts data.reviews correctly and parses average_rating as float
   const reviews: any[] = reviewsRes.data ?? []
-  const isAuthenticated: boolean = myReviewRes.authenticated ?? false
+  const isAuthenticated: boolean = (myReviewRes as any).authenticated ?? false
   const myReview: any | null = myReviewRes.data ?? null
   const averageRating: number = reviewsRes.averageRating ?? 0
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
+      <AdminEditHubButton hubSlug={slug} />
 
       <main className="flex-grow pt-24 pb-20">
         
