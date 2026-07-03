@@ -6,23 +6,21 @@ import { CONFIG } from '@/src/config';
 const intlMiddleware = createMiddleware(routing);
 
 export default async function middleware(request: NextRequest) {
-  const { pathname, search } = request.nextUrl;
+  const { pathname } = request.nextUrl;
 
   // 1. Authenticate protected routes
-  const isProtectedAdmin = /^\/(en|ar)\/admin(\/|$)/.test(pathname) || pathname.startsWith('/admin');
-  const isProtectedDashboard = /^\/(en|ar)\/dashboard(\/|$)/.test(pathname) || pathname.startsWith('/dashboard');
+  const isProtectedAdmin = /^\/ar\/admin(\/|$)/.test(pathname) || pathname.startsWith('/admin');
+  const isProtectedDashboard = /^\/ar\/dashboard(\/|$)/.test(pathname) || pathname.startsWith('/dashboard');
 
   if (isProtectedAdmin || isProtectedDashboard) {
     const token = request.cookies.get('token')?.value;
-    const localeMatch = pathname.match(/^\/(en|ar)/);
-    const locale = localeMatch ? localeMatch[1] : 'ar';
 
     if (!token) {
-      return NextResponse.redirect(new URL(`/${locale}/sign-in`, request.url));
+      return NextResponse.redirect(new URL(`/ar/sign-in`, request.url));
     }
 
     try {
-      const res = await fetch(`${CONFIG.API_URL}/api/v1/profile?lang=${locale}`, {
+      const res = await fetch(`${CONFIG.API_URL}/api/v1/profile?lang=ar`, {
         method: "GET",
         headers: {
           "Accept": "application/json",
@@ -34,41 +32,25 @@ export default async function middleware(request: NextRequest) {
       const userRole = body?.data?.role || body?.role;
 
       if (!res.ok || !userRole) {
-        return NextResponse.redirect(new URL(`/${locale}/isgn-in`, request.url));
+        return NextResponse.redirect(new URL(`/ar/sign-in`, request.url));
       }
 
       if (isProtectedAdmin && userRole !== 'admin') {
-        return NextResponse.redirect(new URL(`/${locale}/`, request.url)); // unauthorized -> redirect home
+        return NextResponse.redirect(new URL(`/ar`, request.url)); // unauthorized -> redirect home
       }
 
       if (isProtectedDashboard && !['admin', 'hub_owner'].includes(userRole)) {
-        return NextResponse.redirect(new URL(`/${locale}/`, request.url)); // unauthorized -> redirect home
+        return NextResponse.redirect(new URL(`/ar`, request.url)); // unauthorized -> redirect home
       }
 
     } catch (error) {
       console.error("Middleware Auth Error:", error);
-      return NextResponse.redirect(new URL(`/${locale}/sign-in`, request.url));
+      return NextResponse.redirect(new URL(`/ar/sign-in`, request.url));
     }
   }
 
-  // 2. Existing locale routing logic
-  if (pathname.startsWith('/ar')) {
-    return intlMiddleware(request);
-  }
-
-  let targetPath = pathname;
-
-  if (pathname.startsWith('/en')) {
-    targetPath = pathname.replace(/^\/en/, '/ar');
-  } else if (pathname === '/') {
-    targetPath = '/ar';
-  } else {
-    targetPath = `/ar${pathname}`;
-  }
-
-  const newUrl = new URL(`${targetPath}${search}`, request.url);
-
-  return NextResponse.redirect(newUrl);
+  // 2. Delegate all routing to next-intl middleware
+  return intlMiddleware(request);
 }
 
 export const config = {

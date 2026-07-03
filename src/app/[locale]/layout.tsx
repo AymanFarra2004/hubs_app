@@ -15,17 +15,20 @@ import { Analytics } from '@vercel/analytics/react';
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const notoSansArabic = Noto_Sans_Arabic({
   variable: "--font-noto-arabic",
   subsets: ["arabic"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "700"],
+  display: "swap",
 });
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
