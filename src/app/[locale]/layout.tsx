@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     keywords: ["Gaza", "hubs", "internet", "electricity", "workspace", "Qareeb", "Palestine", "غزة", "قريب", "مساحة عمل", "مساحات عمل", "اماكن عمل", "اماكن كهرباء", "اماكن انترنت", "هب", "هبات"],
     authors: [{ name: "Qareeb Team" }],
     icons: {
-      icon: '/qareeb-logo-location.png',
+      icon: '/qareeb-logo-location.webp',
     },
     alternates: {
       canonical: `${baseUrl}/${locale}`,

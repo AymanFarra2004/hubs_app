@@ -43,7 +43,7 @@ export function Footer() {
           <div className="col-span-1 md:col-span-2">
             <Link href="/" className="cursor-pointer flex items-center gap-3 mb-4">
               <img
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Qareeb Logo"
                 className="h-11 w-auto object-contain"
               />

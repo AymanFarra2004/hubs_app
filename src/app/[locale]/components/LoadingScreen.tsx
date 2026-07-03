@@ -49,7 +49,7 @@ export default function LoadingScreen() {
           
           <div className="relative w-24 h-24 md:w-32 md:h-32">
             <Image
-              src="/qareeb-logo-location.png"
+              src="/qareeb-logo-location.webp"
               alt="Qareeb Logo"
               fill
               className="object-contain"

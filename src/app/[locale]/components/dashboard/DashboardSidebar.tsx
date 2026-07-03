@@ -30,7 +30,7 @@ export function DashboardSidebar({ isSidebarOpen, onClose }: { isSidebarOpen?: b
       <div className="h-16 flex items-center justify-between px-6 border-b border-border">
         <Link href="/">
         <div className="flex items-center gap-2">
-          <img src="/logo.png" alt="Qareeb Logo" className="h-12 w-auto object-contain" />
+          <img src="/logo.webp" alt="Qareeb Logo" className="h-12 w-auto object-contain" />
           <h1 className="text-xl font-bold text-foreground tracking-tight">Qareeb | قريب</h1>
         </div>
         </Link>

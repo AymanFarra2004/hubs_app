@@ -45,7 +45,7 @@ export default function SignInView() {
         <div className="flex-1 flex flex-col justify-center pb-20 px-4 sm:px-6 lg:px-20 xl:px-24 bg-background">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <Link href="/" className="flex items-center justify-center gap-2 mb-10">
-              <img src="/logo.png" alt="Qareeb Logo" className="h-52 w-auto object-contain drop-shadow-md" />
+              <img src="/logo.webp" alt="Qareeb Logo" className="h-52 w-auto object-contain drop-shadow-md" />
             </Link>
 
             <div>
