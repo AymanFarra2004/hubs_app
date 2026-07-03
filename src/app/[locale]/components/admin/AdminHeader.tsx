@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { Menu, Bell, User, LogOut, ChevronDown, Home, Sun, Moon, Languages, Shield } from "lucide-react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -57,7 +57,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           </Link>
           <div className="h-4 w-px bg-border mx-0.5 sm:mx-1"></div>
           <div className="flex items-center gap-2 px-2">
-            <img src="/logo.webp" alt="Qareeb Logo" className="h-8 w-auto object-contain" />
+            <Image src="/logo.webp" alt="Qareeb Logo" width={150} height={32} className="h-8 w-auto object-contain" />
             <h1 className="text-base sm:text-lg font-bold text-foreground truncate max-w-[120px] sm:max-w-none">
               Qareeb | قريب
             </h1>

@@ -1,5 +1,6 @@
 "use client"
 import { Link, usePathname, useRouter } from "@/src/i18n/routing";
+import Image from "next/image";
 import { LayoutDashboard, PlusCircle, Settings, LogOut, X } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logout } from "@/src/store/authSlice";
@@ -30,7 +31,7 @@ export function DashboardSidebar({ isSidebarOpen, onClose }: { isSidebarOpen?: b
       <div className="h-16 flex items-center justify-between px-6 border-b border-border">
         <Link href="/">
         <div className="flex items-center gap-2">
-          <img src="/logo.webp" alt="Qareeb Logo" className="h-12 w-auto object-contain" />
+          <Image src="/logo.webp" alt="Qareeb Logo" width={150} height={48} className="h-12 w-auto object-contain" />
           <h1 className="text-xl font-bold text-foreground tracking-tight">Qareeb | قريب</h1>
         </div>
         </Link>

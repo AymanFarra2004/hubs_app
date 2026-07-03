@@ -1,4 +1,5 @@
 import { Link } from "@/src/i18n/routing";
+import Image from "next/image";
 import { Settings, MapPin, ExternalLink } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { CONFIG } from "@/src/config";
@@ -22,10 +23,11 @@ export function HubCard({ hub }: HubCardProps) {
     <div className="bg-background rounded-2xl border border-border shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-md group">
       <div className="h-48 bg-muted relative overflow-hidden">
         {imageUrl ? (
-          <img 
+          <Image 
             src={imageUrl} 
             alt={hubName} 
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            fill
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full bg-primary/10 text-primary/40 font-semibold">

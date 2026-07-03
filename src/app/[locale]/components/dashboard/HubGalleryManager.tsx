@@ -338,7 +338,7 @@ export default function HubGalleryManager({ hub, isOpen, onClose, onUpdate }: { 
                        isMain ? 'border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.3)]' : 'border-black/5 dark:border-white/5 hover:border-primary/30'
                      }`}
                    >
-                     <img src={photo.url} alt="Old gallery" className="w-full h-full object-cover bg-muted/20" />
+                     <Image src={photo.url} alt="Old gallery" fill className="object-cover bg-muted/20" />
                      
                      {/* Overlay Indicators */}
                      {isMain && (

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import { CONFIG } from "@/src/config";
+import Image from "next/image";
 
 import { Link } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
@@ -50,8 +51,8 @@ export default function HeebatRibbon({ hubs = [] }: { hubs?: any[] }) {
               key={`${hub.id}-${index}`}
               className="flex items-center gap-3 pr-6 pl-2 py-2 bg-card border border-border/50 rounded-full whitespace-nowrap shadow-sm hover:shadow-md hover:border-purple-500/30 transition-all cursor-pointer group"
             >
-              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform shadow-sm">
-                <img src={imageUrl} alt={hubName} className="w-full h-full object-cover" />
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 group-hover:scale-105 transition-transform shadow-sm relative">
+                <Image src={imageUrl} alt={hubName} fill className="object-cover" />
               </div>
               <span className="text-sm font-medium text-foreground">{hubName}</span>
             </Link>

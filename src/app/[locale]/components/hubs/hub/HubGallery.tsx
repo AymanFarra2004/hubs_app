@@ -69,10 +69,11 @@ export default function HubGallery({ hubName, galleryUrls }: { hubName: string, 
                    <Maximize2 className="h-5 w-5" />
                 </div>
               </div>
-              <img 
+              <Image 
                 src={url} 
                 alt={`${hubName} gallery ${idx + 1}`} 
-                className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                fill
+                className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
               />
             </div>
           ))}
@@ -116,11 +117,12 @@ export default function HubGallery({ hubName, galleryUrls }: { hubName: string, 
             onWheel={handleWheel}
           >
             <div className="relative w-full h-full flex items-center justify-center" onClick={e => e.stopPropagation()}>
-               <img 
+               <Image 
                  src={galleryUrls[selectedIndex]}
                  alt={`${hubName} fullscreen image ${selectedIndex + 1}`}
+                 fill
                  style={{ transform: `scale(${scale})` }}
-                 className="max-w-full max-h-full object-contain rounded-lg shadow-2xl drop-shadow-2xl transition-transform ease-out"
+                 className="object-contain rounded-lg shadow-2xl drop-shadow-2xl transition-transform ease-out"
                />
                
                {/* Controls Hint */}

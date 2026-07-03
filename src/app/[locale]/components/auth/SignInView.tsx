@@ -3,6 +3,7 @@
 import { useState, useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { Link, useRouter } from '@/src/i18n/routing'
+import Image from "next/image";
 import { MapPin, Mail, Lock, ArrowRight, Loader2, Eye, EyeOff } from "lucide-react"
 import { Header } from "@/components/header/Header"
 import { Footer } from "@/components/footer/Footer"
@@ -45,7 +46,7 @@ export default function SignInView() {
         <div className="flex-1 flex flex-col justify-center pb-20 px-4 sm:px-6 lg:px-20 xl:px-24 bg-background">
           <div className="mx-auto w-full max-w-sm lg:w-96">
             <Link href="/" className="flex items-center justify-center gap-2 mb-10">
-              <img src="/logo.webp" alt="Qareeb Logo" className="h-52 w-auto object-contain drop-shadow-md" />
+              <Image src="/logo.webp" alt="Qareeb Logo" width={208} height={208} className="h-52 w-auto object-contain drop-shadow-md" />
             </Link>
 
             <div>

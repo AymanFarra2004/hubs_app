@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { Menu, Bell, User, LogOut, ChevronDown, Home, Sun, Moon, Languages } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -66,7 +66,7 @@ export function DashboardHeader({ onMenuClick }: DashboardHeaderProps) {
           </Link>
           
           {/* <div className="flex items-center gap-2 px-2">
-            <img src="/logo.webp" alt="Qareeb Logo" className="h-8 w-auto object-contain" />
+            <Image src="/logo.webp" alt="Qareeb Logo" width={150} height={32} className="h-8 w-auto object-contain" />
             <h1 className="text-base sm:text-lg font-bold text-foreground truncate max-w-[120px] sm:max-w-none">
               Qareeb | قريب
             </h1>

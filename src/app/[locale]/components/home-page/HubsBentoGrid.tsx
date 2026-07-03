@@ -5,6 +5,7 @@ import { Coins, Star } from "lucide-react";
 import { format24to12 } from "@/src/lib/utils";
 import { getServiceIcon } from "@/src/data/hubs";
 import { CONFIG } from "@/src/config";
+import Image from "next/image";
 
 
 export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
@@ -85,10 +86,11 @@ export default function HubsBentoGrid({ hubs = [] }: { hubs?: any[] }) {
               className={`bg-card dark:bg-card/50 rounded-2xl overflow-hidden group hover:shadow-[0_20px_40px_rgba(25,28,30,0.06)] dark:hover:shadow-[0_20px_40px_rgba(255,255,255,0.02)] transition-shadow duration-300 border border-border/50 flex-col ${i >= 3 ? 'hidden md:flex' : 'flex'}`}
             >
               <div className="relative h-64 overflow-hidden">
-                <img
+                <Image
                   src={hub.imageUrl}
                   alt={hub.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
                 />
                 <div className="absolute top-4 left-4 flex gap-2">
                   <span className="bg-background/70 backdrop-blur-md text-foreground text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-sm border border-border/50">

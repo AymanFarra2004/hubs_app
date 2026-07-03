@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { Shield, LayoutDashboard, Server, Bell, Settings, LogOut, CheckSquare, AlertTriangle, X, Users, MessageSquare, MapPin } from "lucide-react";
 import { Link } from "@/src/i18n/routing";
 import { useSelector } from "react-redux";
@@ -54,7 +54,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       `}>
         <div className="h-16 flex items-center justify-between px-6 border-b border-border">
           <div className="flex items-center gap-2">
-            <img src="/logo.webp" alt="Qareeb Logo" className="h-12 w-auto object-contain" />
+            <Image src="/logo.webp" alt="Qareeb Logo" width={150} height={48} className="h-12 w-auto object-contain" />
             <h1 className="text-xl font-bold text-foreground tracking-tight">Qareeb | قريب</h1>
           </div>
           <button 

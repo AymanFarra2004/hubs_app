@@ -3,6 +3,7 @@
 import { useTranslations, useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import { CONFIG } from "@/src/config";
+import Image from "next/image";
 
 import { useEffect, useState } from "react";
 import { useRouter, Link } from "@/src/i18n/routing";
@@ -126,10 +127,11 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group"
               >
                 <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <img
+                  <Image
                     src={carouselHubs[0].imageUrl}
                     alt={carouselHubs[0].name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
                     <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
@@ -146,10 +148,11 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group"
               >
                 <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <img
+                  <Image
                     src={carouselHubs[1].imageUrl}
                     alt={carouselHubs[1].name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-3 flex justify-center px-2">
                     <span className="bg-background/90 backdrop-blur-md px-3 py-1 rounded-full border border-border/50 text-[10px] font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
@@ -166,10 +169,11 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 group"
               >
                 <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <img
+                  <Image
                     src={carouselHubs[2].imageUrl}
                     alt={carouselHubs[2].name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
                     <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
@@ -186,10 +190,11 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
                 className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 group"
               >
                 <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <img
+                  <Image
                     src={carouselHubs[3].imageUrl}
                     alt={carouselHubs[3].name}
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                   <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
                     <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
@@ -203,7 +208,7 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
             {/* Center Overlay Element */}
             <div className="absolute w-32 h-32  rounded-full flex flex-col items-center justify-center  z-10">
               <span className="text-[#9333EA] font-extrabold text-2xl tracking-tight">
-                <img src="/qareeb-logo-location.webp" alt="Logo" className="w-auto h-[120px] object-cover" />
+                <Image src="/qareeb-logo-location.webp" alt="Logo" width={120} height={120} className="w-auto h-[120px] object-cover" />
               </span>
             </div>
           </div>

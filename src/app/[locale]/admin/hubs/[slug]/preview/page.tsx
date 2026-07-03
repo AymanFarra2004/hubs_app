@@ -3,6 +3,7 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { CONFIG } from "@/src/config";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   ExternalLink,
@@ -229,10 +230,11 @@ export default async function AdminHubPreviewPage({ params }: PageProps) {
       {/* Hero Image — mirrors HubHeroImage */}
       <div className="relative aspect-[21/9] w-full rounded-2xl overflow-hidden shadow-md">
         {mainImage ? (
-          <img
+          <Image
             src={mainImage}
             alt={name}
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
           />
         ) : (
           <div className="w-full h-full bg-muted flex items-center justify-center">

@@ -5,6 +5,7 @@ import { Settings, Box, Tag, Link as LinkIcon, Camera, Save, ArrowLeft, Loader2,
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "@/src/i18n/routing";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { getPrivateHubBySlug, updateHub, deleteHub, addHubSocial, updateHubSocials, getHubOffers, addHubOffer, updateHubOffer, deleteHubOffer, getAllServices, createService, getHubServices, addCustomService, deleteCustomService, getHubDataBySlugForManagement, getHubSocials } from "@/src/actions/hubs";
 import type { SocialAccount } from "@/src/actions/hubs";
 import { toast } from "react-hot-toast";
@@ -159,7 +160,7 @@ export function GeneralTab({ hub, onUpdate, redirectOnDelete = "/dashboard" }: {
             <div className="flex items-center gap-4 border border-border p-3 rounded-xl bg-muted/10">
               <div className="h-16 w-16 rounded-xl border border-border flex items-center justify-center bg-muted/30 text-muted-foreground overflow-hidden relative shadow-sm">
                 {imageUrl ? (
-                  <img src={imageUrl} alt="Hub" className="w-full h-full object-cover" />
+                  <Image src={imageUrl} alt="Hub" fill className="object-cover" />
                 ) : (
                   <Camera className="h-6 w-6 opacity-50" />
                 )}

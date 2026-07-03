@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { logout } from "@/src/store/authSlice";
 import { logoutUser } from "@/src/actions/auth";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const navLinks = [
   { href: "/", labelKey: "home" },
@@ -66,7 +67,7 @@ export function Header() {
           {/* Logo */}
           <div className="shrink-0 flex items-center">
             <Link href="/" className="cursor-pointer flex items-center gap-3 transition-transform hover:scale-105 active:scale-95">
-              <img src="/logo.webp" alt="Qareeb Logo" className="h-13 w-auto object-contain drop-shadow-md" />
+              <Image src="/logo.webp" alt="Qareeb Logo" width={150} height={52} className="h-13 w-auto object-contain drop-shadow-md" />
               <span className="font-extrabold text-2xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
                 Qareeb | قريب
               </span>
