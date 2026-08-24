@@ -76,16 +76,16 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
           <Moon className="h-5 w-5 block dark:hidden" />
         </button>
 
-        {/* Language Switcher 
+        {/* Language Switcher */}
         <button
           onClick={handleLocaleSwitch}
-          className="p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors flex items-center gap-1.5 text-xs sm:text-sm font-bold"
+          className="p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors flex items-center gap-1.5 text-xs sm:text-sm font-bold cursor-pointer"
           title={t("switchLanguage")}
         >
           <Languages className="h-5 w-5" />
           <span className="hidden xs:inline-block">{locale === "en" ? "عربي" : "EN"}</span>
         </button>
-        */}
+
 
         <button className="p-2 text-muted-foreground hover:bg-muted rounded-full transition-colors relative">
           <Bell className="h-5 w-5" />

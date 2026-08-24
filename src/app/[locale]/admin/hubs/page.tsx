@@ -1,5 +1,6 @@
 import { getAdminHubs } from "@/src/actions/admin";
 import HubsTable from "./HubsTable";
+import BulkTranslateButton from "./BulkTranslateButton";
 import { getTranslations } from "next-intl/server";
 import { getLocale } from "next-intl/server";
 
@@ -27,12 +28,16 @@ export default async function AdminHubsPage() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
-      <div>
-        <h2 className="text-2xl font-extrabold tracking-tight underline decoration-primary/30 underline-offset-8">{t("hubManagement")}</h2>
-        <p className="text-muted-foreground mt-2">{t("hubManagementDesc")}</p>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-extrabold tracking-tight underline decoration-primary/30 underline-offset-8">{t("hubManagement")}</h2>
+          <p className="text-muted-foreground mt-2">{t("hubManagementDesc")}</p>
+        </div>
+        <BulkTranslateButton />
       </div>
 
       <HubsTable initialHubs={hubs} />
     </div>
   );
 }
+
