@@ -24,23 +24,57 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
 
   useEffect(() => {
     const approvedHubs = hubs.filter(hub => hub.status === "approved" && hub.images?.main);
-    if (approvedHubs.length > 0) {
-      const shuffled = [...approvedHubs].sort(() => 0.5 - Math.random());
-      const selectedHubs = shuffled.slice(0, 4);
+    if (approvedHubs.length === 0) return;
 
-      const mappedHubs = selectedHubs.map(hub => ({
-        imageUrl: hub.images.main.startsWith('http') ? hub.images.main : `${CONFIG.API_URL}${hub.images.main.startsWith('/') ? '' : '/'}${hub.images.main}`,
-        name: typeof hub.name === 'string' ? hub.name : (hub.name?.[locale] || hub.name?.en || hub.name?.ar || "Unknown Hub"),
-        slug: hub.slug
-      }));
+    const now = new Date();
 
-      const padded = [...mappedHubs];
-      while (padded.length < 4) {
-        padded.push(carouselHubs[padded.length]);
-      }
-      setCarouselHubs(padded.slice(0, 4));
+    // 1. Filter featured hubs that are currently active (within date range)
+    const featuredHubs = approvedHubs
+      .filter(hub => {
+        if (!hub.is_featured) return false;
+        
+        const parseDate = (dStr?: string) => {
+          if (!dStr) return null;
+          const iso = dStr.includes('T') ? dStr : dStr.replace(' ', 'T');
+          const d = new Date(iso);
+          return isNaN(d.getTime()) ? null : d;
+        };
+
+        const from = parseDate(hub.featured_from);
+        const until = parseDate(hub.featured_until); 
+        
+        if (from) from.setHours(0, 0, 0, 0);
+        if (until) until.setHours(23, 59, 59, 999);
+
+        if (from && now < from) return false;
+        if (until && now > until) return false;
+        return true;
+      })
+      .sort((a, b) => (b.featured_priority || 0) - (a.featured_priority || 0))
+      .slice(0, 4);
+    console.log(featuredHubs, "featuredHubs")
+
+    // 2. Fill remaining slots with random non-featured approved hubs
+    const featuredSlugs = new Set(featuredHubs.map(h => h.slug));
+    const remaining = approvedHubs.filter(h => !featuredSlugs.has(h.slug));
+    const shuffled = [...remaining].sort(() => 0.5 - Math.random());
+    const fillers = shuffled.slice(0, 4 - featuredHubs.length);
+
+    const selectedHubs = [...featuredHubs, ...fillers];
+
+    const mappedHubs = selectedHubs.map(hub => ({
+      imageUrl: hub.images.main.startsWith('http') ? hub.images.main : `${CONFIG.API_URL}${hub.images.main.startsWith('/') ? '' : '/'}${hub.images.main}`,
+      name: typeof hub.name === 'string' ? hub.name : (hub.name?.[locale] || hub.name?.en || hub.name?.ar || "Unknown Hub"),
+      slug: hub.slug
+    }));
+
+    const padded = [...mappedHubs];
+    while (padded.length < 4) {
+      padded.push(carouselHubs[padded.length]);
     }
+    setCarouselHubs(padded.slice(0, 4));
   }, [hubs, locale]);
+
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
