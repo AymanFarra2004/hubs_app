@@ -224,7 +224,19 @@
     "previous": "السابق",
     "next": "التالي",
     "search": "البحث عن مركز",
-    "searchPlaceholder": "ابحث بالاسم، المعرف أو المالك..."
+    "searchPlaceholder": "ابحث بالاسم، المعرف أو المالك...",
+    "feature": "تمييز",
+    "unfeature": "إلغاء التمييز",
+    "featuredSettings": "إعدادات التمييز",
+    "featuredSettingsDesc": "اضبط هذا المركز ليظهر في الدائرة الدوارة بالصفحة الرئيسية. الأولوية الأعلى تُعرض أولاً.",
+    "featuredPriority": "الأولوية",
+    "featuredPriorityHint": "رقم أعلى = يُعرض أولاً في الدائرة الدوارة",
+    "featuredFrom": "مميز من",
+    "featuredUntil": "مميز حتى",
+    "saveFeatured": "حفظ وتمييز",
+    "featuredBadge": "مميز",
+    "featuredSuccess": "تم تحديث حالة التمييز بنجاح!",
+    "featuredError": "فشل تحديث حالة التمييز"
   },
   "AdminHubPreview": {
     "hubNotFound": "المركز غير موجود",

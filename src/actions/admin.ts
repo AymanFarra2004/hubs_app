@@ -421,3 +421,66 @@ export async function deleteLocation(slug: string) {
     return { error: "Network Error" };
   }
 }
+
+// ============== FEATURED HUBS ==============
+
+export async function updateHubFeaturedStatus(
+  slug: string,
+  is_featured: boolean,
+  featured_priority: number = 100,
+  featured_from?: string,
+  featured_until?: string
+) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const now = new Date();
+    
+    // Format featured_from: if YYYY-MM-DD provided, set to 00:00:00 (start of day)
+    const formattedFrom = featured_from
+      ? (featured_from.length === 10 ? `${featured_from} 00:00:00` : featured_from)
+      : `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} 00:00:00`;
+
+    // Default featured_until to 1 week from now if not provided
+    const formattedUntil = featured_until
+      ? (featured_until.length === 10 ? `${featured_until} 23:59:59` : featured_until)
+      : (() => {
+          const d = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+          return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} 23:59:59`;
+        })();
+
+    const payload = {
+      is_featured,
+      featured_from: formattedFrom,
+      featured_until: formattedUntil,
+      featured_priority,
+    };
+
+    const res = await fetch(`${API_BASE_URL}/hubs/${slug}/featured`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const result = await res.json();
+
+    if (res.ok) {
+      revalidatePath("/admin/hubs");
+      revalidatePath("/[locale]/admin/hubs", "page");
+      revalidatePath("/", "layout");
+      revalidateTag("admin-hubs", "layout");
+      revalidateTag("all-hubs", "layout");
+      return { success: true, message: result.message || "Featured status updated" };
+    }
+
+    return { error: result.message || "Failed to update featured status" };
+  } catch (error) {
+    return { error: "Network Error" };
+  }
+}

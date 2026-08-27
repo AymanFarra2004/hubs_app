@@ -224,7 +224,19 @@
     "previous": "Previous",
     "next": "Next",
     "search": "Search Hubs",
-    "searchPlaceholder": "Search by name, slug or owner..."
+    "searchPlaceholder": "Search by name, slug or owner...",
+    "feature": "Feature",
+    "unfeature": "Unfeature",
+    "featuredSettings": "Featured Settings",
+    "featuredSettingsDesc": "Configure this hub to appear in the homepage hero carousel. Higher priority hubs are shown first.",
+    "featuredPriority": "Priority",
+    "featuredPriorityHint": "Higher number = shown first in the hero carousel",
+    "featuredFrom": "Featured From",
+    "featuredUntil": "Featured Until",
+    "saveFeatured": "Save & Feature",
+    "featuredBadge": "Featured",
+    "featuredSuccess": "Featured status updated successfully!",
+    "featuredError": "Failed to update featured status"
   },
   "AdminHubPreview": {
     "hubNotFound": "Hub not found",

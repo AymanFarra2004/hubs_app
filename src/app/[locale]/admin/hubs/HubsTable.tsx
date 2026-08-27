@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { updateHubStatus } from "@/src/actions/admin";
-import { Loader2, Check, X, Clock, ShieldCheck, ShieldAlert, Box, ExternalLink, Eye, Search } from "lucide-react";
+import { updateHubStatus, updateHubFeaturedStatus } from "@/src/actions/admin";
+import { Loader2, Check, X, Clock, ShieldCheck, ShieldAlert, Box, ExternalLink, Eye, Search, Star } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { useTranslations, useLocale } from "next-intl";
@@ -25,6 +25,14 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
   const [rejectModalOpen, setRejectModalOpen] = useState(false);
   const [hubToReject, setHubToReject] = useState<{ id: string, slug: string } | null>(null);
   const [rejectionReason, setRejectionReason] = useState("");
+
+  // Featured modal state
+  const [featuredModalOpen, setFeaturedModalOpen] = useState(false);
+  const [hubToFeature, setHubToFeature] = useState<any>(null);
+  const [featuredPriority, setFeaturedPriority] = useState(100);
+  const [featuredFrom, setFeaturedFrom] = useState("");
+  const [featuredUntil, setFeaturedUntil] = useState("");
+  const [isSavingFeatured, setIsSavingFeatured] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);
 
   // Helper to normalize status checks
@@ -116,6 +124,58 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
     setRejectModalOpen(true);
   };
 
+  const openFeaturedModal = (hub: any) => {
+    setHubToFeature(hub);
+    setFeaturedPriority(typeof hub.featured_priority === 'number' ? hub.featured_priority : 100);
+    
+    const today = new Date();
+    const nextWeek = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    const formatDate = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const extractDate = (str?: string) => {
+      if (!str) return null;
+      const match = str.match(/^\d{4}-\d{2}-\d{2}/);
+      return match ? match[0] : null;
+    };
+
+    setFeaturedFrom(extractDate(hub.featured_from) || formatDate(today));
+    setFeaturedUntil(extractDate(hub.featured_until) || formatDate(nextWeek));
+    setFeaturedModalOpen(true);
+  };
+
+  const handleSaveFeatured = async (makeFeatured: boolean) => {
+    if (!hubToFeature) return;
+    setIsSavingFeatured(true);
+
+    const res = await updateHubFeaturedStatus(
+      hubToFeature.slug,
+      makeFeatured,
+      featuredPriority,
+      featuredFrom,
+      featuredUntil
+    );
+
+    if (res.success) {
+      setHubs(prev => prev.map(h =>
+        h.id === hubToFeature.id
+          ? {
+              ...h,
+              is_featured: makeFeatured,
+              featured_priority: featuredPriority,
+              featured_from: featuredFrom ? `${featuredFrom} 00:00:00` : h.featured_from,
+              featured_until: featuredUntil ? `${featuredUntil} 23:59:59` : h.featured_until
+            }
+          : h
+      ));
+      router.refresh();
+      toast.success(t("featuredSuccess"));
+      setFeaturedModalOpen(false);
+      setHubToFeature(null);
+    } else {
+      toast.error(res.error || t("featuredError"));
+    }
+    setIsSavingFeatured(false);
+  };
+
   const TabButton = ({ type, label, icon: Icon, color }: { type: TabType, label: string, icon: any, color: string }) => {
     const isActive = activeTab === type;
     const count = groups[type].length;
@@ -186,7 +246,15 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                 return (
                   <tr key={hub.id || hub.slug} className="hover:bg-muted/10 transition-colors">
                     <td className="px-6 py-6">
-                      <div className="font-bold text-foreground text-base">{name}</div>
+                      <div className="flex items-center gap-2">
+                        <div className="font-bold text-foreground text-base">{name}</div>
+                        {hub.is_featured && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700 border border-amber-200 shadow-[0_0_8px_rgba(245,158,11,0.15)]">
+                            <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                            {t("featuredBadge")} #{hub.featured_priority || '—'}
+                          </span>
+                        )}
+                      </div>
                       <div className="text-xs text-muted-foreground font-mono mt-1 opacity-70">{hub.slug}</div>
                       {isRejected && hub.rejection_reason && (
                         <div className="mt-2 p-2 bg-red-50 rounded-lg text-red-700 text-[11px] max-w-xs border border-red-100 italic">
@@ -233,6 +301,21 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                                  {t("view_preview")}
                                </Link>
                              )
+                           )}
+
+                           {isApproved && (
+                             <button
+                               onClick={() => openFeaturedModal(hub)}
+                               title={hub.is_featured ? t("unfeature") : t("feature")}
+                               className={`cursor-pointer flex items-center gap-1.5 px-3 py-2 rounded-xl transition-all font-semibold text-xs border ${
+                                 hub.is_featured
+                                   ? 'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100'
+                                   : 'text-muted-foreground border-border hover:text-amber-600 hover:bg-amber-50/50 hover:border-amber-200'
+                               }`}
+                             >
+                               <Star className={`h-3.5 w-3.5 ${hub.is_featured ? 'fill-amber-500 text-amber-500' : ''}`} />
+                               {hub.is_featured ? t("unfeature") : t("feature")}
+                             </button>
                            )}
 
                            {(isPending || isRejected) && (
@@ -370,6 +453,144 @@ export default function HubsTable({ initialHubs }: { initialHubs: any[] }) {
                 {isRejecting ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
                 {t("confirmRejection")}
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Featured Settings Modal */}
+      {featuredModalOpen && hubToFeature && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 tracking-tight">
+          <div className="bg-background rounded-3xl shadow-xl w-full max-w-md border border-border animate-in zoom-in-95 duration-200 overflow-hidden">
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-2">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+                  <Star className="h-5 w-5 text-amber-600 fill-amber-500" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-foreground">{t("featuredSettings")}</h3>
+                  <p className="text-xs text-muted-foreground">
+                    {hubToFeature.name?.[locale] || hubToFeature.name?.en || hubToFeature.name?.ar || hubToFeature.name}
+                  </p>
+                </div>
+              </div>
+              <p className="text-sm text-muted-foreground mb-6 mt-3">
+                {t("featuredSettingsDesc")}
+              </p>
+
+              <div className="space-y-5">
+                {/* Priority Slider */}
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-sm font-semibold text-foreground">
+                      {t("featuredPriority")}
+                    </label>
+                    <span className="text-xs font-mono font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2.5 py-0.5 rounded-lg">
+                      {featuredPriority} / 100
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-3">{t("featuredPriorityHint")}</p>
+                  
+                  {/* Slider container strictly in LTR to ensure 0 is on the left and 100 is on the right across all languages */}
+                  <div dir="ltr" className="space-y-1.5 p-3 rounded-2xl bg-muted/20 border border-border/50">
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-muted-foreground w-4 text-center">0</span>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={featuredPriority}
+                        onChange={(e) => setFeaturedPriority(Number(e.target.value))}
+                        className="flex-1 h-2 rounded-full appearance-none cursor-pointer accent-amber-500"
+                        style={{
+                          background: `linear-gradient(to right, #f59e0b 0%, #f59e0b ${featuredPriority}%, #e5e7eb ${featuredPriority}%, #e5e7eb 100%)`
+                        }}
+                      />
+                      <span className="text-xs font-bold text-muted-foreground w-7 text-center">100</span>
+                      <input
+                        type="number"
+                        min={0}
+                        max={100}
+                        value={featuredPriority}
+                        onChange={(e) => {
+                          const val = Math.min(100, Math.max(0, Number(e.target.value) || 0));
+                          setFeaturedPriority(val);
+                        }}
+                        className="w-14 h-9 rounded-xl bg-amber-50/70 border border-amber-200 text-center text-amber-700 font-bold text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all shrink-0"
+                      />
+                    </div>
+                    <div className="flex justify-between text-[10px] text-muted-foreground px-5 font-medium">
+                      <span>0</span>
+                      <span>25</span>
+                      <span>50</span>
+                      <span>75</span>
+                      <span>100</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Dates: From & Until */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-1.5">
+                      {t("featuredFrom")}
+                    </label>
+                    <input
+                      type="date"
+                      value={featuredFrom}
+                      onChange={(e) => setFeaturedFrom(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-foreground mb-1.5">
+                      {t("featuredUntil")}
+                    </label>
+                    <input
+                      type="date"
+                      value={featuredUntil}
+                      onChange={(e) => setFeaturedUntil(e.target.value)}
+                      className="w-full px-4 py-2.5 border border-input rounded-xl bg-background text-sm focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 py-4 bg-muted/30 flex items-center justify-between border-t border-border mt-2">
+              <div className="flex gap-2">
+                {hubToFeature.is_featured && (
+                  <button
+                    onClick={() => handleSaveFeatured(false)}
+                    disabled={isSavingFeatured}
+                    className="cursor-pointer flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 rounded-xl transition-colors border border-red-100 disabled:opacity-50"
+                  >
+                    <X className="h-4 w-4" />
+                    {t("unfeature")}
+                  </button>
+                )}
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    setFeaturedModalOpen(false);
+                    setHubToFeature(null);
+                  }}
+                  disabled={isSavingFeatured}
+                  className="cursor-pointer px-5 py-2.5 text-sm font-medium text-foreground hover:bg-muted rounded-xl transition-colors disabled:opacity-50"
+                >
+                  {t("cancel")}
+                </button>
+                <button
+                  onClick={() => handleSaveFeatured(true)}
+                  disabled={isSavingFeatured}
+                  className="cursor-pointer flex items-center gap-2 px-5 py-2.5 text-sm font-medium text-white bg-amber-500 hover:bg-amber-600 rounded-xl transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSavingFeatured ? <Loader2 className="h-4 w-4 animate-spin" /> : <Star className="h-4 w-4 fill-white" />}
+                  {t("saveFeatured")}
+                </button>
+              </div>
             </div>
           </div>
         </div>
