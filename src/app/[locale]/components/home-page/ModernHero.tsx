@@ -7,7 +7,21 @@ import Image from "next/image";
 
 import { useEffect, useState } from "react";
 import { useRouter, Link } from "@/src/i18n/routing";
-import { Search } from "lucide-react";
+import { Search, Sparkles } from "lucide-react";
+
+interface CarouselHubItem {
+  imageUrl: string;
+  name: string;
+  slug: string;
+  isFeatured: boolean;
+}
+
+const CAROUSEL_POSITIONS = [
+  "top-0 left-1/2 -translate-x-1/2 -translate-y-1/2",
+  "bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2",
+  "top-1/2 left-0 -translate-x-1/2 -translate-y-1/2",
+  "top-1/2 right-0 translate-x-1/2 -translate-y-1/2"
+];
 
 export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
   const t = useTranslations("Hero");
@@ -15,11 +29,11 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [carouselHubs, setCarouselHubs] = useState<Array<{ imageUrl: string; name: string; slug: string }>>([
-    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBc-YbptXZPFMcFAevZ4MdKYs2-djxfXufsaz4xgS5x4LQ8Wn4P91yh-_yDsHiJ37KZ_eNgDew3G-0kdkRfgmP1pP50y9ZBWVNot_Joac78Jmp1ZaHViyVVEoMKTE_fHQywdpYl4D16FRvEaRhJ8oqpAwztKIwg2WRaA7M1ZSdIGP5OrZrluHOX4oTfI4b-W2SJ_XbduamOr2Gd5o-MdZd2EO54kguUOhf7Pi0ps6ylvGULAM_1so1I9sWxDHLb0xTFX0ePl9G0_rPO", name: "Premium Workspace", slug: "#" },
-    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZ_gH3jmM-h25j5LbFEpZvorSIpGVv9Lwk6bnvWZQ7qKT3lylNG8Zk9haFs3cfaKphgEc7vNZTdW_zgd0mQldU9bWdsRoDxAC1bqBv_-7u2LOXXYW78GT3CjV0rUfSBpAw3uZ09LySQUd27r3thO3XRpKCtFKfR4e3avikKO4SdzJFgSVjRG1a6wGIhsLzKBSwJeDruuEky0z_8VRmb0TPQdelpD8M3xCpAttZnGGCKz4PbBfGZ5qYsQ26iW8u28lQWOMFe3uhM9Yc", name: "Quiet Zone", slug: "#" },
-    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBXzHG3YdRn1OpTuBxKvx5IeGDiyruuLErbFOHJJY8L4AiCumbnWQQ7zs6IFKfRbN0BAH6rFC_Z6TLcVTT_SQWCAXj9ZaBtdeZcYpXsYr6B0feMMfJAjlvgQAOlTIjjDp3aVTpnGrCbaLGAwd1oJcfCA1PTfUcjmVNZ0pc0PMvIFVA_noGpPN_zHr9RHJaooXeUtzGLC_QB19IOkIX4Ar9g2RSZFMn__tnanJWQVyu3OvZ8Xy_DQSdVQBDbmetpj9gclxaNQMZH9Ya9", name: "Creator Studio", slug: "#" },
-    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDR_lDhi15LL8aTmyXFqKkifVgBEutvEfg3wNLVxCZRtLseDzWmo3Pfw57UkmBNRKP0_IfkhgH-63vbWnOI8G7QcCQRLXI2E46XsdiFjD3UFe-pTgCSH2wY7BwmVLctjpDg_JDlJb-gg-uOaiTK7fdvd6P17QGZqMLuAfbq1MdpkidSARXF95jqFgZK7Ibv2ENroKkryUhtBAvkHhiZqdwqLpll5EOYz-mwGCDBuqrEEv9_EHIXtBisn9wpdt_4jySY7jK4kKj53Z2c", name: "Collab Space", slug: "#" }
+  const [carouselHubs, setCarouselHubs] = useState<Array<CarouselHubItem>>([
+    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBc-YbptXZPFMcFAevZ4MdKYs2-djxfXufsaz4xgS5x4LQ8Wn4P91yh-_yDsHiJ37KZ_eNgDew3G-0kdkRfgmP1pP50y9ZBWVNot_Joac78Jmp1ZaHViyVVEoMKTE_fHQywdpYl4D16FRvEaRhJ8oqpAwztKIwg2WRaA7M1ZSdIGP5OrZrluHOX4oTfI4b-W2SJ_XbduamOr2Gd5o-MdZd2EO54kguUOhf7Pi0ps6ylvGULAM_1so1I9sWxDHLb0xTFX0ePl9G0_rPO", name: "Premium Workspace", slug: "#", isFeatured: true },
+    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZ_gH3jmM-h25j5LbFEpZvorSIpGVv9Lwk6bnvWZQ7qKT3lylNG8Zk9haFs3cfaKphgEc7vNZTdW_zgd0mQldU9bWdsRoDxAC1bqBv_-7u2LOXXYW78GT3CjV0rUfSBpAw3uZ09LySQUd27r3thO3XRpKCtFKfR4e3avikKO4SdzJFgSVjRG1a6wGIhsLzKBSwJeDruuEky0z_8VRmb0TPQdelpD8M3xCpAttZnGGCKz4PbBfGZ5qYsQ26iW8u28lQWOMFe3uhM9Yc", name: "Quiet Zone", slug: "#", isFeatured: false },
+    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuBXzHG3YdRn1OpTuBxKvx5IeGDiyruuLErbFOHJJY8L4AiCumbnWQQ7zs6IFKfRbN0BAH6rFC_Z6TLcVTT_SQWCAXj9ZaBtdeZcYpXsYr6B0feMMfJAjlvgQAOlTIjjDp3aVTpnGrCbaLGAwd1oJcfCA1PTfUcjmVNZ0pc0PMvIFVA_noGpPN_zHr9RHJaooXeUtzGLC_QB19IOkIX4Ar9g2RSZFMn__tnanJWQVyu3OvZ8Xy_DQSdVQBDbmetpj9gclxaNQMZH9Ya9", name: "Creator Studio", slug: "#", isFeatured: false },
+    { imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDR_lDhi15LL8aTmyXFqKkifVgBEutvEfg3wNLVxCZRtLseDzWmo3Pfw57UkmBNRKP0_IfkhgH-63vbWnOI8G7QcCQRLXI2E46XsdiFjD3UFe-pTgCSH2wY7BwmVLctjpDg_JDlJb-gg-uOaiTK7fdvd6P17QGZqMLuAfbq1MdpkidSARXF95jqFgZK7Ibv2ENroKkryUhtBAvkHhiZqdwqLpll5EOYz-mwGCDBuqrEEv9_EHIXtBisn9wpdt_4jySY7jK4kKj53Z2c", name: "Collab Space", slug: "#", isFeatured: false }
   ]);
 
   useEffect(() => {
@@ -52,7 +66,6 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
       })
       .sort((a, b) => (b.featured_priority || 0) - (a.featured_priority || 0))
       .slice(0, 4);
-    console.log(featuredHubs, "featuredHubs")
 
     // 2. Fill remaining slots with random non-featured approved hubs
     const featuredSlugs = new Set(featuredHubs.map(h => h.slug));
@@ -62,13 +75,14 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
 
     const selectedHubs = [...featuredHubs, ...fillers];
 
-    const mappedHubs = selectedHubs.map(hub => ({
+    const mappedHubs: CarouselHubItem[] = selectedHubs.map(hub => ({
       imageUrl: hub.images.main.startsWith('http') ? hub.images.main : `${CONFIG.API_URL}${hub.images.main.startsWith('/') ? '' : '/'}${hub.images.main}`,
       name: typeof hub.name === 'string' ? hub.name : (hub.name?.[locale] || hub.name?.en || hub.name?.ar || "Unknown Hub"),
-      slug: hub.slug
+      slug: hub.slug,
+      isFeatured: featuredSlugs.has(hub.slug)
     }));
 
-    const padded = [...mappedHubs];
+    const padded: CarouselHubItem[] = [...mappedHubs];
     while (padded.length < 4) {
       padded.push(carouselHubs[padded.length]);
     }
@@ -142,8 +156,8 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
         </div>
 
         {/* Right Side: Circular Carousel */}
-        <div className="relative h-[400px] md:h-[500px] lg:h-[600px] items-center justify-center flex w-full mt-10 lg:mt-0 pointer-events-auto">
-          <div className="relative flex items-center justify-center scale-[0.6] sm:scale-75 md:scale-90 lg:scale-100 origin-center">
+        <div className="relative h-[450px] sm:h-[500px] md:h-[550px] lg:h-[650px] items-center justify-center flex w-full mt-10 lg:mt-0 pointer-events-auto">
+          <div className="relative flex items-center justify-center scale-[0.55] sm:scale-[0.7] md:scale-[0.82] lg:scale-[0.92] xl:scale-100 origin-center">
             {/* Central Anchor point */}
             <div className="absolute w-[400px] h-[400px] rounded-full border border-black/10 dark:border-white/10"></div>
             <div className="absolute w-[550px] h-[550px] rounded-full border border-black/5 dark:border-white/5"></div>
@@ -154,89 +168,56 @@ export default function ModernHero({ hubs = [] }: { hubs?: any[] }) {
               transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
               className="absolute w-[600px] h-[600px]"
             >
-              {/* Image 1 */}
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-                className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 group"
-              >
-                <Link href={carouselHubs[0].slug !== "#" ? `/hubs/${carouselHubs[0].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src={carouselHubs[0].imageUrl}
-                    alt={carouselHubs[0].name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
-                    <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                      {carouselHubs[0].name}
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
+              {carouselHubs.slice(0, 4).map((hub, index) => (
+                <motion.div
+                  key={index}
+                  animate={{ rotate: -360 }}
+                  transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
+                  className={`absolute ${CAROUSEL_POSITIONS[index] || CAROUSEL_POSITIONS[0]} group`}
+                >
+                  <Link
+                    href={hub.slug !== "#" ? `/hubs/${hub.slug}` : "#"}
+                    className={`cursor-pointer relative w-48 h-48 rounded-full block group-hover:scale-105 transition-all duration-300 ${
+                      hub.isFeatured
+                        ? "p-[3.5px] bg-gradient-to-tr from-amber-500 via-yellow-300 to-amber-600 shadow-[0_0_30px_rgba(245,158,11,0.45)] dark:shadow-[0_0_35px_rgba(251,191,36,0.35)] ring-2 ring-amber-400/50"
+                        : "overflow-hidden shadow-2xl bg-background border border-border/50"
+                    }`}
+                  >
+                    {/* Featured Sparkle Badge */}
+                    {hub.isFeatured && (
+                      <div className="absolute -top-1 -right-1 z-30 flex items-center justify-center w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 via-amber-400 to-yellow-300 text-amber-950 shadow-md ring-2 ring-background">
+                        <Sparkles className="w-3.5 h-3.5 fill-amber-950 text-amber-950" />
+                      </div>
+                    )}
 
-              {/* Image 2 */}
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 group"
-              >
-                <Link href={carouselHubs[1].slug !== "#" ? `/hubs/${carouselHubs[1].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src={carouselHubs[1].imageUrl}
-                    alt={carouselHubs[1].name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-3 flex justify-center px-2">
-                    <span className="bg-background/90 backdrop-blur-md px-3 py-1 rounded-full border border-border/50 text-[10px] font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                      {carouselHubs[1].name}
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
+                    {/* Image Container */}
+                    <div className="relative w-full h-full rounded-full overflow-hidden bg-background">
+                      <Image
+                        src={hub.imageUrl}
+                        alt={hub.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
 
-              {/* Image 3 */}
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-                className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 group"
-              >
-                <Link href={carouselHubs[2].slug !== "#" ? `/hubs/${carouselHubs[2].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src={carouselHubs[2].imageUrl}
-                    alt={carouselHubs[2].name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
-                    <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                      {carouselHubs[2].name}
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
-
-              {/* Image 4 */}
-              <motion.div
-                animate={{ rotate: -360 }}
-                transition={{ repeat: Infinity, duration: 30, ease: "linear" }}
-                className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 group"
-              >
-                <Link href={carouselHubs[3].slug !== "#" ? `/hubs/${carouselHubs[3].slug}` : "#"} className="cursor-pointer relative w-48 h-48 rounded-full overflow-hidden shadow-2xl bg-background border border-border/50 block group-hover:scale-105 transition-transform duration-300">
-                  <Image
-                    src={carouselHubs[3].imageUrl}
-                    alt={carouselHubs[3].name}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute inset-x-0 bottom-4 flex justify-center px-2">
-                    <span className="bg-background/90 backdrop-blur-md px-4 py-1.5 rounded-full border border-border/50 text-xs font-bold text-foreground shadow-sm group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30 transition-colors whitespace-nowrap truncate max-w-full">
-                      {carouselHubs[3].name}
-                    </span>
-                  </div>
-                </Link>
-              </motion.div>
+                    {/* Name Pill */}
+                    <div className="absolute inset-x-0 bottom-4 flex justify-center px-2 z-20">
+                      <span
+                        className={`backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold shadow-sm transition-all whitespace-nowrap truncate max-w-[90%] flex items-center gap-1.5 ${
+                          hub.isFeatured
+                            ? "bg-background/95 border border-amber-400/80 text-amber-600 dark:text-amber-300 shadow-[0_2px_12px_rgba(245,158,11,0.25)] group-hover:border-amber-400 group-hover:bg-amber-50/90 dark:group-hover:bg-amber-950/40"
+                            : "bg-background/90 border border-border/50 text-foreground group-hover:text-[#9333EA] group-hover:border-[#9333EA]/30"
+                        }`}
+                      >
+                        {hub.isFeatured && (
+                          <Sparkles className="w-3 h-3 text-amber-500 fill-amber-400 shrink-0" />
+                        )}
+                        <span className="truncate">{hub.name}</span>
+                      </span>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
             </motion.div>
 
             {/* Center Overlay Element */}
