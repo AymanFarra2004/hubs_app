@@ -91,7 +91,7 @@ export default async function RootLayout({
       >
         <NextIntlClientProvider messages={messages} locale={locale}>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
-            <StoreProvider> 
+            <StoreProvider>
               {user && <AuthHydrator user={user} />}
               {children}
               <Analytics />

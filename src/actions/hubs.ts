@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { revalidatePath, revalidateTag } from "next/cache";
 import { format12to24 } from "../lib/utils";
 import { CONFIG } from "@/src/config";
+import { translateArabicToEnglish } from "@/src/lib/translate";
+
 
 const API_BASE_URL = `${CONFIG.API_URL}/api/v1`;
 
@@ -264,24 +266,47 @@ export async function createHub(prevState: any, formData: FormData) {
     const hourly_price_raw = formData.get("hourly_price");
     const hourly_price = hourly_price_raw ? Number(hourly_price_raw) : undefined;
 
+    const desc_ar = (formData.get("description_ar") as string) || "";
+    const desc_en = (formData.get("description_en") as string) || "";
+    const address_ar = (formData.get("address_ar") as string) || "";
+    const address_en = (formData.get("address_en") as string) || "";
+
+    let finalNameEn = name_en || "";
+    let finalDescEn = desc_en || "";
+    let finalAddressEn = address_en || "";
+
+    if (name_ar && (!finalNameEn || !finalDescEn || !finalAddressEn)) {
+      const hubTranslation = await translateArabicToEnglish({
+        name: name_ar,
+        description: desc_ar,
+        address_details: address_ar,
+      });
+      if (hubTranslation) {
+        if (!finalNameEn && hubTranslation.name) finalNameEn = hubTranslation.name;
+        if (!finalDescEn && hubTranslation.description) finalDescEn = hubTranslation.description;
+        if (!finalAddressEn && hubTranslation.address_details) finalAddressEn = hubTranslation.address_details;
+      }
+    }
+
     const payload: any = {
       name: {
-        en: name_en || "",
+        en: finalNameEn,
         ar: name_ar,
       },
       working_hours: {} as any, // Initialize
       description: {
-        en: formData.get("description_en") as string || "",
-        ar: formData.get("description_ar") as string || "",
+        en: finalDescEn,
+        ar: desc_ar,
       },
       address_details: {
-        en: formData.get("address_en") as string || "",
-        ar: formData.get("address_ar") as string || "",
+        en: finalAddressEn,
+        ar: address_ar,
       },
       contact: formData.get("contact") as string || "",
       location_id: location_id,
       social_accounts: [] as any[],
     };
+
 
     // Handle working hours (mandatory)
     const startTime = formData.get("start_time") as string;
@@ -456,13 +481,27 @@ export async function createHub(prevState: any, formData: FormData) {
     // ─── Step 3: Create custom service if provided ──────────────────────────
     if (hubSlug && (customNameAr?.trim() || customNameEn?.trim())) {
       try {
+        let finalCustomNameEn = customNameEn?.trim() || "";
+        let finalCustomDescEn = customDescEn?.trim() || "";
+
+        if (customNameAr?.trim() && (!finalCustomNameEn || !finalCustomDescEn)) {
+          const svcTranslation = await translateArabicToEnglish({
+            name: customNameAr.trim(),
+            description: (customDescAr || "").trim(),
+          });
+          if (svcTranslation) {
+            if (!finalCustomNameEn && svcTranslation.name) finalCustomNameEn = svcTranslation.name;
+            if (!finalCustomDescEn && svcTranslation.description) finalCustomDescEn = svcTranslation.description;
+          }
+        }
+
         const customServicePayload = {
           name: {
-            en: customNameEn?.trim() || "",
+            en: finalCustomNameEn,
             ar: customNameAr?.trim() || customNameEn?.trim(),
           },
           description: {
-            en: customDescEn?.trim() || "",
+            en: finalCustomDescEn,
             ar: customDescAr?.trim() || "",
           },
           is_active: true
@@ -490,18 +529,38 @@ export async function createHub(prevState: any, formData: FormData) {
     const offerDurations = formData.getAll("offer_duration[]") as string[];
 
     if (hubSlug && offerTitlesAr.length > 0) {
+      const offersToTranslate = offerTitlesAr.map((tAr, idx) => ({
+        title: (tAr || "").trim(),
+        description: (offerDescriptionsAr[idx] || "").trim(),
+      }));
+
+      const hasValidTitles = offersToTranslate.some(item => item.title.length > 0);
+
+      const translatedOffers = hasValidTitles
+        ? await translateArabicToEnglish(offersToTranslate)
+        : null;
+
       for (let i = 0; i < offerTitlesAr.length; i++) {
         const titleAr = offerTitlesAr[i];
         if (!titleAr?.trim()) continue;
 
+        let offerTitleEn = "";
+        let offerDescEn = "";
+
+        if (Array.isArray(translatedOffers) && translatedOffers[i]) {
+          offerTitleEn = translatedOffers[i].title || "";
+          offerDescEn = translatedOffers[i].description || "";
+        }
+
+
         try {
           const offerPayload = {
             title: {
-              en: "", 
+              en: offerTitleEn, 
               ar: titleAr.trim(),
             },
             description: {
-              en: "",
+              en: offerDescEn,
               ar: (offerDescriptionsAr[i] || "").trim(),
             },
             type: offerTypes[i] || "monthly",
@@ -527,6 +586,7 @@ export async function createHub(prevState: any, formData: FormData) {
         }
       }
     }
+
 
     if (hubSlug) {
       revalidatePath('/dashboard');
@@ -576,14 +636,27 @@ export async function createService(prevState: any, formData: FormData) {
   if (!token) return { error: "Unauthenticated" };
 
   try {
+    const nameAr = (formData.get("name_ar") as string) || "";
+    let nameEn = (formData.get("name_en") as string) || "";
+    const descAr = (formData.get("description_ar") as string) || "";
+    let descEn = (formData.get("description_en") as string) || "";
+
+    if (nameAr && (!nameEn || !descEn)) {
+      const translation = await translateArabicToEnglish({ name: nameAr, description: descAr });
+      if (translation) {
+        if (!nameEn && translation.name) nameEn = translation.name;
+        if (!descEn && translation.description) descEn = translation.description;
+      }
+    }
+
     const payload = {
       name: {
-        en: formData.get("name_en") as string,
-        ar: formData.get("name_ar") as string || formData.get("name_en") as string,
+        en: nameEn,
+        ar: nameAr || nameEn,
       },
       description: {
-        en: formData.get("description_en") as string || "",
-        ar: formData.get("description_ar") as string || "",
+        en: descEn,
+        ar: descAr,
       }
     };
 
@@ -635,22 +708,33 @@ export async function addCustomService(hubSlug: string, prevState: any, formData
   if (!token) return { error: "Unauthenticated" };
 
   try {
-    const nameEn = formData.get("name_en") as string;
-    const nameAr = formData.get("name_ar") as string;
+    const nameAr = (formData.get("name_ar") as string) || "";
+    let nameEn = (formData.get("name_en") as string) || "";
+    const descAr = (formData.get("description_ar") as string) || "";
+    let descEn = (formData.get("description_en") as string) || "";
     
     if (!nameAr && !nameEn) return { error: "اسم الخدمة مطلوب" };
 
+    if (nameAr && (!nameEn || !descEn)) {
+      const translation = await translateArabicToEnglish({ name: nameAr, description: descAr });
+      if (translation) {
+        if (!nameEn && translation.name) nameEn = translation.name;
+        if (!descEn && translation.description) descEn = translation.description;
+      }
+    }
+
     const payload = {
       name: {
-        en: nameEn || "",
+        en: nameEn,
         ar: nameAr || nameEn,
       },
       description: {
-        en: formData.get("description_en") as string || "",
-        ar: formData.get("description_ar") as string || "",
+        en: descEn,
+        ar: descAr,
       },
       is_active: formData.get("is_active") === "true" || true
     };
+
 
     const res = await fetch(`${API_BASE_URL}/hubs/${hubSlug}/custom-services`, {
       method: "POST",
@@ -750,14 +834,27 @@ export async function addHubOffer(hubSlug: string, prevState: any, formData: For
   const formValues = Object.fromEntries(formData.entries());
 
   try {
+    const titleAr = (formData.get("title_ar") as string) || "";
+    let titleEn = (formData.get("title_en") as string) || "";
+    const descAr = (formData.get("description_ar") as string) || "";
+    let descEn = (formData.get("description_en") as string) || "";
+
+    if (titleAr && (!titleEn || !descEn)) {
+      const translation = await translateArabicToEnglish({ title: titleAr, description: descAr });
+      if (translation) {
+        if (!titleEn && translation.title) titleEn = translation.title;
+        if (!descEn && translation.description) descEn = translation.description;
+      }
+    }
+
     const payload = {
       title: {
-        en: formData.get("title_en") as string,
-        ar: formData.get("title_ar") as string,
+        en: titleEn,
+        ar: titleAr,
       },
       description: {
-        en: formData.get("description_en") as string,
-        ar: formData.get("description_ar") as string,
+        en: descEn,
+        ar: descAr,
       },
       type: formData.get("type") as string || "daily",
       price: Number(formData.get("price")),
@@ -793,14 +890,27 @@ export async function updateHubOffer(hubSlug: string, offerId: number, prevState
   const formValues = Object.fromEntries(formData.entries());
 
   try {
+    const titleAr = (formData.get("title_ar") as string) || "";
+    let titleEn = (formData.get("title_en") as string) || "";
+    const descAr = (formData.get("description_ar") as string) || "";
+    let descEn = (formData.get("description_en") as string) || "";
+
+    if (titleAr && (!titleEn || !descEn)) {
+      const translation = await translateArabicToEnglish({ title: titleAr, description: descAr });
+      if (translation) {
+        if (!titleEn && translation.title) titleEn = translation.title;
+        if (!descEn && translation.description) descEn = translation.description;
+      }
+    }
+
     const payload = {
       title: {
-        en: formData.get("title_en") as string,
-        ar: formData.get("title_ar") as string,
+        en: titleEn,
+        ar: titleAr,
       },
       description: {
-        en: formData.get("description_en") as string,
-        ar: formData.get("description_ar") as string,
+        en: descEn,
+        ar: descAr,
       },
       type: formData.get("type") as string || "daily",
       price: Number(formData.get("price")),
@@ -1017,6 +1127,33 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     const customDescEn = formData.get("custom_service_description_en") as string;
     const customDescAr = formData.get("custom_service_description_ar") as string;
 
+    // Auto-translate missing English fields in payload if Arabic counterpart exists
+    const toTranslate: Record<string, string> = {};
+    if (payload.name?.ar && !payload.name?.en) {
+      toTranslate.name = payload.name.ar;
+    }
+    if (payload.description?.ar && !payload.description?.en) {
+      toTranslate.description = payload.description.ar;
+    }
+    if (payload.address_details?.ar && !payload.address_details?.en) {
+      toTranslate.address_details = payload.address_details.ar;
+    }
+
+    if (Object.keys(toTranslate).length > 0) {
+      const translationResult = await translateArabicToEnglish(toTranslate);
+      if (translationResult) {
+        if (payload.name?.ar && translationResult.name) {
+          payload.name.en = translationResult.name;
+        }
+        if (payload.description?.ar && translationResult.description) {
+          payload.description.en = translationResult.description;
+        }
+        if (payload.address_details?.ar && translationResult.address_details) {
+          payload.address_details.en = translationResult.address_details;
+        }
+      }
+    }
+
     // --- Step 1: Send JSON data ---
     const langParam = getLangParam();
     const jsonRes = await fetch(`${API_BASE_URL}/hubs/${slug}?${langParam}`, {
@@ -1080,13 +1217,27 @@ export async function updateHub(slug: string, prevState: any, formData: FormData
     // --- Step 3: Handle custom service if provided ---
     if (slug && (customNameAr?.trim() || customNameEn?.trim())) {
       try {
+        let finalCustomNameEn = customNameEn?.trim() || "";
+        let finalCustomDescEn = customDescEn?.trim() || "";
+
+        if (customNameAr?.trim() && (!finalCustomNameEn || !finalCustomDescEn)) {
+          const svcTranslation = await translateArabicToEnglish({
+            name: customNameAr.trim(),
+            description: (customDescAr || "").trim(),
+          });
+          if (svcTranslation) {
+            if (!finalCustomNameEn && svcTranslation.name) finalCustomNameEn = svcTranslation.name;
+            if (!finalCustomDescEn && svcTranslation.description) finalCustomDescEn = svcTranslation.description;
+          }
+        }
+
         const customServicePayload = {
           name: {
-            en: customNameEn?.trim() || "",
+            en: finalCustomNameEn,
             ar: customNameAr?.trim() || customNameEn?.trim(),
           },
           description: {
-            en: customDescEn?.trim() || "",
+            en: finalCustomDescEn,
             ar: customDescAr?.trim() || "",
           },
           is_active: true
@@ -1317,4 +1468,129 @@ export async function downloadImageServer(url: string) {
     return { error: "Failed to fetch image" };
   }
 }
+
+/**
+ * Bulk backfills missing English translations (name, description, address_details)
+ * for all existing hubs in the database.
+ */
+export async function bulkBackfillHubTranslations() {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  if (!token) return { error: "Unauthenticated" };
+
+  try {
+    const langParam = getLangParam("ar");
+    const res = await fetch(`${API_BASE_URL}/hubs?${langParam}&per_page=1000`, {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      cache: "no-store"
+    });
+
+    const result = await res.json();
+    let hubs = result.data || [];
+    if (hubs && !Array.isArray(hubs) && Array.isArray(hubs.data)) {
+      hubs = hubs.data;
+    }
+
+    if (!Array.isArray(hubs) || hubs.length === 0) {
+      return { success: true, message: "No hubs found", total: 0, updated: 0, skipped: 0, errors: 0 };
+    }
+
+    let updatedCount = 0;
+    let skippedCount = 0;
+    let errorCount = 0;
+
+    for (const hub of hubs) {
+      const slug = hub.slug || hub.id;
+      if (!slug) continue;
+
+      const nameAr = typeof hub.name === "object" ? hub.name?.ar : (typeof hub.name === "string" ? hub.name : "");
+      let nameEn = typeof hub.name === "object" ? hub.name?.en : "";
+      
+      const descAr = typeof hub.description === "object" ? hub.description?.ar : (typeof hub.description === "string" ? hub.description : "");
+      let descEn = typeof hub.description === "object" ? hub.description?.en : "";
+
+      const addrAr = typeof hub.address_details === "object" ? hub.address_details?.ar : (typeof hub.address_details === "string" ? hub.address_details : "");
+      let addrEn = typeof hub.address_details === "object" ? hub.address_details?.en : "";
+
+      nameEn = (nameEn || "").trim();
+      descEn = (descEn || "").trim();
+      addrEn = (addrEn || "").trim();
+
+      const needsName = nameAr && !nameEn;
+      const needsDesc = descAr && !descEn;
+      const needsAddr = addrAr && !addrEn;
+
+      if (!needsName && !needsDesc && !needsAddr) {
+        skippedCount++;
+        continue;
+      }
+
+      const toTranslate: Record<string, string> = {};
+      if (needsName) toTranslate.name = nameAr;
+      if (needsDesc) toTranslate.description = descAr;
+      if (needsAddr) toTranslate.address_details = addrAr;
+
+      const translation = await translateArabicToEnglish(toTranslate);
+      if (!translation) {
+        errorCount++;
+        continue;
+      }
+
+      const payload: any = {
+        name: {
+          ar: nameAr,
+          en: translation.name || nameEn || nameAr,
+        },
+        description: {
+          ar: descAr,
+          en: translation.description || descEn || descAr,
+        },
+        address_details: {
+          ar: addrAr,
+          en: translation.address_details || addrEn || addrAr,
+        },
+      };
+
+      if (hub.location_id) payload.location_id = hub.location_id;
+      if (hub.contact) payload.contact = hub.contact;
+      if (hub.hourly_price) payload.hourly_price = hub.hourly_price;
+
+      const updateRes = await fetch(`${API_BASE_URL}/hubs/${slug}?${langParam}`, {
+        method: "PUT",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (updateRes.ok) {
+        updatedCount++;
+      } else {
+        errorCount++;
+      }
+    }
+
+    revalidateTag("all-hubs", 'layout');
+    revalidatePath("/", "layout");
+
+    return {
+      success: true,
+      message: `Backfill completed: ${updatedCount} updated, ${skippedCount} already translated, ${errorCount} failed.`,
+      total: hubs.length,
+      updated: updatedCount,
+      skipped: skippedCount,
+      errors: errorCount,
+    };
+  } catch (error) {
+    console.error("Error in bulkBackfillHubTranslations:", error);
+    return { error: "Network or Server Error during bulk backfill" };
+  }
+}
+
 
